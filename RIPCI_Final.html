@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>RIPCI PCI</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --red:#c0392b;--red2:#a93226;--red-bg:#fde8e8;--red-light:#fef5f5;
+  --green:#27ae60;--green-bg:#d4edda;--green-txt:#155724;
+  --yellow-bg:#fff3cd;--yellow-txt:#856404;
+  --gray-bg:#f5f5f5;--border:#e0e0e0;
+  --text:#222;--text2:#666;--text3:#aaa;
+  --radius:10px;--radius-sm:7px;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;font-size:15px;background:#f0f2f5;color:var(--text);min-height:100vh}
+
+#topbar{background:var(--red);color:#fff;padding:12px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
+#topbar-back{background:none;border:none;color:#fff;font-size:22px;padding:0 6px 0 0;cursor:pointer;display:none}
+#topbar-title{flex:1;font-size:17px;font-weight:600}
+#topbar-action{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.4);color:#fff;padding:7px 13px;border-radius:20px;font-size:13px;cursor:pointer;white-space:nowrap}
+
+/* SYNC BAR */
+#sync-bar{background:#fff;border-bottom:1px solid var(--border);padding:8px 16px;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:var(--text2);position:sticky;top:46px;z-index:99}
+#sync-status{display:flex;align-items:center;gap:6px}
+#sync-dot{width:8px;height:8px;border-radius:50%;background:var(--text3);flex-shrink:0}
+#sync-dot.ok{background:var(--green)}
+#sync-dot.busy{background:#f39c12;animation:pulse 1s infinite}
+#sync-dot.error{background:#c0392b}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+#sync-btn{background:none;border:1px solid var(--border);color:var(--text2);padding:4px 10px;border-radius:16px;font-size:11px;cursor:pointer}
+#sync-btn:active{background:var(--gray-bg)}
+
+.screen{display:none;padding:12px;padding-bottom:90px}
+.screen.active{display:block}
+
+/* LOGIN SCREEN */
+#screen-login{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:70vh;text-align:center;padding:24px}
+.login-icon{font-size:56px;margin-bottom:16px}
+.login-title{font-size:22px;font-weight:700;margin-bottom:8px}
+.login-sub{font-size:14px;color:var(--text2);margin-bottom:28px;line-height:1.5;max-width:320px}
+.btn-google{display:flex;align-items:center;justify-content:center;gap:10px;background:#fff;border:1.5px solid var(--border);border-radius:var(--radius);padding:14px 24px;font-size:15px;font-weight:600;cursor:pointer;color:var(--text);width:100%;max-width:300px}
+.btn-google:active{background:var(--gray-bg)}
+.google-icon{width:20px;height:20px}
+.login-note{font-size:11px;color:var(--text3);margin-top:16px;max-width:280px;line-height:1.6}
+.divider{display:flex;align-items:center;gap:10px;width:100%;max-width:300px;margin:16px 0;color:var(--text3);font-size:12px}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.btn-local{background:var(--gray-bg);border:1px solid var(--border);border-radius:var(--radius);padding:12px 24px;font-size:14px;cursor:pointer;color:var(--text2);width:100%;max-width:300px}
+
+/* CARDS */
+.search-bar{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:10px 14px;font-size:15px;width:100%;margin-bottom:12px}
+.search-bar:focus{outline:none;border-color:var(--red)}
+.client-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:8px;display:flex;align-items:center;gap:12px;cursor:pointer}
+.client-card:active{background:var(--red-light)}
+.client-avatar{width:44px;height:44px;border-radius:50%;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;flex-shrink:0}
+.client-name{font-size:15px;font-weight:600}
+.client-meta{font-size:12px;color:var(--text2);margin-top:2px}
+.empty-state{text-align:center;padding:50px 20px;color:var(--text2)}
+.empty-icon{font-size:48px;margin-bottom:12px}
+
+#tab-bar{background:#fff;border-top:1px solid var(--border);position:fixed;bottom:0;left:0;right:0;display:none;z-index:100}
+.tab-bar-inner{display:flex}
+.tab-btn{flex:1;padding:10px 4px 8px;border:none;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--text3);font-size:10px}
+.tab-btn.active{color:var(--red)}
+.tab-icon{font-size:22px;line-height:1}
+
+.section{margin-bottom:16px}
+.section-title{font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;padding:0 2px}
+.field{background:#fff;border:1px solid var(--border);border-radius:var(--radius);margin-bottom:8px;overflow:hidden}
+.field label{display:block;font-size:11px;font-weight:600;color:var(--text2);padding:8px 14px 0;text-transform:uppercase;letter-spacing:.3px}
+.field input,.field select,.field textarea{display:block;width:100%;padding:6px 14px 10px;border:none;font-size:15px;color:var(--text);background:transparent;-webkit-appearance:none}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none}
+.field textarea{min-height:80px;resize:vertical;line-height:1.5}
+
+.btn-full{display:block;width:100%;padding:14px;background:var(--red);color:#fff;border:none;border-radius:var(--radius);font-size:16px;font-weight:600;cursor:pointer;text-align:center;margin-bottom:8px}
+.btn-full:active{background:var(--red2)}
+.btn-outline{background:#fff;color:var(--red);border:1.5px solid var(--red)}
+.btn-gray{background:var(--gray-bg);color:var(--text2);border:1px solid var(--border)}
+.btn-sm{padding:9px 16px;font-size:14px;font-weight:600;border-radius:var(--radius-sm);border:none;cursor:pointer;display:inline-block}
+.btn-sm-red{background:var(--red);color:#fff}
+.btn-sm-outline{background:#fff;color:var(--red);border:1.5px solid var(--red)}
+.btn-sm-gray{background:var(--gray-bg);color:var(--text2);border:1px solid var(--border)}
+
+.equipo-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);margin-bottom:8px;overflow:hidden}
+.equipo-card-header{padding:12px 14px;display:flex;align-items:center;justify-content:space-between;cursor:pointer}
+.equipo-card-title{font-size:14px;font-weight:600}
+.equipo-card-sub{font-size:12px;color:var(--text2);margin-top:2px}
+.equipo-card-body{border-top:1px solid var(--border);padding:12px 14px}
+
+.task-block{background:#fff;border:1px solid var(--border);border-radius:var(--radius);margin-bottom:8px;overflow:hidden}
+.task-block-header{padding:12px 14px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;-webkit-user-select:none}
+.task-block-code{font-size:15px;font-weight:700;color:var(--red)}
+.task-block-tipo{font-size:12px;color:var(--text2)}
+.task-block-ubi{font-size:12px;color:var(--text2);margin-top:1px}
+.task-block-badge{font-size:12px;font-weight:600;padding:3px 10px;border-radius:20px;white-space:nowrap}
+.task-block-body{border-top:1px solid var(--border)}
+.task-row{padding:12px 14px;border-bottom:1px solid #f5f5f5;display:flex;flex-direction:column;gap:8px}
+.task-row:last-child{border-bottom:none}
+.task-row-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.task-text{font-size:13px;color:var(--text);flex:1;line-height:1.4}
+.perio-pill{font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;white-space:nowrap;flex-shrink:0}
+.p-T{background:#ddf0f5;color:#0c5460}
+.p-S{background:#d4edda;color:#155724}
+.p-A{background:#fff3cd;color:#856404}
+.p-Q{background:#f8d7da;color:#721c24}
+.task-row-controls{display:flex;gap:6px;flex-wrap:wrap}
+.estado-btn{padding:7px 12px;border-radius:20px;border:1.5px solid var(--border);font-size:12px;font-weight:600;cursor:pointer;background:#fff;color:var(--text2)}
+.estado-btn.sel-ok{background:#d4edda;border-color:#27ae60;color:#155724}
+.estado-btn.sel-na{background:#e2e3e5;border-color:#888;color:#333}
+.estado-btn.sel-inc{background:#f8d7da;border-color:#c0392b;color:#721c24}
+.task-obs{width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;background:#fafafa}
+.task-obs:focus{outline:none;border-color:var(--red)}
+.task-date{width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px}
+
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.stat-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:12px;text-align:center}
+.stat-num{font-size:26px;font-weight:700}
+.stat-lbl{font-size:11px;color:var(--text2);margin-top:2px}
+.progress-bar{width:100%;height:7px;background:#eee;border-radius:4px;overflow:hidden}
+.progress-fill{height:100%;background:var(--green);border-radius:4px}
+
+.year-pills{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.year-pill{padding:6px 14px;border:1.5px solid var(--border);border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;background:#fff;color:var(--text2)}
+.year-pill.active{background:var(--red);border-color:var(--red);color:#fff}
+.periodo-filter{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.pf-btn{padding:6px 12px;border:1.5px solid var(--border);border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;background:#fff;color:var(--text2)}
+.pf-btn.active{background:var(--red);border-color:var(--red);color:#fff}
+
+.info-row{background:#fff;border:1px solid var(--border);border-radius:var(--radius-sm);padding:11px 14px;display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600}
+.b-ok{background:#d4edda;color:#155724}
+.b-warn{background:#fff3cd;color:#856404}
+.b-pend{background:#fde8e8;color:#721c24}
+
+.modal-wrap{display:none;background:rgba(0,0,0,.5);min-height:100vh;padding:20px 12px;position:fixed;top:0;left:0;right:0;bottom:0;z-index:200;overflow-y:auto}
+.modal-wrap.open{display:flex;align-items:flex-start;justify-content:center}
+.modal-box{background:#fff;border-radius:var(--radius);padding:20px;width:100%;max-width:440px;margin-top:40px}
+.modal-box h2{font-size:17px;font-weight:700;margin-bottom:14px}
+.modal-actions{display:flex;gap:8px;margin-top:14px}
+.modal-actions button{flex:1;padding:12px;border-radius:var(--radius-sm);border:none;font-size:15px;font-weight:600;cursor:pointer}
+.modal-cancel{background:var(--gray-bg);color:var(--text2)}
+.modal-confirm{background:var(--red);color:#fff}
+.danger-zone{background:#fff5f5;border:1px solid #f5c6cb;border-radius:var(--radius);padding:14px;margin-top:8px}
+.danger-zone h3{font-size:13px;color:#721c24;margin-bottom:8px}
+
+/* DRIVE SETUP CARD */
+.drive-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:12px}
+.drive-card h3{font-size:14px;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.drive-card p{font-size:13px;color:var(--text2);line-height:1.5}
+.step-list{list-style:none;padding:0;margin:10px 0 0}
+.step-list li{font-size:13px;color:var(--text2);padding:5px 0;display:flex;gap:8px}
+.step-num{background:var(--red);color:#fff;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px}
+</style>
+</head>
+<body>
+
+<div id="topbar">
+  <button id="topbar-back" onclick="goBack()" aria-label="Volver">&#8592;</button>
+  <div id="topbar-title">🔥 RIPCI PCI</div>
+  <button id="topbar-action" onclick="topbarAction()" style="display:none">+ Nuevo</button>
+</div>
+
+<div id="sync-bar" style="display:none">
+  <div id="sync-status">
+    <div id="sync-dot"></div>
+    <span id="sync-text">Sin sincronizar</span>
+  </div>
+  <button id="sync-btn" onclick="syncNow()">⟳ Sincronizar</button>
+</div>
+
+<!-- LOGIN -->
+<div id="screen-login" class="screen active">
+  <div class="login-icon">🔥</div>
+  <div class="login-title">RIPCI PCI</div>
+  <div class="login-sub">Sistema de mantenimiento PCI multi-cliente.<br>RD 513/2017 · RD 164/2025</div>
+
+  <button class="btn-google" onclick="loginGoogle()">
+    <svg class="google-icon" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+    Continuar con Google
+  </button>
+
+  <div class="divider">o</div>
+
+  <button class="btn-local" onclick="usarLocal()">Usar sin sincronización (solo local)</button>
+
+  <div class="login-note">Con Google: tus datos se guardan en tu Google Drive y se sincronizan entre todos tus dispositivos automáticamente.</div>
+</div>
+
+<!-- CLIENTS -->
+<div id="screen-clients" class="screen">
+  <input type="text" class="search-bar" id="search-input" placeholder="Buscar cliente..." oninput="filterClients()">
+  <div id="client-list-container"></div>
+</div>
+
+<!-- CLIENT DETAIL -->
+<div id="screen-client" class="screen"></div>
+<div id="screen-inventario" class="screen"></div>
+<div id="screen-checklist" class="screen"></div>
+<div id="screen-resumen" class="screen"></div>
+
+<div id="tab-bar">
+  <div class="tab-bar-inner">
+    <button class="tab-btn" id="tab-datos" onclick="switchTab('datos')"><span class="tab-icon">✏️</span><span>Datos</span></button>
+    <button class="tab-btn" id="tab-inventario" onclick="switchTab('inventario')"><span class="tab-icon">📋</span><span>Inventario</span></button>
+    <button class="tab-btn" id="tab-checklist" onclick="switchTab('checklist')"><span class="tab-icon">✅</span><span>Checklist</span></button>
+    <button class="tab-btn" id="tab-resumen" onclick="switchTab('resumen')"><span class="tab-icon">📊</span><span>Resumen</span></button>
+  </div>
+</div>
+
+<!-- MODALES -->
+<div id="modal-nuevo-cliente" class="modal-wrap">
+  <div class="modal-box">
+    <h2>Nuevo cliente</h2>
+    <div class="field"><label>Nombre *</label><input type="text" id="nc-nombre" placeholder="Ej: Colegio San José"></div>
+    <div class="field"><label>Empresa mantenedora</label><input type="text" id="nc-empresa"></div>
+    <div class="field"><label>Nº autorización</label><input type="text" id="nc-auth"></div>
+    <div class="field"><label>Responsable</label><input type="text" id="nc-resp"></div>
+    <div class="modal-actions">
+      <button class="modal-cancel" onclick="closeModal('modal-nuevo-cliente')">Cancelar</button>
+      <button class="modal-confirm" onclick="crearCliente()">Crear</button>
+    </div>
+  </div>
+</div>
+
+<div id="modal-nueva-revision" class="modal-wrap">
+  <div class="modal-box">
+    <h2>Nueva revisión</h2>
+    <div class="field"><label>Año</label><input type="number" id="nr-year" min="2000" max="2099"></div>
+    <div class="field"><label>Tipo de revisión</label>
+      <select id="nr-tipo"><option>Trimestral</option><option>Semestral</option><option selected>Anual</option><option>Quinquenal</option></select>
+    </div>
+    <div class="field"><label>Técnico revisor</label><input type="text" id="nr-tecnico"></div>
+    <div class="field"><label>Fecha de revisión</label><input type="date" id="nr-fecha"></div>
+    <p style="font-size:12px;color:var(--text2);margin:8px 0 0">Se generarán todas las tareas para los equipos del inventario actual.</p>
+    <div class="modal-actions">
+      <button class="modal-cancel" onclick="closeModal('modal-nueva-revision')">Cancelar</button>
+      <button class="modal-confirm" onclick="crearRevision()">Crear</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== GOOGLE DRIVE CONFIG =====
+// INSTRUCCIONES: Para activar Google Drive, sigue estos pasos:
+// 1. Ve a https://console.cloud.google.com
+// 2. Crea un proyecto nuevo (ej: "RIPCI-PCI")
+// 3. Activa la API "Google Drive API"
+// 4. Ve a "Credenciales" > "Crear credencial" > "ID de cliente OAuth 2.0"
+// 5. Tipo de aplicación: "Aplicación web"
+// 6. En "Orígenes de JavaScript autorizados" añade: http://localhost y file://
+//    Si lo subes a un servidor web, añade también tu dominio (https://tudominio.com)
+// 7. Copia el "ID de cliente" y pégalo abajo donde pone 242837734645-g4g6g61hto1k1676ausv2kc1jg7njfk3.apps.googleusercontent.com
+// 8. Para el archivo de Drive: la primera vez que sincronices se creará automáticamente
+//
+// IMPORTANTE: Si abres el HTML desde un archivo local (file://) en Chrome,
+// necesitas lanzarlo con: chrome --allow-file-access-from-files
+// O mejor: usa cualquier servidor local simple o súbelo a GitHub Pages (gratis)
+
+const DRIVE_CLIENT_ID = '242837734645-g4g6g61hto1k1676ausv2kc1jg7njfk3.apps.googleusercontent.com'; // <-- PEGA AQUI TU CLIENT ID DE GOOGLE
+const DRIVE_SCOPE = 'https://www.googleapis.com/auth/drive.appdata';
+const DRIVE_FILE_NAME = 'ripci_datos.json';
+const CONFIGURED = DRIVE_CLIENT_ID !== '242837734645-g4g6g61hto1k1676ausv2kc1jg7njfk3.apps.googleusercontent.com';
+
+// ===== TASK TEMPLATES =====
+const TASKS = {
+  'Extintor':[
+    {p:'Trimestral',t:'Verificar ubicación y ausencia de daños aparentes'},
+    {p:'Trimestral',t:'Comprobar adecuación al riesgo a proteger'},
+    {p:'Trimestral',t:'Acceso libre, visibilidad y señalización correcta'},
+    {p:'Trimestral',t:'Instrucciones de manejo legibles'},
+    {p:'Trimestral',t:'Indicador de presión en zona verde operativa'},
+    {p:'Trimestral',t:'Partes metálicas en buen estado (boquilla, válvula, manguera)'},
+    {p:'Trimestral',t:'Precintos y tapones intactos'},
+    {p:'Trimestral',t:'No descargado total ni parcialmente'},
+    {p:'Trimestral',t:'Señalización correcta del extintor'},
+    {p:'Anual',t:'Mantenimiento según UNE 23120 (Programa Anual)'},
+    {p:'Anual',t:'Extintores móviles: buen estado del sistema de traslado'},
+    {p:'Quinquenal',t:'Prueba nivel C (timbrado) según RD 809/2021'},
+    {p:'Quinquenal',t:'Retimbrado (por 3 veces desde fecha de timbrado)'},
+  ],
+  'BIE (Boca de Incendio Equipada)':[
+    {p:'Trimestral',t:'Señalización correcta de la BIE'},
+    {p:'Trimestral',t:'Buena accesibilidad al equipo'},
+    {p:'Trimestral',t:'Lectura de manómetro (presión con grifo cerrado)'},
+    {p:'Trimestral',t:'Revisión de componentes: lanza, válvula, manguera'},
+    {p:'Anual',t:'Inspección y mantenimiento según UNE-EN 671-3'},
+    {p:'Anual',t:'Verificar que manguera no supera 20 años desde puesta en servicio'},
+    {p:'Quinquenal',t:'Mantenimiento quinquenal de manguera según UNE-EN 671-3'},
+  ],
+  'Hidrante':[
+    {p:'Trimestral',t:'Verificar acceso libre y señalización correcta'},
+    {p:'Trimestral',t:'Comprobar estado: tapa, racores, cadenas'},
+    {p:'Semestral',t:'Abrir y cerrar válvulas para verificar funcionamiento'},
+    {p:'Anual',t:'Inspección y mantenimiento según UNE 23500'},
+    {p:'Anual',t:'Comprobar caudal y presión del hidrante'},
+    {p:'Quinquenal',t:'Revisión completa del sistema de abastecimiento'},
+  ],
+  'Columna Seca':[
+    {p:'Trimestral',t:'Verificar acceso libre y señalización'},
+    {p:'Trimestral',t:'Comprobar estado de racores y tapones'},
+    {p:'Anual',t:'Inspección completa de la instalación'},
+    {p:'Anual',t:'Prueba de estanqueidad a 200 kPa durante 2 horas'},
+    {p:'Quinquenal',t:'Prueba de presión con inspección total del sistema'},
+  ],
+  'Sistema de Detección y Alarma':[
+    {p:'Trimestral',t:'Verificar cambios desde última revisión'},
+    {p:'Trimestral',t:'Comprobación de funcionamiento con cada fuente de suministro'},
+    {p:'Trimestral',t:'Sustitución de pilotos, fusibles y elementos defectuosos'},
+    {p:'Trimestral',t:'Revisión indicaciones luminosas: alarma, avería, desconexión'},
+    {p:'Trimestral',t:'Mantenimiento de acumuladores (bornas, agua destilada)'},
+    {p:'Trimestral',t:'Verificar equipos de centralización y transmisión de alarma'},
+    {p:'Trimestral',t:'Prueba conmutación en fallo de red; funcionamiento bajo baterías'},
+    {p:'Trimestral',t:'Comprobación señalización pulsadores manuales'},
+    {p:'Trimestral',t:'Comprobar avisadores luminosos y acústicos'},
+    {p:'Trimestral',t:'Verificar megafonía e inteligibilidad de audio (si aplica)'},
+    {p:'Semestral',t:'Verificar ubicación, identificación y accesibilidad de pulsadores'},
+    {p:'Semestral',t:'Verificar estado de pulsadores (fijación, limpieza, corrosión)'},
+    {p:'Anual',t:'Comprobación de maniobras programadas por zona de detección'},
+    {p:'Anual',t:'Verificar y actualizar versión de software de la central'},
+    {p:'Anual',t:'Comprobar todas las maniobras: paro aire, máquinas, ascensores'},
+    {p:'Anual',t:'Operaciones según UNE-EN 23007-14'},
+    {p:'Anual',t:'Verificar espacio libre ≥500 mm bajo detector puntual'},
+    {p:'Anual',t:'Verificar estado detectores (fijación, limpieza, corrosión)'},
+    {p:'Anual',t:'Prueba individual de funcionamiento de todos los detectores'},
+    {p:'Anual',t:'Verificar vida útil detectores (10 años si fabricante no indica)'},
+    {p:'Anual',t:'Prueba de funcionamiento de todos los pulsadores manuales'},
+  ],
+  'Sistema Fijo de Extinción':[
+    {p:'Trimestral',t:'Verificar manómetros y presión del agente extintor'},
+    {p:'Trimestral',t:'Comprobar acceso y señalización del sistema'},
+    {p:'Semestral',t:'Verificar estado de boquillas/toberas (sin obstrucciones)'},
+    {p:'Semestral',t:'Comprobar estado de tuberías, soportes y uniones'},
+    {p:'Anual',t:'Inspección según instrucciones fabricante y UNE-EN 12094'},
+    {p:'Anual',t:'Verificar funcionamiento del panel de control y señalizaciones'},
+    {p:'Anual',t:'Verificar dispositivos de activación (automáticos y manuales)'},
+    {p:'Quinquenal',t:'Revisión y prueba completa del sistema de extinción'},
+  ],
+  'Abastecimiento de Agua CI':[
+    {p:'Trimestral',t:'Verificar nivel de agua en depósitos'},
+    {p:'Trimestral',t:'Comprobar estado y funcionamiento de grupos de bombeo'},
+    {p:'Semestral',t:'Arranque manual y automático de todos los grupos de bombas'},
+    {p:'Semestral',t:'Verificar presión y caudal del sistema CI'},
+    {p:'Anual',t:'Mantenimiento completo según UNE 23500'},
+    {p:'Anual',t:'Prueba de la instalación a caudal y presión nominales'},
+    {p:'Quinquenal',t:'Inspección y limpieza de depósitos; revisión completa'},
+  ],
+  'Sistema Control Humos y Calor':[
+    {p:'Trimestral',t:'Verificar estado de compuertas y actuadores'},
+    {p:'Trimestral',t:'Comprobar señalización y accesibilidad al sistema'},
+    {p:'Semestral',t:'Prueba de apertura de compuertas y aireadores'},
+    {p:'Semestral',t:'Verificar fuentes de energía: eléctrica y auxiliar'},
+    {p:'Anual',t:'Inspección completa según UNE-EN 12101'},
+    {p:'Anual',t:'Prueba funcional del sistema completo manual y automático'},
+    {p:'Quinquenal',t:'Revisión estructural y prueba de rendimiento del sistema'},
+  ],
+};
+const TIPOS = Object.keys(TASKS);
+
+// ===== STATE =====
+let DB = {};
+let cid = null, cYear = null, cTab = 'datos', cFiltro = 'Todos';
+let driveMode = false;
+let driveToken = null;
+let driveFileId = null;
+let syncPending = false;
+let syncTimer = null;
+let lastSyncTime = null;
+
+function saveLocal(){ try{ localStorage.setItem('ripci_v3', JSON.stringify(DB)); }catch(e){} }
+function loadLocal(){ try{ const r=localStorage.getItem('ripci_v3'); DB=r?JSON.parse(r):{}; }catch(e){ DB={}; } }
+function uid(){ return 'id_'+Date.now()+'_'+Math.random().toString(36).slice(2,8); }
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function numSort(a,b){ const nA=parseInt((a||'').replace(/\D/g,''))||0,nB=parseInt((b||'').replace(/\D/g,''))||0; return nA!==nB?nA-nB:(a||'').localeCompare(b||''); }
+function equiposValidos(c){ return (c.equipos||[]).filter(e=>e.codigo&&e.tipo).sort((a,b)=>numSort(a.codigo,b.codigo)); }
+function initials(n){ return (n||'?').split(' ').slice(0,2).map(w=>w[0]||'').join('').toUpperCase()||'?'; }
+
+// ===== SYNC STATUS UI =====
+function setSyncStatus(state, text){
+  const dot=document.getElementById('sync-dot');
+  const txt=document.getElementById('sync-text');
+  dot.className=state; txt.textContent=text;
+}
+
+function scheduleSave(){
+  saveLocal();
+  if(!driveMode) return;
+  clearTimeout(syncTimer);
+  setSyncStatus('busy','Guardando...');
+  syncTimer=setTimeout(()=>saveToDrive(),2000);
+}
+
+// ===== GOOGLE DRIVE =====
+function loginGoogle(){
+  if(!CONFIGURED){
+    showDriveSetup(); return;
+  }
+  const params=new URLSearchParams({
+    client_id: DRIVE_CLIENT_ID,
+    redirect_uri: window.location.href.split('?')[0].split('#')[0],
+    response_type: 'token',
+    scope: DRIVE_SCOPE,
+    prompt: 'select_account'
+  });
+  window.location.href='https://accounts.google.com/o/oauth2/v2/auth?'+params.toString();
+}
+
+function checkOAuthCallback(){
+  const hash=window.location.hash;
+  if(!hash.includes('access_token')) return false;
+  const params=new URLSearchParams(hash.slice(1));
+  const token=params.get('access_token');
+  if(!token) return false;
+  driveToken=token;
+  window.history.replaceState(null,'',window.location.pathname);
+  return true;
+}
+
+async function saveToDrive(){
+  if(!driveToken) return;
+  setSyncStatus('busy','Sincronizando...');
+  try{
+    const content=JSON.stringify(DB);
+    if(!driveFileId){
+      driveFileId=await findOrCreateDriveFile();
+    }
+    if(driveFileId){
+      await updateDriveFile(driveFileId, content);
+      lastSyncTime=new Date();
+      setSyncStatus('ok','Sincronizado · '+lastSyncTime.toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'}));
+    }
+  }catch(e){
+    setSyncStatus('error','Error al sincronizar');
+    console.error('Drive save error:',e);
+  }
+}
+
+async function loadFromDrive(){
+  if(!driveToken) return false;
+  setSyncStatus('busy','Cargando desde Drive...');
+  try{
+    const fileId=await findOrCreateDriveFile();
+    if(!fileId){ setSyncStatus('ok','Drive conectado (sin datos previos)'); return false; }
+    driveFileId=fileId;
+    const resp=await fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`,{
+      headers:{Authorization:'Bearer '+driveToken}
+    });
+    if(resp.ok){
+      const data=await resp.json();
+      DB=data||{};
+      saveLocal();
+      lastSyncTime=new Date();
+      setSyncStatus('ok','Sincronizado · '+lastSyncTime.toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'}));
+      return true;
+    }
+    setSyncStatus('error','Error cargando datos');
+    return false;
+  }catch(e){
+    setSyncStatus('error','Sin conexión');
+    loadLocal();
+    return false;
+  }
+}
+
+async function findOrCreateDriveFile(){
+  const listResp=await fetch(
+    `https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&q=name='${DRIVE_FILE_NAME}'&fields=files(id,name)`,
+    {headers:{Authorization:'Bearer '+driveToken}}
+  );
+  if(!listResp.ok) throw new Error('Drive list failed');
+  const list=await listResp.json();
+  if(list.files&&list.files.length>0) return list.files[0].id;
+  const createResp=await fetch('https://www.googleapis.com/drive/v3/files',{
+    method:'POST',
+    headers:{Authorization:'Bearer '+driveToken,'Content-Type':'application/json'},
+    body:JSON.stringify({name:DRIVE_FILE_NAME,parents:['appDataFolder']})
+  });
+  if(!createResp.ok) throw new Error('Drive create failed');
+  const created=await createResp.json();
+  return created.id;
+}
+
+async function updateDriveFile(fileId, content){
+  const resp=await fetch(`https://www.googleapis.com/upload/drive/v3/files/${fileId}?uploadType=media`,{
+    method:'PATCH',
+    headers:{Authorization:'Bearer '+driveToken,'Content-Type':'application/json'},
+    body:content
+  });
+  if(!resp.ok) throw new Error('Drive update failed');
+}
+
+async function syncNow(){
+  if(!driveMode||!driveToken){ alert('No conectado a Google Drive.'); return; }
+  setSyncStatus('busy','Sincronizando...');
+  await loadFromDrive();
+  renderClientList();
+}
+
+// ===== DRIVE SETUP SCREEN =====
+function showDriveSetup(){
+  const sc=document.getElementById('screen-login');
+  sc.innerHTML=`
+    <div style="max-width:400px;width:100%">
+      <div style="font-size:36px;text-align:center;margin-bottom:12px">⚙️</div>
+      <div class="drive-card">
+        <h3>🔧 Configuración necesaria</h3>
+        <p>Para sincronizar con Google Drive necesitas un Client ID de Google. Es gratis y tarda ~5 minutos.</p>
+        <ul class="step-list">
+          <li><span class="step-num">1</span>Ve a <strong>console.cloud.google.com</strong> e inicia sesión</li>
+          <li><span class="step-num">2</span>Crea un proyecto nuevo (ej: "RIPCI-PCI")</li>
+          <li><span class="step-num">3</span>Activa <strong>Google Drive API</strong></li>
+          <li><span class="step-num">4</span>Crea credencial: OAuth 2.0 > Aplicación web</li>
+          <li><span class="step-num">5</span>En "Orígenes autorizados" añade la URL donde abres este archivo</li>
+          <li><span class="step-num">6</span>Copia el Client ID y pégalo en el código del HTML donde pone <strong>242837734645-g4g6g61hto1k1676ausv2kc1jg7njfk3.apps.googleusercontent.com</strong></li>
+        </ul>
+      </div>
+      <div class="divider" style="display:flex;align-items:center;gap:10px;color:var(--text3);font-size:12px;margin:12px 0">
+        <span style="flex:1;height:1px;background:var(--border)"></span>
+        o sin Drive
+        <span style="flex:1;height:1px;background:var(--border)"></span>
+      </div>
+      <button class="btn-local" onclick="usarLocal()">Continuar sin sincronización</button>
+      <p style="font-size:11px;color:var(--text3);margin-top:12px;text-align:center">Sin Drive: los datos se guardan solo en este navegador/dispositivo y no se sincronizan.</p>
+    </div>`;
+}
+
+// ===== LOCAL MODE =====
+function usarLocal(){
+  driveMode=false;
+  loadLocal();
+  document.getElementById('sync-bar').style.display='none';
+  enterApp();
+}
+
+// ===== APP ENTRY =====
+function enterApp(){
+  showScreenRaw('clients');
+  document.getElementById('topbar-action').style.display='block';
+  document.getElementById('topbar-action').textContent='+ Nuevo';
+  document.getElementById('topbar-action').onclick=()=>openModal('modal-nuevo-cliente');
+  renderClientList();
+}
+
+// ===== NAVIGATION =====
+function showScreenRaw(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function goBack(){
+  if(cid){
+    cid=null; cYear=null; cTab='datos';
+    document.getElementById('topbar-back').style.display='none';
+    document.getElementById('topbar-title').textContent='🔥 RIPCI PCI';
+    document.getElementById('topbar-action').textContent='+ Nuevo';
+    document.getElementById('topbar-action').onclick=()=>openModal('modal-nuevo-cliente');
+    document.getElementById('tab-bar').style.display='none';
+    showScreenRaw('clients');
+    renderClientList();
+  }
+}
+
+function topbarAction(){ openModal('modal-nueva-revision'); }
+function openModal(id){
+  document.getElementById(id).classList.add('open');
+  if(id==='modal-nueva-revision'){
+    document.getElementById('nr-year').value=new Date().getFullYear();
+    document.getElementById('nr-fecha').value=new Date().toISOString().slice(0,10);
+    const c=DB[cid]; if(c) document.getElementById('nr-tecnico').value=c.tecnico||'';
+  }
+  if(id==='modal-nuevo-cliente'){
+    ['nc-nombre','nc-empresa','nc-auth','nc-resp'].forEach(i=>document.getElementById(i).value='');
+    setTimeout(()=>document.getElementById('nc-nombre').focus(),200);
+  }
+}
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+
+// ===== CLIENT LIST =====
+function renderClientList(){
+  const q=(document.getElementById('search-input').value||'').toLowerCase();
+  const ids=Object.keys(DB).filter(id=>!q||DB[id].name.toLowerCase().includes(q)).sort((a,b)=>DB[a].name.localeCompare(DB[b].name));
+  const c=document.getElementById('client-list-container');
+  c.innerHTML=ids.length===0
+    ?`<div class="empty-state"><div class="empty-icon">🏢</div><p>Sin clientes.<br>Pulsa "+ Nuevo" para crear el primero.</p></div>`
+    :ids.map(id=>{
+      const cl=DB[id];
+      return `<div class="client-card" onclick="openClient('${id}')">
+        <div class="client-avatar">${initials(cl.name)}</div>
+        <div style="flex:1;min-width:0">
+          <div class="client-name">${esc(cl.name)}</div>
+          <div class="client-meta">${equiposValidos(cl).length} equipos · ${Object.keys(cl.revisiones||{}).length} revisiones</div>
+        </div>
+        <div style="color:var(--text3);font-size:18px">›</div>
+      </div>`;
+    }).join('');
+}
+
+function filterClients(){ renderClientList(); }
+
+function openClient(id){
+  cid=id; cTab='datos'; cYear=null; cFiltro='Todos';
+  const c=DB[id];
+  document.getElementById('topbar-back').style.display='block';
+  document.getElementById('topbar-title').textContent=(c.name||'').slice(0,20);
+  document.getElementById('topbar-action').style.display='block';
+  document.getElementById('topbar-action').textContent='+ Revisión';
+  document.getElementById('topbar-action').onclick=()=>openModal('modal-nueva-revision');
+  document.getElementById('tab-bar').style.display='block';
+  switchTab('datos');
+}
+
+// ===== TABS =====
+function switchTab(tab){
+  cTab=tab;
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+  if(tab==='datos') renderDatos();
+  else if(tab==='inventario') renderInventario();
+  else if(tab==='checklist') renderChecklist();
+  else if(tab==='resumen') renderResumen();
+}
+
+// ===== DATOS =====
+function renderDatos(){
+  const c=DB[cid];
+  const years=Object.keys(c.revisiones||{}).sort().reverse();
+  document.getElementById('screen-client').innerHTML=`
+    <div class="section"><div class="section-title">Instalación</div>
+      <div class="field"><label>Nombre / Instalación</label><input type="text" value="${esc(c.name)}" onchange="upC('name',this.value)"></div>
+      <div class="field"><label>Empresa mantenedora</label><input type="text" value="${esc(c.empresa||'')}" onchange="upC('empresa',this.value)"></div>
+      <div class="field"><label>Nº Autorización</label><input type="text" value="${esc(c.auth||'')}" onchange="upC('auth',this.value)"></div>
+      <div class="field"><label>Responsable</label><input type="text" value="${esc(c.responsable||'')}" onchange="upC('responsable',this.value)"></div>
+      <div class="field"><label>Técnico revisor (defecto)</label><input type="text" value="${esc(c.tecnico||'')}" onchange="upC('tecnico',this.value)"></div>
+      <div class="field"><label>Dirección</label><input type="text" value="${esc(c.direccion||'')}" onchange="upC('direccion',this.value)"></div>
+      <div class="field"><label>Teléfono</label><input type="tel" value="${esc(c.telefono||'')}" onchange="upC('telefono',this.value)"></div>
+    </div>
+    <div class="section"><div class="section-title">Revisiones</div>
+      ${years.length?years.map(y=>{
+        const r=c.revisiones[y],s=tStats(r);
+        return `<div class="info-row">
+          <div><div style="font-weight:600;font-size:14px">📅 ${y}</div>
+          <div style="font-size:12px;color:var(--text2)">${r.tipo||''} · ${r.tecnico||'Sin técnico'}</div></div>
+          <span class="badge ${s.inc>0?'b-warn':s.pct===100?'b-ok':'b-pend'}">${s.pct}%</span>
+        </div>`;
+      }).join(''):`<div style="padding:16px;text-align:center;color:var(--text2);font-size:13px">Sin revisiones aún.</div>`}
+    </div>
+    ${!driveMode?`<div class="section" style="display:flex;gap:8px">
+      <button class="btn-sm btn-sm-red" style="flex:1;padding:11px" onclick="exportar()">💾 Exportar JSON</button>
+      <button class="btn-sm btn-sm-outline" style="flex:1;padding:11px" onclick="document.getElementById('imp-file').click()">📂 Importar JSON</button>
+      <input type="file" id="imp-file" accept=".json" style="display:none" onchange="importar(event)">
+    </div>`:''}
+    <div class="section"><div class="danger-zone">
+      <h3>Zona de peligro</h3>
+      <button class="btn-full btn-outline" style="font-size:14px;padding:11px" onclick="eliminarCliente()">🗑 Eliminar cliente</button>
+    </div></div>`;
+  showScreenRaw('client');
+}
+
+function upC(f,v){ DB[cid][f]=v; scheduleSave(); if(f==='name') document.getElementById('topbar-title').textContent=v.slice(0,20); }
+
+function tStats(rev){
+  const t=rev.tasks||[];
+  const done=t.filter(x=>x.estado==='ok').length;
+  const inc=t.filter(x=>x.estado==='inc').length;
+  return {total:t.length,done,inc,pct:t.length?Math.round(done/t.length*100):0};
+}
+
+// ===== INVENTARIO =====
+function renderInventario(){
+  const c=DB[cid];
+  const all=(c.equipos||[]).slice().sort((a,b)=>numSort(a.codigo,b.codigo));
+  document.getElementById('screen-inventario').innerHTML=`
+    <div class="section">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <div class="section-title" style="margin-bottom:0">Equipos PCI</div>
+        <button class="btn-sm btn-sm-red" onclick="addEquipo()">+ Añadir</button>
+      </div>
+      <p style="font-size:12px;color:var(--text2);margin-bottom:10px">Los equipos se ordenan automáticamente por número. Al crear una revisión se generan todas las tareas.</p>
+      ${all.length===0?`<div style="text-align:center;padding:30px;color:var(--text2)"><div style="font-size:36px;margin-bottom:8px">📋</div><p>Sin equipos. Pulsa "+ Añadir"</p></div>`:''}
+      ${all.map(e=>equCard(e)).join('')}
+    </div>`;
+  showScreenRaw('inventario');
+}
+
+function equCard(e){
+  const tc=(TASKS[e.tipo]||[]).length;
+  return `<div class="equipo-card" id="ecard-${e.id}">
+    <div class="equipo-card-header" onclick="togEcard('${e.id}')">
+      <div style="flex:1;min-width:0">
+        <div class="equipo-card-title">${e.codigo?esc(e.codigo):'<span style="color:var(--text3)">Sin código</span>'}&nbsp;<span style="font-size:12px;color:var(--text2)">${esc(e.tipo||'')}</span></div>
+        <div class="equipo-card-sub">${e.ubicacion?esc(e.ubicacion):'Sin ubicación'}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+        ${tc?`<span style="font-size:11px;background:#e8f4f8;color:#1a6e8e;padding:2px 8px;border-radius:10px;font-weight:700">${tc}t</span>`:''}
+        <span style="color:var(--text3);font-size:18px" id="earr-${e.id}">›</span>
+      </div>
+    </div>
+    <div class="equipo-card-body" id="ebody-${e.id}" style="display:none">
+      <div class="field" style="background:var(--gray-bg)"><label>Código</label><input type="text" value="${esc(e.codigo||'')}" placeholder="EXT-01" onchange="upE('${e.id}','codigo',this.value)"></div>
+      <div class="field" style="background:var(--gray-bg)"><label>Tipo de equipo</label>
+        <select onchange="upE('${e.id}','tipo',this.value)">
+          <option value="">— Seleccionar —</option>
+          ${TIPOS.map(t=>`<option ${e.tipo===t?'selected':''}>${esc(t)}</option>`).join('')}
+        </select></div>
+      <div class="field" style="background:var(--gray-bg)"><label>Subtipo / Modelo</label><input type="text" value="${esc(e.subtipo||'')}" placeholder="Polvo ABC 6kg" onchange="upE('${e.id}','subtipo',this.value)"></div>
+      <div class="field" style="background:var(--gray-bg)"><label>Ubicación</label><input type="text" value="${esc(e.ubicacion||'')}" placeholder="Planta Baja - Pasillo" onchange="upE('${e.id}','ubicacion',this.value)"></div>
+      <div class="field" style="background:var(--gray-bg)"><label>Nº Serie</label><input type="text" value="${esc(e.nserie||'')}" onchange="upE('${e.id}','nserie',this.value)"></div>
+      <div class="field" style="background:var(--gray-bg)"><label>Fecha caducidad</label><input type="date" value="${esc(e.fcad||'')}" onchange="upE('${e.id}','fcad',this.value)"></div>
+      <button class="btn-full btn-outline" style="font-size:13px;padding:10px;margin-top:4px" onclick="delEquipo('${e.id}')">Eliminar equipo</button>
+    </div>
+  </div>`;
+}
+
+function togEcard(id){
+  const b=document.getElementById('ebody-'+id),a=document.getElementById('earr-'+id);
+  const o=b.style.display==='none'; b.style.display=o?'block':'none'; a.textContent=o?'v':'›';
+}
+function addEquipo(){
+  const c=DB[cid]; if(!c.equipos)c.equipos=[];
+  c.equipos.push({id:uid(),codigo:'',tipo:'',subtipo:'',ubicacion:'',nserie:'',fcad:''});
+  scheduleSave(); renderInventario();
+  setTimeout(()=>{const cards=document.querySelectorAll('.equipo-card');if(cards.length){const l=cards[cards.length-1];l.scrollIntoView({behavior:'smooth',block:'center'});l.querySelector('.equipo-card-header').click();}},100);
+}
+function upE(id,f,v){
+  const c=DB[cid],e=(c.equipos||[]).find(x=>x.id===id);
+  if(e){e[f]=v; scheduleSave();}
+  if(f==='codigo'||f==='tipo') setTimeout(()=>renderInventario(),80);
+}
+function delEquipo(id){
+  if(!confirm('¿Eliminar este equipo?'))return;
+  DB[cid].equipos=(DB[cid].equipos||[]).filter(e=>e.id!==id);
+  scheduleSave(); renderInventario();
+}
+
+// ===== CHECKLIST =====
+function renderChecklist(){
+  const c=DB[cid],years=Object.keys(c.revisiones||{}).sort().reverse();
+  const sc=document.getElementById('screen-checklist');
+  if(!years.length){sc.innerHTML=`<div class="empty-state"><div class="empty-icon">📅</div><p>Sin revisiones.<br>Pulsa "+ Revisión" arriba.</p></div>`;showScreenRaw('checklist');return;}
+  if(!cYear||!c.revisiones[cYear]) cYear=years[0];
+  const rev=c.revisiones[cYear];
+  const byCode={};
+  (rev.tasks||[]).forEach(t=>{
+    if(!byCode[t.codigo])byCode[t.codigo]={codigo:t.codigo,tipo:t.tipo,ubi:t.ubicacion,tasks:[]};
+    byCode[t.codigo].tasks.push(t);
+  });
+  const codes=Object.keys(byCode).sort(numSort);
+  const periodos=['Todos','Trimestral','Semestral','Anual','Quinquenal'];
+  sc.innerHTML=`
+    <div style="margin-bottom:10px">
+      <div class="year-pills">${years.map(y=>`<div class="year-pill ${y===cYear?'active':''}" onclick="selYear('${y}')">${y}</div>`).join('')}</div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:8px">${rev.tipo||''} · ${rev.tecnico||'Sin técnico'}${rev.fecha?' · '+rev.fecha:''}</div>
+      <div class="periodo-filter">${periodos.map(p=>`<div class="pf-btn ${cFiltro===p?'active':''}" onclick="setFiltro('${p}')">${p}</div>`).join('')}</div>
+    </div>
+    ${codes.map(code=>{
+      const eq=byCode[code];
+      const filtered=cFiltro==='Todos'?eq.tasks:eq.tasks.filter(t=>t.p===cFiltro);
+      if(!filtered.length)return'';
+      const done=filtered.filter(t=>t.estado==='ok').length,inc=filtered.filter(t=>t.estado==='inc').length;
+      const pct=filtered.length?Math.round(done/filtered.length*100):0;
+      const bc=inc>0?'b-warn':pct===100?'b-ok':'b-pend';
+      return `<div class="task-block" id="tb-${code}">
+        <div class="task-block-header" onclick="togTB('${code}')">
+          <div style="flex:1;min-width:0">
+            <div><span class="task-block-code">${esc(eq.codigo)}</span> <span class="task-block-tipo">${esc(eq.tipo)}</span></div>
+            <div class="task-block-ubi">${esc(eq.ubi)}</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
+            <span class="task-block-badge badge ${bc}">${done}/${filtered.length}</span>
+            <span style="color:var(--text3);font-size:18px" id="tbarr-${code}">›</span>
+          </div>
+        </div>
+        <div class="task-block-body" id="tbbody-${code}" style="display:none">
+          ${filtered.map(t=>taskRow(t)).join('')}
+        </div>
+      </div>`;
+    }).join('')||`<div style="text-align:center;padding:24px;color:var(--text2)">Sin tareas para este filtro.</div>`}`;
+  showScreenRaw('checklist');
+}
+
+function taskRow(t){
+  const pi=t.p?t.p[0]:'T';
+  return `<div class="task-row" id="tr-${t.id}">
+    <div class="task-row-top">
+      <div class="task-text">${esc(t.tarea)}</div>
+      <span class="perio-pill p-${pi}">${t.p}</span>
+    </div>
+    <div class="task-row-controls">
+      <button class="estado-btn ${t.estado==='ok'?'sel-ok':''}" onclick="setEst('${cYear}','${t.id}','ok',this)">✓ Realizado</button>
+      <button class="estado-btn ${t.estado==='na'?'sel-na':''}" onclick="setEst('${cYear}','${t.id}','na',this)">No aplica</button>
+      <button class="estado-btn ${t.estado==='inc'?'sel-inc':''}" onclick="setEst('${cYear}','${t.id}','inc',this)">⚠ Incidencia</button>
+    </div>
+    ${t.estado==='inc'?`<textarea class="task-obs" placeholder="Describe la incidencia..." onchange="setObs('${cYear}','${t.id}',this.value)">${esc(t.obs||'')}</textarea>`:''}
+    <input type="date" class="task-date" value="${esc(t.fecha||revFecha())}" onchange="setFecha('${cYear}','${t.id}',this.value)">
+  </div>`;
+}
+
+function revFecha(){ const c=DB[cid]; return(cYear&&c.revisiones&&c.revisiones[cYear]&&c.revisiones[cYear].fecha)||''; }
+function togTB(code){const b=document.getElementById('tbbody-'+code),a=document.getElementById('tbarr-'+code);const o=b.style.display==='none';b.style.display=o?'block':'none';a.textContent=o?'v':'›';}
+function selYear(y){cYear=y;cFiltro='Todos';renderChecklist();}
+function setFiltro(f){cFiltro=f;renderChecklist();}
+
+function setEst(year,tid,estado,btn){
+  const c=DB[cid],rev=c.revisiones[year];
+  const t=(rev.tasks||[]).find(x=>x.id===tid); if(!t)return;
+  t.estado=estado; scheduleSave();
+  const row=document.getElementById('tr-'+tid);
+  if(row) row.outerHTML=taskRow(t);
+  updBadge(year,t.codigo);
+}
+function setObs(year,tid,val){const t=(DB[cid].revisiones[year].tasks||[]).find(x=>x.id===tid);if(t){t.obs=val;scheduleSave();}}
+function setFecha(year,tid,val){const t=(DB[cid].revisiones[year].tasks||[]).find(x=>x.id===tid);if(t){t.fecha=val;scheduleSave();}}
+function updBadge(year,code){
+  const tasks=(DB[cid].revisiones[year].tasks||[]).filter(t=>t.codigo===code&&(cFiltro==='Todos'||t.p===cFiltro));
+  const done=tasks.filter(t=>t.estado==='ok').length,inc=tasks.filter(t=>t.estado==='inc').length;
+  const pct=tasks.length?Math.round(done/tasks.length*100):0;
+  const bc=inc>0?'b-warn':pct===100?'b-ok':'b-pend';
+  const badge=document.querySelector(`#tb-${code} .task-block-badge`);
+  if(badge){badge.className=`task-block-badge badge ${bc}`;badge.textContent=`${done}/${tasks.length}`;}
+}
+
+// ===== RESUMEN =====
+function renderResumen(){
+  const c=DB[cid],years=Object.keys(c.revisiones||{}).sort().reverse();
+  const sc=document.getElementById('screen-resumen');
+  if(!years.length){sc.innerHTML=`<div class="empty-state"><div class="empty-icon">📊</div><p>Sin revisiones.</p></div>`;showScreenRaw('resumen');return;}
+  if(!cYear||!c.revisiones[cYear]) cYear=years[0];
+  const rev=c.revisiones[cYear],tasks=rev.tasks||[];
+  const total=tasks.length,done=tasks.filter(t=>t.estado==='ok').length,inc=tasks.filter(t=>t.estado==='inc').length,na=tasks.filter(t=>t.estado==='na').length;
+  const pct=total?Math.round(done/total*100):0;
+  const byTipo={};
+  tasks.forEach(t=>{if(!byTipo[t.tipo])byTipo[t.tipo]={total:0,done:0,inc:0};byTipo[t.tipo].total++;if(t.estado==='ok')byTipo[t.tipo].done++;if(t.estado==='inc')byTipo[t.tipo].inc++;});
+  sc.innerHTML=`
+    <div class="year-pills">${years.map(y=>`<div class="year-pill ${y===cYear?'active':''}" onclick="selYearR('${y}')">${y}</div>`).join('')}</div>
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-num">${total}</div><div class="stat-lbl">Total tareas</div></div>
+      <div class="stat-card"><div class="stat-num" style="color:var(--green)">${done}</div><div class="stat-lbl">Realizadas</div></div>
+      <div class="stat-card"><div class="stat-num" style="color:#c0392b">${inc}</div><div class="stat-lbl">Incidencias</div></div>
+      <div class="stat-card"><div class="stat-num" style="color:var(--text2)">${na}</div><div class="stat-lbl">No aplica</div></div>
+    </div>
+    <div class="stat-card" style="margin-bottom:14px">
+      <div class="stat-num">${pct}%</div><div class="stat-lbl">Completado</div>
+      <div class="progress-bar" style="margin-top:6px"><div class="progress-fill" style="width:${pct}%"></div></div>
+    </div>
+    <div class="section-title">Por tipo de sistema</div>
+    ${Object.entries(byTipo).map(([tipo,s])=>{
+      const p=s.total?Math.round(s.done/s.total*100):0;
+      return `<div class="info-row" style="flex-direction:column;align-items:flex-start;gap:6px">
+        <div style="display:flex;justify-content:space-between;width:100%;align-items:center">
+          <div style="font-size:13px;font-weight:600">${esc(tipo)}</div>
+          <span class="badge ${s.inc>0?'b-warn':p===100?'b-ok':'b-pend'}">${p}%</span>
+        </div>
+        <div style="font-size:12px;color:var(--text2)">${s.done}/${s.total} realizadas${s.inc>0?' · <span style="color:#c0392b;font-weight:600">'+s.inc+' incidencia(s)</span>':''}</div>
+        <div class="progress-bar" style="height:5px"><div class="progress-fill" style="width:${p}%"></div></div>
+      </div>`;
+    }).join('')}
+    ${inc>0?`<div class="section-title" style="margin-top:14px;color:#c0392b">Incidencias</div>
+    ${tasks.filter(t=>t.estado==='inc').map(t=>`<div class="info-row" style="flex-direction:column;align-items:flex-start;gap:3px">
+      <div style="font-size:13px;font-weight:600;color:var(--red)">${esc(t.codigo)}</div>
+      <div style="font-size:12px">${esc(t.tarea)}</div>
+      ${t.obs?`<div style="font-size:12px;color:var(--text2);font-style:italic">${esc(t.obs)}</div>`:''}
+    </div>`).join('')}`:''}`;
+  showScreenRaw('resumen');
+}
+function selYearR(y){cYear=y;renderResumen();}
+
+// ===== CREATE =====
+function crearCliente(){
+  const name=document.getElementById('nc-nombre').value.trim();
+  if(!name){alert('El nombre es obligatorio.');return;}
+  const id=uid();
+  DB[id]={name,empresa:document.getElementById('nc-empresa').value.trim(),auth:document.getElementById('nc-auth').value.trim(),responsable:document.getElementById('nc-resp').value.trim(),equipos:[],revisiones:{},creado:new Date().toISOString()};
+  scheduleSave(); closeModal('modal-nuevo-cliente'); renderClientList(); openClient(id);
+}
+
+function crearRevision(){
+  const year=document.getElementById('nr-year').value.trim();
+  if(!year||isNaN(year)){alert('Año inválido.');return;}
+  const tipo=document.getElementById('nr-tipo').value,tecnico=document.getElementById('nr-tecnico').value.trim(),fecha=document.getElementById('nr-fecha').value;
+  const c=DB[cid];
+  if(c.revisiones[year]&&!confirm(`Ya existe la revisión ${year}. ¿Reemplazar?`))return;
+  const tasks=[];
+  equiposValidos(c).forEach(eq=>{
+    (TASKS[eq.tipo]||[]).forEach(tmpl=>{
+      tasks.push({id:uid(),codigo:eq.codigo,tipo:eq.tipo,ubicacion:eq.ubicacion||'',p:tmpl.p,tarea:tmpl.t,estado:'ok',fecha:'',obs:''});
+    });
+  });
+  c.revisiones[year]={year,tipo,tecnico,fecha,tasks,creado:new Date().toISOString()};
+  scheduleSave(); closeModal('modal-nueva-revision'); cYear=year; switchTab('checklist');
+}
+
+function eliminarCliente(){
+  if(!confirm(`¿ELIMINAR "${DB[cid].name}" y todas sus revisiones?`))return;
+  delete DB[cid]; scheduleSave(); goBack(); renderClientList();
+}
+
+// ===== EXPORT/IMPORT (local mode) =====
+function exportar(){
+  const blob=new Blob([JSON.stringify(DB,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download='RIPCI_'+new Date().toISOString().slice(0,10)+'.json';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
+}
+function importar(evt){
+  const file=evt.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{try{if(!confirm('Importar sobreescribirá todos los datos. ¿Continuar?'))return;DB=JSON.parse(e.target.result);scheduleSave();goBack();renderClientList();alert('Importado correctamente.');}catch(err){alert('Archivo inválido.');}};
+  reader.readAsText(file);evt.target.value='';
+}
+
+// ===== MODAL OVERLAY =====
+document.querySelectorAll('.modal-wrap').forEach(m=>{m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');});});
+
+// ===== INIT =====
+async function init(){
+  if(CONFIGURED && checkOAuthCallback()){
+    driveMode=true;
+    document.getElementById('sync-bar').style.display='flex';
+    setSyncStatus('busy','Cargando desde Drive...');
+    await loadFromDrive();
+    enterApp();
+    return;
+  }
+  const savedToken=sessionStorage.getItem('ripci_drive_token');
+  if(CONFIGURED && savedToken){
+    driveToken=savedToken; driveMode=true;
+    document.getElementById('sync-bar').style.display='flex';
+    setSyncStatus('busy','Reconectando...');
+    await loadFromDrive();
+    enterApp();
+    return;
+  }
+  const wasLocal=localStorage.getItem('ripci_local_mode');
+  if(wasLocal){
+    usarLocal(); return;
+  }
+  showScreenRaw('login');
+  document.getElementById('screen-login').classList.add('active');
+}
+
+function usarLocal(){
+  localStorage.setItem('ripci_local_mode','1');
+  driveMode=false;
+  loadLocal();
+  document.getElementById('sync-bar').style.display='none';
+  enterApp();
+}
+
+init();
+</script>
+</body>
+</html>
