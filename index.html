@@ -3514,7 +3514,6 @@ function renderInformesGlobal(){
 // ===== INIT =====
 async function init(){
   if(FIREBASE_CONFIG.apiKey!=='TU_API_KEY'){
-    // Comprobar si ya hay sesión activa de Google
     getAuth().onAuthStateChanged(async user => {
       if(user){
         if(user.email !== OWNER_EMAIL){
@@ -3528,13 +3527,11 @@ async function init(){
         try{ await fsLoad(); }catch(e){ console.warn('Firebase error',e); setSS('err','Sin conexión · datos locales'); load(); }
         enterApp();
       } else {
-        // No hay sesión — mostrar pantalla de login
         showRaw('login');
       }
     });
     return;
   }
-  // Sin Firebase: modo local directo
   usarLocal();
 }
 
