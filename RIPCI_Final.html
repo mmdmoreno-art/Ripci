@@ -1,18 +1,18 @@
 <!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
+<!-- saved from url=(0048)file:///Users/macbook/Downloads/index_pci_7.html -->
+<html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="RIPCI">
 <meta name="theme-color" content="#c0392b">
 <meta name="mobile-web-app-capable" content="yes">
-<link rel="manifest" href="manifest.json">
+<link rel="manifest" href="file:///Users/macbook/Downloads/manifest.json">
 <title>🔥 RIPCI PCI Pro v7</title>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="./🔥 RIPCI PCI Pro v7 ole_files/firebase-app-compat.js"></script>
+<script src="./🔥 RIPCI PCI Pro v7 ole_files/firebase-firestore-compat.js"></script>
+<script src="./🔥 RIPCI PCI Pro v7 ole_files/firebase-auth-compat.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
@@ -1175,18 +1175,18 @@ body.dark .dash-action-btn{box-shadow:0 3px 12px rgba(0,0,0,.35)}
 .dstat-n{color:var(--red)}
 </style>
 </head>
-<body onload="init()">
+<body onload="init()" class="dark">
 
 <!-- Offline banner -->
-<div id="offline-banner">📵 Sin conexión — usando datos locales</div>
+<div id="offline-banner" style="display: none;">📵 Sin conexión — usando datos locales</div>
 
 <!-- Dark mode toggle -->
-<button id="dark-toggle" onclick="toggleDarkMode()" title="Modo oscuro/claro">🌙</button>
+<button id="dark-toggle" onclick="toggleDarkMode()" title="Modo oscuro/claro">☀️</button>
 <!-- Toast notifications -->
 <div id="toast-container"></div>
 
-<div id="topbar">
-  <button id="tb-back" onclick="goBack()">&#8592;</button>
+<div id="topbar" style="display: none;">
+  <button id="tb-back" onclick="goBack()">←</button>
   <div id="tb-title">🔥 RIPCI PCI Pro</div><span id="plan-badge" class="free" style="display:none">GRATIS</span>
   <button id="tb-cat" onclick="abrirCatalogo()" style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;padding:6px 11px;border-radius:16px;font-size:12px;cursor:pointer;margin-right:4px;display:none">📦 Catálogo</button>
   <button id="tb-action" onclick="tbAction()">+ Nuevo</button>
@@ -1199,36 +1199,37 @@ body.dark .dash-action-btn{box-shadow:0 3px 12px rgba(0,0,0,.35)}
 <!-- BARRA DE NAVEGACIÓN GLOBAL (arriba) -->
 <div id="nav-global" style="display:none;position:sticky;top:46px;z-index:98;overflow-x:auto;-webkit-overflow-scrolling:touch">
   <div style="display:flex;min-width:max-content;padding:0 4px">
-    <button class="nav-global-btn active" id="ng-dashboard" onclick="irSeccion('dashboard')" style="flex:none;border:none;background:none;cursor:pointer;border-bottom:2px solid var(--red);white-space:nowrap;color:var(--red)"><span style="font-size:18px;display:block">🏠</span>Inicio</button>
-    <button class="nav-global-btn" id="ng-clientes" onclick="irSeccion('clientes')" style="flex:none;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;color:var(--text2)"><span style="font-size:18px;display:block">🏢</span>Clientes</button>
-    <button class="nav-global-btn" id="ng-presupuestos" onclick="irSeccion('presupuestos-global')" style="flex:none;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;color:var(--text2)"><span style="font-size:18px;display:block">💶</span>Presupuest.</button>
-    <button class="nav-global-btn" id="ng-certificados" onclick="irSeccion('certificados-global')" style="flex:none;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;color:var(--text2)"><span style="font-size:18px;display:block">📜</span>Certificados</button>
-    <button class="nav-global-btn" id="ng-informes" onclick="irSeccion('informes-global')" style="flex:none;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;color:var(--text2)"><span style="font-size:18px;display:block">📊</span>Informes</button>
-    <button class="nav-global-btn" id="ng-proveedores" onclick="irSeccion('proveedores')" style="flex:none;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;color:var(--text2)"><span style="font-size:18px;display:block">🚚</span>Proveedores</button>
-    <button class="nav-global-btn" id="ng-facturas" onclick="irSeccion('facturas-global')" style="flex:none;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;color:var(--text2)"><span style="font-size:18px;display:block">🧾</span>Facturas</button>
-    <button class="nav-global-btn" id="ng-epis" onclick="irSeccion('epis-global')" style="flex:none;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;color:var(--text2)"><span style="font-size:18px;display:block">🦺</span>EPIs</button>
-    <button class="nav-global-btn" id="ng-importar" onclick="irSeccion('importar')" style="flex:none;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;color:var(--text2)"><span style="font-size:18px;display:block">📥</span>Importar</button>
-    <button class="nav-global-btn" id="ng-ajustes" onclick="irSeccion('ajustes')" style="flex:none;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;color:var(--text2)"><span style="font-size:18px;display:block">⚙️</span>Ajustes</button>
+    <button class="nav-global-btn active" id="ng-dashboard" onclick="irSeccion(&#39;dashboard&#39;)" style="flex:none;border:none;background:none;cursor:pointer;border-bottom:2px solid var(--red);white-space:nowrap;color:var(--red)"><span style="font-size:18px;display:block">🏠</span>Inicio</button>
+    <button class="nav-global-btn" id="ng-clientes" onclick="irSeccion(&#39;clientes&#39;)" style="flex:none;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;color:var(--text2)"><span style="font-size:18px;display:block">🏢</span>Clientes</button>
+    <button class="nav-global-btn" id="ng-presupuestos" onclick="irSeccion(&#39;presupuestos-global&#39;)" style="flex:none;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;color:var(--text2)"><span style="font-size:18px;display:block">💶</span>Presupuest.</button>
+    <button class="nav-global-btn" id="ng-certificados" onclick="irSeccion(&#39;certificados-global&#39;)" style="flex:none;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;color:var(--text2)"><span style="font-size:18px;display:block">📜</span>Certificados</button>
+    <button class="nav-global-btn" id="ng-informes" onclick="irSeccion(&#39;informes-global&#39;)" style="flex:none;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;color:var(--text2)"><span style="font-size:18px;display:block">📊</span>Informes</button>
+    <button class="nav-global-btn" id="ng-proveedores" onclick="irSeccion(&#39;proveedores&#39;)" style="flex:none;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;color:var(--text2)"><span style="font-size:18px;display:block">🚚</span>Proveedores</button>
+    <button class="nav-global-btn" id="ng-facturas" onclick="irSeccion(&#39;facturas-global&#39;)" style="flex:none;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;color:var(--text2)"><span style="font-size:18px;display:block">🧾</span>Facturas</button>
+    <button class="nav-global-btn" id="ng-epis" onclick="irSeccion(&#39;epis-global&#39;)" style="flex:none;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;color:var(--text2)"><span style="font-size:18px;display:block">🦺</span>EPIs</button>
+    <button class="nav-global-btn" id="ng-importar" onclick="irSeccion(&#39;importar&#39;)" style="flex:none;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;color:var(--text2)"><span style="font-size:18px;display:block">📥</span>Importar</button>
+    <button class="nav-global-btn" id="ng-calendario" onclick="irSeccion(&#39;calendario&#39;)" style="flex:none;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;color:var(--text2)"><span style="font-size:18px;display:block">📅</span>Calendario</button>
+    <button class="nav-global-btn" id="ng-ajustes" onclick="irSeccion(&#39;ajustes&#39;)" style="flex:none;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;color:var(--text2)"><span style="font-size:18px;display:block">⚙️</span>Ajustes</button>
   </div>
 </div>
 
 <!-- SCREENS -->
 <!-- ===== PANTALLA AUTH SAAS (Registro / Login) ===== -->
-<div id="screen-saas-auth" class="screen" style="display:none;padding:0">
+<div id="screen-saas-auth" class="screen active" style="display: flex; padding: 0px;">
   <div class="saas-auth-top">
     <div class="saas-logo">🔥</div>
     <div class="saas-brand">RIPCI PCI Pro</div>
     <div class="saas-tagline">Gestión profesional contra incendios</div>
     <div class="saas-card">
       <div class="saas-tabs">
-        <button class="saas-tab active" id="saas-tab-login" onclick="saasSwTab('login')">Entrar</button>
-        <button class="saas-tab" id="saas-tab-registro" onclick="saasSwTab('registro')">Registrarse</button>
+        <button class="saas-tab active" id="saas-tab-login" onclick="saasSwTab(&#39;login&#39;)">Entrar</button>
+        <button class="saas-tab" id="saas-tab-registro" onclick="saasSwTab(&#39;registro&#39;)">Registrarse</button>
       </div>
 
       <!-- LOGIN -->
       <div id="saas-panel-login">
         <button class="saas-btn-google" onclick="saasLoginGoogle()">
-          <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"></path><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"></path><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"></path><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"></path></svg>
           Continuar con Google
         </button>
         <div class="saas-divider">o con email</div>
@@ -1238,8 +1239,7 @@ body.dark .dash-action-btn{box-shadow:0 3px 12px rgba(0,0,0,.35)}
         </div>
         <div class="saas-field">
           <label>Contraseña</label>
-          <input type="password" id="login-pass" placeholder="••••••••" autocomplete="current-password"
-            onkeydown="if(event.key==='Enter')saasLoginEmail()">
+          <input type="password" id="login-pass" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key===&#39;Enter&#39;)saasLoginEmail()">
         </div>
         <button class="saas-btn" onclick="saasLoginEmail()">Entrar →</button>
         <div class="saas-err" id="login-err"></div>
@@ -1284,7 +1284,7 @@ body.dark .dash-action-btn{box-shadow:0 3px 12px rgba(0,0,0,.35)}
       <!-- REGISTRO -->
       <div id="saas-panel-registro" style="display:none">
         <button class="saas-btn-google" onclick="saasRegistroGoogle()">
-          <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"></path><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"></path><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"></path><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"></path></svg>
           Registrarse con Google
         </button>
         <div class="saas-divider">o con email</div>
@@ -1298,13 +1298,12 @@ body.dark .dash-action-btn{box-shadow:0 3px 12px rgba(0,0,0,.35)}
         </div>
         <div class="saas-field">
           <label>Contraseña (mín. 6 caracteres)</label>
-          <input type="password" id="reg-pass" placeholder="••••••••"
-            onkeydown="if(event.key==='Enter')saasRegistroEmail()">
+          <input type="password" id="reg-pass" placeholder="••••••••" onkeydown="if(event.key===&#39;Enter&#39;)saasRegistroEmail()">
         </div>
         <button class="saas-btn" onclick="saasRegistroEmail()">Crear cuenta gratis →</button>
         <div class="saas-err" id="reg-err"></div>
         <div style="font-size:11px;color:#aaa;text-align:center;margin-top:12px;line-height:1.5">
-          Al registrarte aceptas los <a href="#" style="color:#c0392b">Términos de uso</a>.<br>Sin tarjeta de crédito. Plan Gratis para siempre.
+          Al registrarte aceptas los <a href="file:///Users/macbook/Downloads/index_pci_7.html#" style="color:#c0392b">Términos de uso</a>.<br>Sin tarjeta de crédito. Plan Gratis para siempre.
         </div>
       </div>
     </div>
@@ -1345,20 +1344,20 @@ body.dark .dash-action-btn{box-shadow:0 3px 12px rgba(0,0,0,.35)}
     <div class="onb-title">Elige tu plan</div>
     <div class="onb-sub">Empieza gratis. Cambia cuando quieras.</div>
     <div style="width:100%;max-width:360px">
-      <div style="background:#f8f8f8;border:2px solid #e0e0e0;border-radius:14px;padding:16px;margin-bottom:10px;cursor:pointer;text-align:left" onclick="onbSelPlan('gratis')" id="onb-plan-gratis">
+      <div style="background:#f8f8f8;border:2px solid #e0e0e0;border-radius:14px;padding:16px;margin-bottom:10px;cursor:pointer;text-align:left" onclick="onbSelPlan(&#39;gratis&#39;)" id="onb-plan-gratis">
         <div style="display:flex;justify-content:space-between;align-items:center">
           <div><div style="font-weight:800;font-size:15px">Gratis</div><div style="font-size:11px;color:#666;margin-top:2px">10 clientes · 1 técnico · Limitado</div></div>
           <div style="font-size:20px;font-weight:900;color:#555">0€</div>
         </div>
       </div>
-      <div style="background:#fff3f3;border:2px solid #c0392b;border-radius:14px;padding:16px;margin-bottom:10px;cursor:pointer;text-align:left;position:relative" onclick="onbSelPlan('pro')" id="onb-plan-pro">
+      <div style="background:#fff3f3;border:2px solid #c0392b;border-radius:14px;padding:16px;margin-bottom:10px;cursor:pointer;text-align:left;position:relative" onclick="onbSelPlan(&#39;pro&#39;)" id="onb-plan-pro">
         <div style="position:absolute;top:-10px;left:16px;background:#c0392b;color:#fff;font-size:10px;font-weight:800;padding:3px 10px;border-radius:10px">MÁS POPULAR</div>
         <div style="display:flex;justify-content:space-between;align-items:center">
           <div><div style="font-weight:800;font-size:15px;color:#c0392b">Pro</div><div style="font-size:11px;color:#666;margin-top:2px">100 clientes · 3 técnicos · Todo incluido</div></div>
           <div style="font-size:20px;font-weight:900;color:#c0392b">50€/mes</div>
         </div>
       </div>
-      <div style="background:#f8f8f8;border:2px solid #e0e0e0;border-radius:14px;padding:16px;cursor:pointer;text-align:left" onclick="onbSelPlan('empresa')" id="onb-plan-empresa">
+      <div style="background:#f8f8f8;border:2px solid #e0e0e0;border-radius:14px;padding:16px;cursor:pointer;text-align:left" onclick="onbSelPlan(&#39;empresa&#39;)" id="onb-plan-empresa">
         <div style="display:flex;justify-content:space-between;align-items:center">
           <div><div style="font-weight:800;font-size:15px">Empresa</div><div style="font-size:11px;color:#666;margin-top:2px">Ilimitado · Equipo completo</div></div>
           <div style="font-size:20px;font-weight:900;color:#333">200€/mes</div>
@@ -1397,7 +1396,7 @@ body.dark .dash-action-btn{box-shadow:0 3px 12px rgba(0,0,0,.35)}
       <div class="plan-feature"><span class="pf-icon">📜</span> Hasta 10 certificados</div>
       <div class="plan-feature"><span class="pf-icon">❌</span> Sin notificaciones push</div>
       <div class="plan-feature"><span class="pf-icon">❌</span> Sin informes avanzados</div>
-      <button class="plan-btn plan-btn-free" onclick="seleccionarPlan('gratis')">Plan actual</button>
+      <button class="plan-btn plan-btn-free" onclick="seleccionarPlan(&#39;gratis&#39;)">Plan actual</button>
     </div>
 
     <!-- PRO -->
@@ -1414,7 +1413,7 @@ body.dark .dash-action-btn{box-shadow:0 3px 12px rgba(0,0,0,.35)}
       <div class="plan-feature"><span class="pf-icon">🔔</span> Notificaciones push</div>
       <div class="plan-feature"><span class="pf-icon">📊</span> Informes avanzados</div>
       <div class="plan-feature"><span class="pf-icon">🎨</span> Logo y marca propia</div>
-      <button class="plan-btn plan-btn-pro" onclick="seleccionarPlan('pro')">Elegir Pro →</button>
+      <button class="plan-btn plan-btn-pro" onclick="seleccionarPlan(&#39;pro&#39;)">Elegir Pro →</button>
     </div>
 
     <!-- EMPRESA -->
@@ -1430,10 +1429,10 @@ body.dark .dash-action-btn{box-shadow:0 3px 12px rgba(0,0,0,.35)}
       <div class="plan-feature"><span class="pf-icon">🎨</span> Logo y marca propia</div>
       <div class="plan-feature"><span class="pf-icon">🏆</span> Soporte prioritario</div>
       <div class="plan-feature"><span class="pf-icon">📋</span> Panel multi-empresa</div>
-      <button class="plan-btn plan-btn-emp" onclick="seleccionarPlan('empresa')">Elegir Empresa →</button>
+      <button class="plan-btn plan-btn-emp" onclick="seleccionarPlan(&#39;empresa&#39;)">Elegir Empresa →</button>
     </div>
   </div>
-  <button onclick="irSeccion('dashboard')" style="display:block;width:calc(100% - 24px);margin:0 12px 24px;padding:12px;background:none;border:1.5px solid var(--border);border-radius:12px;font-size:14px;color:var(--text2);cursor:pointer">Volver al panel</button>
+  <button onclick="irSeccion(&#39;dashboard&#39;)" style="display:block;width:calc(100% - 24px);margin:0 12px 24px;padding:12px;background:none;border:1.5px solid var(--border);border-radius:12px;font-size:14px;color:var(--text2);cursor:pointer">Volver al panel</button>
 </div>
 
 <!-- ===== PANTALLA SUPERADMIN ===== -->
@@ -1469,11 +1468,11 @@ body.dark .dash-action-btn{box-shadow:0 3px 12px rgba(0,0,0,.35)}
     <div style="font-size:11px;opacity:.7;margin-top:2px">Recibe avisos cuando caduca un extintor</div>
   </div>
   <button onclick="activarNotificaciones()" style="background:#c0392b;border:none;color:#fff;padding:8px 14px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer">Activar</button>
-  <button onclick="document.getElementById('notif-bar').style.display='none'" style="background:none;border:none;color:rgba(255,255,255,.5);font-size:18px;cursor:pointer">✕</button>
+  <button onclick="document.getElementById(&#39;notif-bar&#39;).style.display=&#39;none&#39;" style="background:none;border:none;color:rgba(255,255,255,.5);font-size:18px;cursor:pointer">✕</button>
 </div>
 
 <!-- ===== EXISTING LOGIN SCREEN ===== -->
-<div id="screen-login" class="screen" style="padding:0;min-height:100vh;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;background:var(--bg)">
+<div id="screen-login" class="screen" style="padding: 0px; min-height: 100vh; display: none; flex-direction: column; align-items: stretch; justify-content: flex-start; background: var(--bg);">
 
   <!-- SPLASH FULLSCREEN -->
   <div id="login-splash" style="position:fixed;inset:0;z-index:500;background:linear-gradient(160deg,#c0392b 0%,#7b1d10 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:opacity .5s ease,transform .5s ease;overflow:hidden" onclick="splashEntrar()">
@@ -1492,14 +1491,14 @@ body.dark .dash-action-btn{box-shadow:0 3px 12px rgba(0,0,0,.35)}
     <!-- Pulsa para entrar -->
     <div id="login-tap-hint" style="margin-top:52px;display:flex;flex-direction:column;align-items:center;gap:8px;animation:pulseHint 2.4s ease-in-out infinite">
       <div style="width:48px;height:48px;border-radius:50%;border:2px solid rgba(255,255,255,.4);display:flex;align-items:center;justify-content:center">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.8)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.8)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
       </div>
       <span style="font-size:12px;color:rgba(255,255,255,.55);font-weight:600;letter-spacing:.5px;text-transform:uppercase">Toca para entrar</span>
     </div>
 
     <!-- Google sync (discreto, abajo) -->
     <button onclick="event.stopPropagation();loginGoogle()" style="position:absolute;bottom:28px;display:flex;align-items:center;gap:7px;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:8px 16px;font-size:11px;font-weight:600;color:rgba(255,255,255,.65);cursor:pointer">
-      <svg width="13" height="13" viewBox="0 0 24 24"><path fill="#fff" opacity=".8" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#fff" opacity=".7" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#fff" opacity=".6" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#fff" opacity=".9" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+      <svg width="13" height="13" viewBox="0 0 24 24"><path fill="#fff" opacity=".8" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"></path><path fill="#fff" opacity=".7" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"></path><path fill="#fff" opacity=".6" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"></path><path fill="#fff" opacity=".9" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"></path></svg>
       Sincronizar con Google
     </button>
   </div>
@@ -1512,21 +1511,18 @@ body.dark .dash-action-btn{box-shadow:0 3px 12px rgba(0,0,0,.35)}
 </div>
 
 <!-- DASHBOARD GLOBAL -->
-<div id="screen-dashboard" class="screen">
+<div id="screen-dashboard" class="screen" style="display: none;">
   <div class="dash-hero">
     <div class="v8-hero-top">
       <div>
-        <div class="v8-hero-greeting" id="v8-hero-greeting">Buenos días</div>
+        <div class="v8-hero-greeting" id="v8-hero-greeting">Buenas tardes</div>
         <div class="v8-hero-empresa" id="v8-hero-empresa">RIPCI PCI Pro</div>
       </div>
-      <div class="v8-hero-date" id="v8-hero-date"></div>
+      <div class="v8-hero-date" id="v8-hero-date">Sábado 30 mayo</div>
     </div>
     <div class="dash-search-wrap">
       <span class="dash-search-icon">🔍</span>
-      <input type="text" class="dash-search" id="dash-search-input"
-        placeholder="Buscar clientes, presupuestos, equipos..."
-        oninput="buscarGlobal(this.value)"
-        autocomplete="off" autocorrect="off" spellcheck="false">
+      <input type="text" class="dash-search" id="dash-search-input" placeholder="Buscar clientes, presupuestos, equipos..." oninput="buscarGlobal(this.value)" autocomplete="off" autocorrect="off" spellcheck="false">
       <button class="dash-search-clear" id="dash-search-clear" onclick="limpiarBusqueda()">✕</button>
     </div>
   </div>
@@ -1541,22 +1537,22 @@ body.dark .dash-action-btn{box-shadow:0 3px 12px rgba(0,0,0,.35)}
     <div style="padding:14px 12px 4px">
       <div class="dash-sec-label">Acciones principales</div>
       <div class="dab-grid">
-        <button class="dash-action-btn dab-red" onclick="openM('modal-cliente')">
+        <button class="dash-action-btn dab-red" onclick="openM(&#39;modal-cliente&#39;)">
           <span class="dab-icon">➕</span><span class="dab-label">Nuevo cliente</span>
         </button>
-        <button class="dash-action-btn dab-blue" onclick="irSeccion('clientes')">
+        <button class="dash-action-btn dab-blue" onclick="irSeccion(&#39;clientes&#39;)">
           <span class="dab-icon">🏢</span><span class="dab-label">Clientes</span><span class="dab-count" id="dt-clientes">—</span>
         </button>
-        <button class="dash-action-btn dab-purple" onclick="irSeccion('presupuestos-global')">
+        <button class="dash-action-btn dab-purple" onclick="irSeccion(&#39;presupuestos-global&#39;)">
           <span class="dab-icon">💶</span><span class="dab-label">Presupuestos</span><span class="dab-count" id="dt-presupuestos">—</span>
         </button>
-        <button class="dash-action-btn dab-teal" onclick="irSeccion('certificados-global')">
+        <button class="dash-action-btn dab-teal" onclick="irSeccion(&#39;certificados-global&#39;)">
           <span class="dab-icon">📜</span><span class="dab-label">Certificados</span><span class="dab-count" id="dt-certificados">—</span>
         </button>
-        <button class="dash-action-btn dab-green" onclick="irSeccion('facturas-global')">
+        <button class="dash-action-btn dab-green" onclick="irSeccion(&#39;facturas-global&#39;)">
           <span class="dab-icon">🧾</span><span class="dab-label">Facturas</span><span class="dab-count" id="dt-facturas">—</span>
         </button>
-        <button class="dash-action-btn dab-orange" onclick="irSeccion('informes-global')">
+        <button class="dash-action-btn dab-orange" onclick="irSeccion(&#39;informes-global&#39;)">
           <span class="dab-icon">📊</span><span class="dab-label">Informes</span><span class="dab-count" id="dt-informes">—</span>
         </button>
       </div>
@@ -1565,12 +1561,12 @@ body.dark .dash-action-btn{box-shadow:0 3px 12px rgba(0,0,0,.35)}
     <div style="padding:4px 12px 0">
       <div class="dash-sec-label" style="margin-top:12px">Más secciones</div>
       <div class="dmt-grid">
-        <div class="dash-mini-tile" onclick="irSeccion('proveedores')">
+        <div class="dash-mini-tile" onclick="irSeccion(&#39;proveedores&#39;)">
           <div class="dmt-icon">🚚</div>
           <div class="dmt-label">Proveedores</div>
           <div class="dmt-sub" id="dt-proveedores">—</div>
         </div>
-        <div class="dash-mini-tile" onclick="irSeccion('epis-global')">
+        <div class="dash-mini-tile" onclick="irSeccion(&#39;epis-global&#39;)">
           <div class="dmt-icon">🦺</div>
           <div class="dmt-label">EPIs</div>
           <div class="dmt-sub" id="dt-epis">Actas</div>
@@ -1580,17 +1576,17 @@ body.dark .dash-action-btn{box-shadow:0 3px 12px rgba(0,0,0,.35)}
           <div class="dmt-label">Catálogo</div>
           <div class="dmt-sub" id="dt-catalogo">—</div>
         </div>
-        <div class="dash-mini-tile" onclick="irSeccion('importar')">
+        <div class="dash-mini-tile" onclick="irSeccion(&#39;importar&#39;)">
           <div class="dmt-icon">📥</div>
           <div class="dmt-label">Importar</div>
           <div class="dmt-sub">Excel/CSV</div>
         </div>
-        <div class="dash-mini-tile" onclick="irSeccion('ajustes')">
+        <div class="dash-mini-tile" onclick="irSeccion(&#39;ajustes&#39;)">
           <div class="dmt-icon">⚙️</div>
           <div class="dmt-label">Ajustes</div>
           <div class="dmt-sub">Config.</div>
         </div>
-        <div class="dash-mini-tile" onclick="irSeccion('clientes')">
+        <div class="dash-mini-tile" onclick="irSeccion(&#39;clientes&#39;)">
           <div class="dmt-icon">🔔</div>
           <div class="dmt-label">Alertas</div>
           <div class="dmt-sub">Caducidades</div>
@@ -1606,50 +1602,50 @@ body.dark .dash-action-btn{box-shadow:0 3px 12px rgba(0,0,0,.35)}
 </div>
 
 <!-- SECCIÓN GLOBAL: PRESUPUESTOS -->
-<div id="screen-presupuestos-global" class="screen">
+<div id="screen-presupuestos-global" class="screen" style="display: none;">
   <div id="pres-global-content"></div>
 </div>
 
 <!-- SECCIÓN GLOBAL: CERTIFICADOS -->
-<div id="screen-certificados-global" class="screen">
+<div id="screen-certificados-global" class="screen" style="display: none;">
   <div id="cert-global-content"></div>
 </div>
 
 <!-- SECCIÓN GLOBAL: FACTURAS -->
-<div id="screen-facturas-global" class="screen">
+<div id="screen-facturas-global" class="screen" style="display: none;">
   <div id="fact-global-content"></div>
 </div>
 
 <!-- SECCIÓN GLOBAL: EPIs -->
-<div id="screen-epis-global" class="screen">
+<div id="screen-epis-global" class="screen" style="display: none;">
   <div id="epis-global-content"></div>
 </div>
 
 <!-- SECCIÓN GLOBAL: INFORMES -->
-<div id="screen-informes-global" class="screen">
+<div id="screen-informes-global" class="screen" style="display: none;">
   <div id="inf-global-content"></div>
 </div>
 
 <!-- CLIENTES (lista clásica, ahora secundaria) -->
-<div id="screen-clients" class="screen">
+<div id="screen-clients" class="screen" style="display: none;">
   <div id="alert-container"></div>
   <input type="text" class="search-bar" id="search-input" placeholder="🔍 Buscar cliente..." oninput="filterClients()">
   <div class="urgentes-bar">
-    <button class="urgentes-btn" id="btn-todos-cli" onclick="setFiltroClientes('todos')">Todos</button>
-    <button class="urgentes-btn" id="btn-urgentes-cli" onclick="setFiltroClientes('urgentes')">🔴 Urgentes</button>
-    <button class="urgentes-btn" id="btn-revision-cli" onclick="setFiltroClientes('sin-revision')">📅 Sin revisión</button>
+    <button class="urgentes-btn active" id="btn-todos-cli" onclick="setFiltroClientes(&#39;todos&#39;)">Todos</button>
+    <button class="urgentes-btn" id="btn-urgentes-cli" onclick="setFiltroClientes(&#39;urgentes&#39;)">🔴 Urgentes</button>
+    <button class="urgentes-btn" id="btn-revision-cli" onclick="setFiltroClientes(&#39;sin-revision&#39;)">📅 Sin revisión</button>
   </div>
   <div style="display:flex;gap:8px;margin-bottom:10px">
     <button class="bsm bsm-o" style="flex:1;padding:10px;font-size:13px" onclick="exportarClientesExcel()">📊 Exportar a Excel</button>
-    <button class="bsm bsm-g" style="flex:1;padding:10px;font-size:13px" onclick="document.getElementById('imp-csv').click()">📥 Importar CSV/Excel</button>
+    <button class="bsm bsm-g" style="flex:1;padding:10px;font-size:13px" onclick="document.getElementById(&#39;imp-csv&#39;).click()">📥 Importar CSV/Excel</button>
     <input type="file" id="imp-csv" accept=".csv,.xlsx,.xls" style="display:none" onchange="importarClientesCSV(event)">
   </div>
-  <div id="client-list"></div>
+  <div id="client-list"><div class="empty"><div style="font-size:48px;margin-bottom:12px">🏢</div><p>Sin clientes.<br>Pulsa "+ Nuevo" para crear el primero.</p></div></div>
 </div>
 
-<div id="screen-client" class="screen"></div>
-<div id="screen-inventario" class="screen"></div>
-<div id="screen-checklist" class="screen"></div>
+<div id="screen-client" class="screen" style="display: none;"></div>
+<div id="screen-inventario" class="screen" style="display: none;"></div>
+<div id="screen-checklist" class="screen" style="display: none;"></div>
 
 <!-- MODO REVISIÓN RÁPIDA -->
 <div id="modo-rapido" style="display:none;position:fixed;inset:0;z-index:200;background:var(--bg);flex-direction:column">
@@ -1678,9 +1674,7 @@ body.dark .dash-action-btn{box-shadow:0 3px 12px rgba(0,0,0,.35)}
       <div id="mr-estado-actual" style="text-align:center;font-size:13px;color:var(--text2);margin-bottom:16px"></div>
       <!-- Obs incidencia -->
       <div id="mr-obs-wrap" style="display:none;margin-bottom:16px">
-        <textarea id="mr-obs" placeholder="Describe la incidencia..." 
-          style="width:100%;padding:10px 12px;border:1.5px solid var(--red);border-radius:10px;font-size:14px;min-height:70px;resize:vertical;background:var(--surface);color:var(--text)"
-          oninput="mrGuardarObs(this.value)"></textarea>
+        <textarea id="mr-obs" placeholder="Describe la incidencia..." style="width:100%;padding:10px 12px;border:1.5px solid var(--red);border-radius:10px;font-size:14px;min-height:70px;resize:vertical;background:var(--surface);color:var(--text)" oninput="mrGuardarObs(this.value)"></textarea>
       </div>
     </div>
     <!-- Contador posición -->
@@ -1689,47 +1683,43 @@ body.dark .dash-action-btn{box-shadow:0 3px 12px rgba(0,0,0,.35)}
   <!-- Botones acción -->
   <div style="padding:16px;padding-bottom:32px;display:flex;flex-direction:column;gap:10px;flex-shrink:0;background:var(--surface);border-top:1px solid var(--border)">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-      <button onclick="mrSetEst('ok')" id="mr-btn-ok"
-        style="padding:16px;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;background:#d4edda;color:#155724;transition:transform .1s;active:scale(.95)">
+      <button onclick="mrSetEst(&#39;ok&#39;)" id="mr-btn-ok" style="padding:16px;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;background:#d4edda;color:#155724;transition:transform .1s;active:scale(.95)">
         ✓ OK
       </button>
-      <button onclick="mrSetEst('inc')" id="mr-btn-inc"
-        style="padding:16px;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;background:#fde8e8;color:#721c24;transition:transform .1s">
+      <button onclick="mrSetEst(&#39;inc&#39;)" id="mr-btn-inc" style="padding:16px;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;background:#fde8e8;color:#721c24;transition:transform .1s">
         ⚠ Incidencia
       </button>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-      <button onclick="mrSetEst('na')"
-        style="padding:12px;border:1px solid var(--border);border-radius:14px;font-size:14px;cursor:pointer;background:var(--gray);color:var(--text2)">
+      <button onclick="mrSetEst(&#39;na&#39;)" style="padding:12px;border:1px solid var(--border);border-radius:14px;font-size:14px;cursor:pointer;background:var(--gray);color:var(--text2)">
         — No aplica
       </button>
-      <button onclick="mrSaltar()"
-        style="padding:12px;border:1px solid var(--border);border-radius:14px;font-size:14px;cursor:pointer;background:var(--gray);color:var(--text2)">
+      <button onclick="mrSaltar()" style="padding:12px;border:1px solid var(--border);border-radius:14px;font-size:14px;cursor:pointer;background:var(--gray);color:var(--text2)">
         › Saltar
       </button>
     </div>
   </div>
 </div>
 <!-- FIN MODO REVISIÓN RÁPIDA -->
-<div id="screen-resumen" class="screen"></div>
-<div id="screen-certificado" class="screen"></div>
-<div id="screen-catalogo" class="screen"></div>
-<div id="screen-presupuestos" class="screen"></div>
-<div id="screen-presupuesto-detalle" class="screen"></div>
-<div id="screen-presupuesto-print" class="screen"></div>
-<div id="screen-doc-print" class="screen"></div>
-<div id="screen-facturas" class="screen"></div>
-<div id="screen-factura-detalle" class="screen"></div>
-<div id="screen-factura-print" class="screen"></div>
+<div id="screen-resumen" class="screen" style="display: none;"></div>
+<div id="screen-certificado" class="screen" style="display: none;"></div>
+<div id="screen-catalogo" class="screen" style="display: none;"></div>
+<div id="screen-presupuestos" class="screen" style="display: none;"></div>
+<div id="screen-presupuesto-detalle" class="screen" style="display: none;"></div>
+<div id="screen-presupuesto-print" class="screen" style="display: none;"></div>
+<div id="screen-doc-print" class="screen" style="display: none;"></div>
+<div id="screen-facturas" class="screen" style="display: none;"></div>
+<div id="screen-factura-detalle" class="screen" style="display: none;"></div>
+<div id="screen-factura-print" class="screen" style="display: none;"></div>
 
 <!-- PANTALLA PROVEEDORES -->
-<div id="screen-proveedores" class="screen">
+<div id="screen-proveedores" class="screen" style="display: none;">
   <input type="text" class="search-bar" id="prov-search" placeholder="🔍 Buscar proveedor..." oninput="renderProveedores()">
   <div id="prov-list"></div>
 </div>
 
 <!-- PANTALLA IMPORTAR DATOS -->
-<div id="screen-importar" class="screen">
+<div id="screen-importar" class="screen" style="display: none;">
   <div class="section">
     <div class="stitle">📥 Importar datos desde Excel / CSV</div>
 
@@ -1737,7 +1727,7 @@ body.dark .dash-action-btn{box-shadow:0 3px 12px rgba(0,0,0,.35)}
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:12px">
       <div style="font-size:15px;font-weight:700;margin-bottom:4px">🏢 Clientes</div>
       <div style="font-size:12px;color:var(--text2);margin-bottom:10px">El archivo debe tener una columna <b>Nombre</b>. Columnas opcionales: Razón Social, Dirección, CP, CIF/NIF, Teléfono, Email, IBAN, Forma de Pago, Contactos.</div>
-      <button class="btn" onclick="document.getElementById('imp-cli-xls').click()" style="margin-bottom:6px">📂 Seleccionar archivo de Clientes</button>
+      <button class="btn" onclick="document.getElementById(&#39;imp-cli-xls&#39;).click()" style="margin-bottom:6px">📂 Seleccionar archivo de Clientes</button>
       <input type="file" id="imp-cli-xls" accept=".csv,.xlsx,.xls" style="display:none" onchange="importarClientesCSV(event)">
       <div style="font-size:11px;color:var(--text3)">Formatos: .csv (sep. ; o ,) · .xlsx · .xls</div>
     </div>
@@ -1746,7 +1736,7 @@ body.dark .dash-action-btn{box-shadow:0 3px 12px rgba(0,0,0,.35)}
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:12px">
       <div style="font-size:15px;font-weight:700;margin-bottom:4px">📦 Materiales / Catálogo</div>
       <div style="font-size:12px;color:var(--text2);margin-bottom:10px">El archivo debe tener una columna <b>Descripcion</b> (o Desc). Opcionales: Referencia, Categoría, Precio Coste, Precio Venta, Unidad, Notas.</div>
-      <button class="btn" onclick="document.getElementById('imp-mat-xls').click()" style="margin-bottom:6px">📂 Seleccionar archivo de Materiales</button>
+      <button class="btn" onclick="document.getElementById(&#39;imp-mat-xls&#39;).click()" style="margin-bottom:6px">📂 Seleccionar archivo de Materiales</button>
       <input type="file" id="imp-mat-xls" accept=".csv,.xlsx,.xls" style="display:none" onchange="importarMaterialesCSV(event)">
       <button class="btn btn-out" onclick="exportarPlantillaMateriales()" style="margin-bottom:6px;font-size:13px">📄 Descargar plantilla Excel</button>
       <div style="font-size:11px;color:var(--text3)">Formatos: .csv (sep. ; o ,) · .xlsx · .xls</div>
@@ -1756,7 +1746,7 @@ body.dark .dash-action-btn{box-shadow:0 3px 12px rgba(0,0,0,.35)}
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:12px">
       <div style="font-size:15px;font-weight:700;margin-bottom:4px">🚚 Proveedores</div>
       <div style="font-size:12px;color:var(--text2);margin-bottom:10px">El archivo debe tener una columna <b>Nombre</b>. Opcionales: CIF, Teléfono, Email, Dirección, CP, Contacto, Notas.</div>
-      <button class="btn" onclick="document.getElementById('imp-prov-xls').click()" style="margin-bottom:6px">📂 Seleccionar archivo de Proveedores</button>
+      <button class="btn" onclick="document.getElementById(&#39;imp-prov-xls&#39;).click()" style="margin-bottom:6px">📂 Seleccionar archivo de Proveedores</button>
       <input type="file" id="imp-prov-xls" accept=".csv,.xlsx,.xls" style="display:none" onchange="importarProveedoresCSV(event)">
       <button class="btn btn-out" onclick="exportarPlantillaProveedores()" style="margin-bottom:6px;font-size:13px">📄 Descargar plantilla Excel</button>
       <div style="font-size:11px;color:var(--text3)">Formatos: .csv (sep. ; o ,) · .xlsx · .xls</div>
@@ -1765,14 +1755,12 @@ body.dark .dash-action-btn{box-shadow:0 3px 12px rgba(0,0,0,.35)}
 </div>
 
 <!-- PANTALLA ACCESO BLOQUEADO -->
-<div id="screen-acceso" class="screen">
+<div id="screen-acceso" class="screen" style="display: none;">
   <div class="acceso-box">
     <div class="acceso-icon">🔐</div>
     <div class="acceso-title">RIPCI PCI Pro</div>
     <div class="acceso-sub">Introduce tu clave de acceso para continuar</div>
-    <input type="text" class="acceso-input" id="acceso-input" placeholder="CLAVE-XXXX"
-      autocomplete="off" autocorrect="off" spellcheck="false"
-      onkeydown="if(event.key==='Enter')verificarClave()">
+    <input type="text" class="acceso-input" id="acceso-input" placeholder="CLAVE-XXXX" autocomplete="off" autocorrect="off" spellcheck="false" onkeydown="if(event.key===&#39;Enter&#39;)verificarClave()">
     <div class="acceso-error" id="acceso-error"></div>
     <button class="btn" onclick="verificarClave()">Acceder</button>
     <div style="font-size:11px;color:var(--text3);margin-top:16px">¿No tienes clave? Contacta con tu instalador PCI.</div>
@@ -1780,7 +1768,7 @@ body.dark .dash-action-btn{box-shadow:0 3px 12px rgba(0,0,0,.35)}
 </div>
 
 <!-- PANEL ADMIN -->
-<div id="screen-admin" class="screen">
+<div id="screen-admin" class="screen" style="display: none;">
   <div class="section">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
       <div class="stitle" style="margin-bottom:0">Panel de claves de acceso</div>
@@ -1792,18 +1780,18 @@ body.dark .dash-action-btn{box-shadow:0 3px 12px rgba(0,0,0,.35)}
 
 <div id="tab-bar">
   <div class="tb-inner">
-    <button class="tab-btn" id="tab-datos" onclick="swTab('datos')"><span class="ti">✏️</span><span>Datos</span></button>
-    <button class="tab-btn" id="tab-inventario" onclick="swTab('inventario')"><span class="ti">📋</span><span>Equipos</span></button>
-    <button class="tab-btn" id="tab-checklist" onclick="swTab('checklist')"><span class="ti">✅</span><span>Revisión</span></button>
-    <button class="tab-btn" id="tab-resumen" onclick="swTab('resumen')"><span class="ti">📊</span><span>Resumen</span></button>
-    <button class="tab-btn" id="tab-certificado" onclick="swTab('certificado')"><span class="ti">📜</span><span>Cert.</span></button>
-    <button class="tab-btn" id="tab-presupuestos" onclick="swTab('presupuestos')"><span class="ti">💶</span><span>Presupu.</span></button>
-    <button class="tab-btn" id="tab-facturas" onclick="swTab('facturas')"><span class="ti">🧾</span><span>Facturas</span></button>
+    <button class="tab-btn" id="tab-datos" onclick="swTab(&#39;datos&#39;)"><span class="ti">✏️</span><span>Datos</span></button>
+    <button class="tab-btn" id="tab-inventario" onclick="swTab(&#39;inventario&#39;)"><span class="ti">📋</span><span>Equipos</span></button>
+    <button class="tab-btn" id="tab-checklist" onclick="swTab(&#39;checklist&#39;)"><span class="ti">✅</span><span>Revisión</span></button>
+    <button class="tab-btn" id="tab-resumen" onclick="swTab(&#39;resumen&#39;)"><span class="ti">📊</span><span>Resumen</span></button>
+    <button class="tab-btn" id="tab-certificado" onclick="swTab(&#39;certificado&#39;)"><span class="ti">📜</span><span>Cert.</span></button>
+    <button class="tab-btn" id="tab-presupuestos" onclick="swTab(&#39;presupuestos&#39;)"><span class="ti">💶</span><span>Presupu.</span></button>
+    <button class="tab-btn" id="tab-facturas" onclick="swTab(&#39;facturas&#39;)"><span class="ti">🧾</span><span>Facturas</span></button>
   </div>
 </div>
 
 <!-- MODAL CLIENTE -->
-<div id="modal-cliente" class="modal-wrap">
+<div id="modal-cliente" class="modal-wrap v5-init">
   <div class="mbox">
     <h2>Nuevo cliente</h2>
     <div class="stitle">Instalación</div>
@@ -1830,29 +1818,29 @@ body.dark .dash-action-btn{box-shadow:0 3px 12px rgba(0,0,0,.35)}
       <div class="field"><label>Nº Autorización</label><input type="text" id="nc-au"></div>
       <div class="field"><label>Responsable</label><input type="text" id="nc-re"></div>
     </div>
-    <div class="macts"><button class="mcancel" onclick="closeM('modal-cliente')">Cancelar</button><button class="mok" onclick="crearCliente()">Crear</button></div>
+    <div class="macts"><button class="mcancel" onclick="closeM(&#39;modal-cliente&#39;)">Cancelar</button><button class="mok" onclick="crearCliente()">Crear</button></div>
   </div>
 </div>
 
 <!-- MODAL REVISIÓN -->
-<div id="modal-revision" class="modal-wrap">
+<div id="modal-revision" class="modal-wrap v5-init">
   <div class="mbox">
     <h2>Nueva revisión</h2>
     <div class="frow">
       <div class="field"><label>Año</label><input type="number" id="nr-y" min="2000" max="2099"></div>
-      <div class="field"><label>Tipo</label><select id="nr-t"><option>Trimestral</option><option>Semestral</option><option selected>Anual</option><option>Quinquenal</option></select></div>
+      <div class="field"><label>Tipo</label><select id="nr-t"><option>Trimestral</option><option>Semestral</option><option selected="">Anual</option><option>Quinquenal</option></select></div>
     </div>
     <div class="field"><label>Técnico revisor</label><input type="text" id="nr-tc"></div>
     <div class="field"><label>Fecha de revisión</label><input type="date" id="nr-f"></div>
     <div class="field"><label>Nº Certificado</label><input type="text" id="nr-nc" placeholder="CERT-2025-001"></div>
     <div class="field"><label>Observaciones generales</label><textarea id="nr-obs" placeholder="Observaciones sobre la revisión..."></textarea></div>
     <p style="font-size:12px;color:var(--text2);margin:6px 0 0">Se generarán todas las tareas para los equipos del inventario actual.</p>
-    <div class="macts"><button class="mcancel" onclick="closeM('modal-revision')">Cancelar</button><button class="mok" onclick="crearRevision()">Crear</button></div>
+    <div class="macts"><button class="mcancel" onclick="closeM(&#39;modal-revision&#39;)">Cancelar</button><button class="mok" onclick="crearRevision()">Crear</button></div>
   </div>
 </div>
 
 <!-- MODAL FIRMA -->
-<div id="modal-firma" class="modal-wrap">
+<div id="modal-firma" class="modal-wrap v5-init">
   <div class="mbox">
     <h2 id="firma-title">Firma del técnico</h2>
     <div class="firma-area">
@@ -1860,7 +1848,7 @@ body.dark .dash-action-btn{box-shadow:0 3px 12px rgba(0,0,0,.35)}
       <button class="firma-clear" onclick="clearFirma()">Borrar</button>
     </div>
     <div class="firma-label">Firma con el dedo o el ratón</div>
-    <div class="macts"><button class="mcancel" onclick="closeM('modal-firma')">Cancelar</button><button class="mok" onclick="guardarFirma()">Guardar firma</button></div>
+    <div class="macts"><button class="mcancel" onclick="closeM(&#39;modal-firma&#39;)">Cancelar</button><button class="mok" onclick="guardarFirma()">Guardar firma</button></div>
   </div>
 </div>
 
@@ -1869,7 +1857,7 @@ body.dark .dash-action-btn{box-shadow:0 3px 12px rgba(0,0,0,.35)}
      MODAL BUSCADOR DE CLIENTES UNIVERSAL
      Usado para: presupuestos, facturas, revisiones, certificados
      ═══════════════════════════════════════════════════════════ -->
-<div id="modal-buscar-cliente" class="modal-wrap">
+<div id="modal-buscar-cliente" class="modal-wrap v5-init">
   <div class="mbox" style="padding:0;overflow:hidden;max-width:520px">
     <!-- Cabecera con color según tipo de documento -->
     <div id="mbc-header" style="background:var(--red);padding:18px 20px 14px;color:#fff">
@@ -1880,19 +1868,15 @@ body.dark .dash-action-btn{box-shadow:0 3px 12px rgba(0,0,0,.35)}
     <div style="padding:12px 16px 8px;background:var(--surface);border-bottom:1px solid var(--border)">
       <div style="position:relative">
         <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:16px;pointer-events:none">🔍</span>
-        <input type="text" id="mbc-search"
-          style="width:100%;padding:11px 36px 11px 38px;border:1.5px solid var(--border);border-radius:12px;font-size:15px;background:var(--surface2);color:var(--text)"
-          placeholder="Nombre, CIF, calle, teléfono, email..."
-          oninput="mbcFiltrar()" autocomplete="off" autocorrect="off" spellcheck="false">
-        <button id="mbc-clear" onclick="mbcLimpiar()"
-          style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:var(--text3);border:none;color:#fff;width:20px;height:20px;border-radius:50%;font-size:11px;cursor:pointer;display:none;align-items:center;justify-content:center">✕</button>
+        <input type="text" id="mbc-search" style="width:100%;padding:11px 36px 11px 38px;border:1.5px solid var(--border);border-radius:12px;font-size:15px;background:var(--surface2);color:var(--text)" placeholder="Nombre, CIF, calle, teléfono, email..." oninput="mbcFiltrar()" autocomplete="off" autocorrect="off" spellcheck="false">
+        <button id="mbc-clear" onclick="mbcLimpiar()" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:var(--text3);border:none;color:#fff;width:20px;height:20px;border-radius:50%;font-size:11px;cursor:pointer;display:none;align-items:center;justify-content:center">✕</button>
       </div>
       <!-- Filtros rápidos -->
       <div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap" id="mbc-filtros">
-        <button class="mbc-fpill active" onclick="mbcSetFiltro('todos',this)">Todos</button>
-        <button class="mbc-fpill" onclick="mbcSetFiltro('recientes',this)">🕐 Recientes</button>
-        <button class="mbc-fpill" onclick="mbcSetFiltro('presupuestos',this)">💶 Con presupuestos</button>
-        <button class="mbc-fpill" onclick="mbcSetFiltro('facturas',this)">🧾 Con facturas</button>
+        <button class="mbc-fpill active" onclick="mbcSetFiltro(&#39;todos&#39;,this)">Todos</button>
+        <button class="mbc-fpill" onclick="mbcSetFiltro(&#39;recientes&#39;,this)">🕐 Recientes</button>
+        <button class="mbc-fpill" onclick="mbcSetFiltro(&#39;presupuestos&#39;,this)">💶 Con presupuestos</button>
+        <button class="mbc-fpill" onclick="mbcSetFiltro(&#39;facturas&#39;,this)">🧾 Con facturas</button>
       </div>
     </div>
     <!-- Contador resultados -->
@@ -1903,8 +1887,8 @@ body.dark .dash-action-btn{box-shadow:0 3px 12px rgba(0,0,0,.35)}
     <div id="mbc-lista" style="max-height:340px;overflow-y:auto;background:var(--surface)"></div>
     <!-- Pie -->
     <div style="padding:12px 16px;border-top:1px solid var(--border);display:flex;gap:8px;background:var(--surface)">
-      <button class="btn btn-gray" style="margin:0;flex:1;padding:11px;font-size:14px" onclick="closeM('modal-buscar-cliente')">Cancelar</button>
-      <button class="btn btn-out" style="margin:0;flex:1;padding:11px;font-size:14px" onclick="closeM('modal-buscar-cliente');openM('modal-cliente')">➕ Nuevo cliente</button>
+      <button class="btn btn-gray" style="margin:0;flex:1;padding:11px;font-size:14px" onclick="closeM(&#39;modal-buscar-cliente&#39;)">Cancelar</button>
+      <button class="btn btn-out" style="margin:0;flex:1;padding:11px;font-size:14px" onclick="closeM(&#39;modal-buscar-cliente&#39;);openM(&#39;modal-cliente&#39;)">➕ Nuevo cliente</button>
     </div>
   </div>
 </div>
@@ -1913,7 +1897,7 @@ body.dark .dash-action-btn{box-shadow:0 3px 12px rgba(0,0,0,.35)}
 <div id="modal-cliente-pres" style="display:none"></div>
 
 <!-- MODAL MATERIAL CATÁLOGO -->
-<div id="modal-material" class="modal-wrap">
+<div id="modal-material" class="modal-wrap v5-init">
   <div class="mbox">
     <h2 id="modal-mat-title">Nuevo material</h2>
     <input type="hidden" id="mat-edit-id">
@@ -1936,12 +1920,12 @@ body.dark .dash-action-btn{box-shadow:0 3px 12px rgba(0,0,0,.35)}
       </select>
     </div>
     <div class="field"><label>Notas internas</label><textarea id="mat-notas" placeholder="Referencia proveedor, notas..."></textarea></div>
-    <div class="macts"><button class="mcancel" onclick="closeM('modal-material')">Cancelar</button><button class="mok" onclick="guardarMaterial()">Guardar</button></div>
+    <div class="macts"><button class="mcancel" onclick="closeM(&#39;modal-material&#39;)">Cancelar</button><button class="mok" onclick="guardarMaterial()">Guardar</button></div>
   </div>
 </div>
 
 <!-- MODAL PROVEEDOR -->
-<div id="modal-proveedor" class="modal-wrap">
+<div id="modal-proveedor" class="modal-wrap v5-init">
   <div class="mbox">
     <h2 id="modal-prov-title">Nuevo proveedor</h2>
     <input type="hidden" id="prov-edit-id">
@@ -1956,35 +1940,35 @@ body.dark .dash-action-btn{box-shadow:0 3px 12px rgba(0,0,0,.35)}
     <div class="field"><label>Persona de contacto</label><input type="text" id="prov-contacto" placeholder="Nombre contacto"></div>
     <div class="field"><label>Especialidad / Notas</label><textarea id="prov-notas" placeholder="Extintores, BIEs, materiales contra incendios..."></textarea></div>
     <div class="macts">
-      <button class="mcancel" onclick="closeM('modal-proveedor')">Cancelar</button>
-      <button class="mcancel" style="color:var(--red);margin-right:auto" onclick="if(document.getElementById('prov-edit-id').value)eliminarProveedor(document.getElementById('prov-edit-id').value)" id="prov-del-btn">🗑</button>
+      <button class="mcancel" onclick="closeM(&#39;modal-proveedor&#39;)">Cancelar</button>
+      <button class="mcancel" style="color:var(--red);margin-right:auto" onclick="if(document.getElementById(&#39;prov-edit-id&#39;).value)eliminarProveedor(document.getElementById(&#39;prov-edit-id&#39;).value)" id="prov-del-btn">🗑</button>
       <button class="mok" onclick="guardarProveedor()">Guardar</button>
     </div>
   </div>
 </div>
 
 <!-- MODAL NUEVA FACTURA GLOBAL -->
-<div id="modal-nueva-fac-global" class="modal-wrap">
+<div id="modal-nueva-fac-global" class="modal-wrap v5-init">
   <div class="mbox">
     <h2>🧾 Nueva factura — ¿Para qué cliente?</h2>
     <div style="font-size:13px;color:var(--text2);margin-bottom:12px">Selecciona el cliente. Podrás añadir materiales libremente o importar desde un presupuesto.</div>
     <div id="nfg-cli-list" style="max-height:320px;overflow-y:auto;border:1px solid var(--border);border-radius:var(--rsm)"></div>
-    <div class="macts"><button class="mcancel" onclick="closeM('modal-nueva-fac-global')">Cancelar</button></div>
+    <div class="macts"><button class="mcancel" onclick="closeM(&#39;modal-nueva-fac-global&#39;)">Cancelar</button></div>
   </div>
 </div>
 
 <!-- MODAL NUEVA LÍNEA PRESUPUESTO -->
-<div id="modal-fac-desde-pres" class="modal-wrap">
+<div id="modal-fac-desde-pres" class="modal-wrap v5-init">
   <div class="mbox">
     <h2>🧾 Factura desde presupuesto</h2>
     <div style="font-size:13px;color:var(--text2);margin-bottom:12px">Selecciona el presupuesto aceptado para generar la factura:</div>
     <div id="fac-pres-list" style="max-height:300px;overflow-y:auto;border:1px solid var(--border);border-radius:var(--rsm)"></div>
-    <div class="macts"><button class="mcancel" onclick="closeM('modal-fac-desde-pres')">Cancelar</button></div>
+    <div class="macts"><button class="mcancel" onclick="closeM(&#39;modal-fac-desde-pres&#39;)">Cancelar</button></div>
   </div>
 </div>
 
 <!-- MODAL NUEVA LÍNEA PRESUPUESTO -->
-<div id="modal-linea" class="modal-wrap">
+<div id="modal-linea" class="modal-wrap v5-init">
   <div class="mbox">
     <h2>➕ Añadir línea al presupuesto</h2>
     <div style="margin-bottom:10px">
@@ -2004,7 +1988,7 @@ body.dark .dash-action-btn{box-shadow:0 3px 12px rgba(0,0,0,.35)}
       <div class="field"><label>P. unitario (€)</label><input type="number" id="lin-precio" step="0.01" min="0" value="0"></div>
       <div class="field"><label>Dto. línea (%)</label><input type="number" id="lin-dto" value="0" min="0" max="100"></div>
     </div>
-    <div class="macts"><button class="mcancel" onclick="closeM('modal-linea')">Cancelar</button><button class="mok" onclick="guardarLinea()">Añadir línea</button></div>
+    <div class="macts"><button class="mcancel" onclick="closeM(&#39;modal-linea&#39;)">Cancelar</button><button class="mok" onclick="guardarLinea()">Añadir línea</button></div>
   </div>
 </div>
 
@@ -2788,7 +2772,7 @@ function ensureRevision(){
   const year=String(new Date().getFullYear());
   if(c.revisiones[year]){cYear=year;return;}
   const tasks=[];
-  eqV(c).forEach(eq=>{(TASKS[eq.tipo]||[]).forEach(tmpl=>{tasks.push({id:uid(),codigo:eq.codigo,tipo:eq.tipo,ubicacion:eq.ubicacion||'',p:tmpl.p,tarea:tmpl.t,estado:'',fecha:'',obs:''}); });});
+  eqV(c).forEach(eq=>{(TASKS[eq.tipo]||[]).forEach(tmpl=>{tasks.push({id:uid(),codigo:eq.codigo,tipo:eq.tipo,ubicacion:eq.ubicacion||'',p:tmpl.p,tarea:tmpl.t,estado:'ok',fecha:'',obs:''}); });});
   c.revisiones[year]={year,tipo:'Revisión anual',tecnico:'',fecha:new Date().toISOString().slice(0,10),numcert:'',obs:'',tasks,creado:new Date().toISOString()};
   cYear=year;
   sched();
@@ -8105,17 +8089,17 @@ window.renderAjustesScreen = function(){
 </script>
 
 <!-- SCREEN AJUSTES -->
-<div id="screen-ajustes" class="screen" style="padding:0;padding-bottom:96px">
+<div id="screen-ajustes" class="screen" style="padding: 0px 0px 96px; display: none;">
 
   <!-- Tabs de configuración -->
   <div style="background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:92px;z-index:97;overflow-x:auto;-webkit-overflow-scrolling:touch">
     <div style="display:flex;min-width:max-content;padding:0 4px">
-      <button class="aj-tab-btn active" id="ajtab-empresa" onclick="swAjTab('empresa')" style="flex:none;padding:10px 14px;border:none;background:none;font-size:12px;font-weight:700;color:var(--red);cursor:pointer;border-bottom:2px solid var(--red);white-space:nowrap">🏢 Empresa</button>
-      <button class="aj-tab-btn" id="ajtab-documentos" onclick="swAjTab('documentos')" style="flex:none;padding:10px 14px;border:none;background:none;font-size:12px;font-weight:600;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap">📄 Documentos</button>
-      <button class="aj-tab-btn" id="ajtab-facturas" onclick="swAjTab('facturas')" style="flex:none;padding:10px 14px;border:none;background:none;font-size:12px;font-weight:600;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap">🧾 Facturas</button>
-      <button class="aj-tab-btn" id="ajtab-certificados" onclick="swAjTab('certificados')" style="flex:none;padding:10px 14px;border:none;background:none;font-size:12px;font-weight:600;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap">📜 Certificados</button>
-      <button class="aj-tab-btn" id="ajtab-diseno" onclick="swAjTab('diseno')" style="flex:none;padding:10px 14px;border:none;background:none;font-size:12px;font-weight:600;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap">🎨 Diseño</button>
-      <button class="aj-tab-btn" id="ajtab-sistema" onclick="swAjTab('sistema')" style="flex:none;padding:10px 14px;border:none;background:none;font-size:12px;font-weight:600;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap">⚙️ Sistema</button>
+      <button class="aj-tab-btn active" id="ajtab-empresa" onclick="swAjTab(&#39;empresa&#39;)" style="flex:none;padding:10px 14px;border:none;background:none;font-size:12px;font-weight:700;color:var(--red);cursor:pointer;border-bottom:2px solid var(--red);white-space:nowrap">🏢 Empresa</button>
+      <button class="aj-tab-btn" id="ajtab-documentos" onclick="swAjTab(&#39;documentos&#39;)" style="flex:none;padding:10px 14px;border:none;background:none;font-size:12px;font-weight:600;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap">📄 Documentos</button>
+      <button class="aj-tab-btn" id="ajtab-facturas" onclick="swAjTab(&#39;facturas&#39;)" style="flex:none;padding:10px 14px;border:none;background:none;font-size:12px;font-weight:600;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap">🧾 Facturas</button>
+      <button class="aj-tab-btn" id="ajtab-certificados" onclick="swAjTab(&#39;certificados&#39;)" style="flex:none;padding:10px 14px;border:none;background:none;font-size:12px;font-weight:600;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap">📜 Certificados</button>
+      <button class="aj-tab-btn" id="ajtab-diseno" onclick="swAjTab(&#39;diseno&#39;)" style="flex:none;padding:10px 14px;border:none;background:none;font-size:12px;font-weight:600;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap">🎨 Diseño</button>
+      <button class="aj-tab-btn" id="ajtab-sistema" onclick="swAjTab(&#39;sistema&#39;)" style="flex:none;padding:10px 14px;border:none;background:none;font-size:12px;font-weight:600;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap">⚙️ Sistema</button>
     </div>
   </div>
 
@@ -8132,9 +8116,9 @@ window.renderAjustesScreen = function(){
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px">
       <div style="font-size:15px;font-weight:700;margin-bottom:4px">📜 Certificado PCI</div>
       <div style="font-size:12px;color:var(--text2);margin-bottom:10px;line-height:1.5">Personaliza los textos que aparecen en el certificado.</div>
-      <div class="field"><label>Comunidad Autónoma / Organismo</label><input type="text" id="doc-comunitat" placeholder="GENERALITAT VALENCIANA..." onchange="updDocConfig('comunitat',this.value)"></div>
-      <div class="field"><label>Número Registro Especial empresa</label><input type="text" id="doc-regEsp" placeholder="B-XXXXXXXX" onchange="updDocConfig('regEsp',this.value)"></div>
-      <div class="field"><label>Texto intro certificado (opcional)</label><textarea id="doc-cert-intro" placeholder="Texto personalizado para la introducción del certificado..." style="min-height:80px" onchange="updDocConfig('certIntro',this.value)"></textarea></div>
+      <div class="field"><label>Comunidad Autónoma / Organismo</label><input type="text" id="doc-comunitat" placeholder="GENERALITAT VALENCIANA..." onchange="updDocConfig(&#39;comunitat&#39;,this.value)"></div>
+      <div class="field"><label>Número Registro Especial empresa</label><input type="text" id="doc-regEsp" placeholder="B-XXXXXXXX" onchange="updDocConfig(&#39;regEsp&#39;,this.value)"></div>
+      <div class="field"><label>Texto intro certificado (opcional)</label><textarea id="doc-cert-intro" placeholder="Texto personalizado para la introducción del certificado..." style="min-height:80px" onchange="updDocConfig(&#39;certIntro&#39;,this.value)"></textarea></div>
       <button class="btn" onclick="guardarDocConfig()">💾 Guardar configuración</button>
     </div>
 
@@ -8142,9 +8126,9 @@ window.renderAjustesScreen = function(){
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px">
       <div style="font-size:15px;font-weight:700;margin-bottom:4px">📃 Contrato de mantenimiento</div>
       <div style="font-size:12px;color:var(--text2);margin-bottom:10px;line-height:1.5">Personaliza los textos del contrato.</div>
-      <div class="field"><label>DNI del representante empresa</label><input type="text" id="doc-dniTecnico" placeholder="00000000X" onchange="updDocConfig('dniTecnico',this.value)"></div>
-      <div class="field"><label>Cláusula de pago personalizada</label><textarea id="doc-clausulaPago" placeholder="Forma de pago: Al contado a la finalización..." style="min-height:70px" onchange="updDocConfig('clausulaPago',this.value)"></textarea></div>
-      <div class="field"><label>Ciudad para firma del contrato</label><input type="text" id="doc-ciudad-contrato" placeholder="Valencia" onchange="updDocConfig('ciudadContrato',this.value)"></div>
+      <div class="field"><label>DNI del representante empresa</label><input type="text" id="doc-dniTecnico" placeholder="00000000X" onchange="updDocConfig(&#39;dniTecnico&#39;,this.value)"></div>
+      <div class="field"><label>Cláusula de pago personalizada</label><textarea id="doc-clausulaPago" placeholder="Forma de pago: Al contado a la finalización..." style="min-height:70px" onchange="updDocConfig(&#39;clausulaPago&#39;,this.value)"></textarea></div>
+      <div class="field"><label>Ciudad para firma del contrato</label><input type="text" id="doc-ciudad-contrato" placeholder="Valencia" onchange="updDocConfig(&#39;ciudadContrato&#39;,this.value)"></div>
       <button class="btn" onclick="guardarDocConfig()">💾 Guardar configuración</button>
     </div>
 
@@ -8153,7 +8137,7 @@ window.renderAjustesScreen = function(){
       <div style="font-size:15px;font-weight:700;margin-bottom:4px">🦺 Acta de EPIs</div>
       <div style="font-size:12px;color:var(--text2);margin-bottom:10px;line-height:1.5">Configura los EPIs predeterminados que aparecen en el acta.</div>
       <div style="font-size:13px;color:var(--text2);margin-bottom:8px">Lista actual: <strong>${EPIS_LISTA.length} EPIs</strong> configurados.</div>
-      <button class="btn btn-out" onclick="irSeccion('epis-global')" style="font-size:13px;padding:10px">🦺 Ir a generar actas EPIs</button>
+      <button class="btn btn-out" onclick="irSeccion(&#39;epis-global&#39;)" style="font-size:13px;padding:10px">🦺 Ir a generar actas EPIs</button>
     </div>
   </div>
 
@@ -8163,29 +8147,29 @@ window.renderAjustesScreen = function(){
 
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px">
       <div style="font-size:15px;font-weight:700;margin-bottom:4px">📋 Numeración y formato</div>
-      <div class="field"><label>Prefijo de facturas (ej: A, B, F)</label><input type="text" id="fact-prefijo" placeholder="B" onchange="updEmpresa('prefFact',this.value)"></div>
+      <div class="field"><label>Prefijo de facturas (ej: A, B, F)</label><input type="text" id="fact-prefijo" placeholder="B" onchange="updEmpresa(&#39;prefFact&#39;,this.value)"></div>
       <div class="field"><label>% IVA por defecto</label>
-        <select id="fact-iva" onchange="updDocConfig('ivaDefault',this.value)" style="padding:5px 13px 9px">
+        <select id="fact-iva" onchange="updDocConfig(&#39;ivaDefault&#39;,this.value)" style="padding:5px 13px 9px">
           <option value="21">21%</option>
           <option value="10">10%</option>
           <option value="4">4%</option>
           <option value="0">0% (exento)</option>
         </select>
       </div>
-      <div class="field"><label>Texto de pie de factura</label><textarea id="fact-pie" placeholder="Texto adicional en el pie de factura..." style="min-height:60px" onchange="updDocConfig('factPie',this.value)"></textarea></div>
-      <div class="field"><label>Observaciones predeterminadas</label><textarea id="fact-obs-def" placeholder="Se entiende aceptada la factura salvo reclamación..." style="min-height:60px" onchange="updDocConfig('factObs',this.value)"></textarea></div>
+      <div class="field"><label>Texto de pie de factura</label><textarea id="fact-pie" placeholder="Texto adicional en el pie de factura..." style="min-height:60px" onchange="updDocConfig(&#39;factPie&#39;,this.value)"></textarea></div>
+      <div class="field"><label>Observaciones predeterminadas</label><textarea id="fact-obs-def" placeholder="Se entiende aceptada la factura salvo reclamación..." style="min-height:60px" onchange="updDocConfig(&#39;factObs&#39;,this.value)"></textarea></div>
       <button class="btn" onclick="guardarDocConfig()">💾 Guardar configuración</button>
     </div>
 
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px">
       <div style="font-size:15px;font-weight:700;margin-bottom:4px">💳 Datos de cobro</div>
       <div style="font-size:12px;color:var(--text2);margin-bottom:10px">Estos datos aparecen en el bloque de pago de la factura. Se gestionan desde la sección Empresa.</div>
-      <button class="btn btn-out" onclick="swAjTab('empresa')" style="font-size:13px;padding:10px">🏢 Ir a datos de empresa</button>
+      <button class="btn btn-out" onclick="swAjTab(&#39;empresa&#39;)" style="font-size:13px;padding:10px">🏢 Ir a datos de empresa</button>
     </div>
 
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px">
       <div style="font-size:15px;font-weight:700;margin-bottom:8px">🧾 Acceso rápido a facturas</div>
-      <button class="btn" onclick="irSeccion('facturas-global')" style="margin-bottom:0">🧾 Ir a Facturas</button>
+      <button class="btn" onclick="irSeccion(&#39;facturas-global&#39;)" style="margin-bottom:0">🧾 Ir a Facturas</button>
     </div>
   </div>
 
@@ -8195,16 +8179,16 @@ window.renderAjustesScreen = function(){
 
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px">
       <div style="font-size:15px;font-weight:700;margin-bottom:4px">🏅 Datos de certificación</div>
-      <div class="field"><label>Número de Registro Instaladora (RIPCI)</label><input type="text" id="cert-numReg" placeholder="R.I. 12/XXXXX" onchange="updEmpresa('numReg',this.value)"></div>
-      <div class="field"><label>Número de Registro Especial (ámbito nacional)</label><input type="text" id="cert-regEsp" placeholder="B-XXXXXXXX" onchange="updDocConfig('regEsp',this.value)"></div>
-      <div class="field"><label>Organismo autorizador (Comunidad Autónoma)</label><textarea id="cert-comunitat" placeholder="GENERALITAT VALENCIANA, CONSELLERIA D'INDUSTRIA..." style="min-height:60px" onchange="updDocConfig('comunitat',this.value)"></textarea></div>
-      <div class="field"><label>Texto final del certificado</label><textarea id="cert-texto-final" placeholder="Texto adicional al pie del certificado..." style="min-height:60px" onchange="updDocConfig('certTextoFinal',this.value)"></textarea></div>
+      <div class="field"><label>Número de Registro Instaladora (RIPCI)</label><input type="text" id="cert-numReg" placeholder="R.I. 12/XXXXX" onchange="updEmpresa(&#39;numReg&#39;,this.value)"></div>
+      <div class="field"><label>Número de Registro Especial (ámbito nacional)</label><input type="text" id="cert-regEsp" placeholder="B-XXXXXXXX" onchange="updDocConfig(&#39;regEsp&#39;,this.value)"></div>
+      <div class="field"><label>Organismo autorizador (Comunidad Autónoma)</label><textarea id="cert-comunitat" placeholder="GENERALITAT VALENCIANA, CONSELLERIA D&#39;INDUSTRIA..." style="min-height:60px" onchange="updDocConfig(&#39;comunitat&#39;,this.value)"></textarea></div>
+      <div class="field"><label>Texto final del certificado</label><textarea id="cert-texto-final" placeholder="Texto adicional al pie del certificado..." style="min-height:60px" onchange="updDocConfig(&#39;certTextoFinal&#39;,this.value)"></textarea></div>
       <button class="btn" onclick="guardarDocConfig()">💾 Guardar configuración</button>
     </div>
 
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px">
       <div style="font-size:15px;font-weight:700;margin-bottom:8px">📜 Ver todos los certificados</div>
-      <button class="btn btn-out" onclick="irSeccion('certificados-global')" style="font-size:13px;padding:10px;margin-bottom:0">📜 Ir a certificados</button>
+      <button class="btn btn-out" onclick="irSeccion(&#39;certificados-global&#39;)" style="font-size:13px;padding:10px;margin-bottom:0">📜 Ir a certificados</button>
     </div>
   </div>
 
@@ -8234,8 +8218,7 @@ window.renderAjustesScreen = function(){
       <div style="margin-bottom:14px">
         <div style="font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px">🎨 Color principal</div>
         <div style="display:flex;align-items:center;gap:10px">
-          <input type="color" id="dj-color" value="#c0392b" oninput="actualizarPreviewDiseno()"
-            style="width:52px;height:42px;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;padding:2px">
+          <input type="color" id="dj-color" value="#c0392b" oninput="actualizarPreviewDiseno()" style="width:52px;height:42px;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;padding:2px">
           <div style="flex:1"><div style="font-size:12px;color:var(--text2)">Afecta a: encabezado, barra de número, cabecera de tabla, fila total, capítulos</div></div>
         </div>
       </div>
@@ -8245,16 +8228,13 @@ window.renderAjustesScreen = function(){
           <div style="font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.4px">📏 Grosor borde inferior del encabezado</div>
           <span id="dj-header-borde-lbl" style="font-size:13px;font-weight:700;color:var(--red)">3</span>px
         </div>
-        <input type="range" id="dj-header-borde" min="1" max="10" value="3"
-          oninput="document.getElementById('dj-header-borde-lbl').textContent=this.value;actualizarPreviewDiseno()"
-          style="width:100%;accent-color:var(--red)">
+        <input type="range" id="dj-header-borde" min="1" max="10" value="3" oninput="document.getElementById(&#39;dj-header-borde-lbl&#39;).textContent=this.value;actualizarPreviewDiseno()" style="width:100%;accent-color:var(--red)">
       </div>
 
       <div style="margin-bottom:14px">
         <div style="font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px">— Color de líneas separadoras de filas</div>
         <div style="display:flex;align-items:center;gap:10px">
-          <input type="color" id="dj-linea-color" value="#e0e0e0" oninput="actualizarPreviewDiseno()"
-            style="width:52px;height:42px;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;padding:2px">
+          <input type="color" id="dj-linea-color" value="#e0e0e0" oninput="actualizarPreviewDiseno()" style="width:52px;height:42px;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;padding:2px">
           <div style="flex:1;font-size:12px;color:var(--text2)">Color de los separadores entre filas de la tabla</div>
         </div>
       </div>
@@ -8264,9 +8244,7 @@ window.renderAjustesScreen = function(){
           <div style="font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.4px">📏 Grosor de líneas de filas</div>
           <span id="dj-linea-grosor-lbl" style="font-size:13px;font-weight:700;color:var(--red)">1</span>px
         </div>
-        <input type="range" id="dj-linea-grosor" min="0" max="4" value="1"
-          oninput="document.getElementById('dj-linea-grosor-lbl').textContent=this.value;actualizarPreviewDiseno()"
-          style="width:100%;accent-color:var(--red)">
+        <input type="range" id="dj-linea-grosor" min="0" max="4" value="1" oninput="document.getElementById(&#39;dj-linea-grosor-lbl&#39;).textContent=this.value;actualizarPreviewDiseno()" style="width:100%;accent-color:var(--red)">
       </div>
 
       <div style="font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px;margin-top:4px;padding-top:12px;border-top:1px solid var(--border)">📦 Estilo de capítulos</div>
@@ -8276,9 +8254,7 @@ window.renderAjustesScreen = function(){
           <div style="font-size:12px;color:var(--text2)">Relleno interno (padding)</div>
           <span id="dj-cap-padding-lbl" style="font-size:13px;font-weight:700;color:var(--red)">7</span>px
         </div>
-        <input type="range" id="dj-cap-padding" min="4" max="18" value="7"
-          oninput="document.getElementById('dj-cap-padding-lbl').textContent=this.value;actualizarPreviewDiseno()"
-          style="width:100%;accent-color:var(--red)">
+        <input type="range" id="dj-cap-padding" min="4" max="18" value="7" oninput="document.getElementById(&#39;dj-cap-padding-lbl&#39;).textContent=this.value;actualizarPreviewDiseno()" style="width:100%;accent-color:var(--red)">
       </div>
 
       <div style="margin-bottom:14px">
@@ -8286,19 +8262,16 @@ window.renderAjustesScreen = function(){
           <div style="font-size:12px;color:var(--text2)">Grosor acento lateral izquierdo</div>
           <span id="dj-cap-borde-lbl" style="font-size:13px;font-weight:700;color:var(--red)">0</span>px
         </div>
-        <input type="range" id="dj-cap-borde" min="0" max="10" value="0"
-          oninput="document.getElementById('dj-cap-borde-lbl').textContent=this.value;actualizarPreviewDiseno()"
-          style="width:100%;accent-color:var(--red)">
+        <input type="range" id="dj-cap-borde" min="0" max="10" value="0" oninput="document.getElementById(&#39;dj-cap-borde-lbl&#39;).textContent=this.value;actualizarPreviewDiseno()" style="width:100%;accent-color:var(--red)">
       </div>
 
       <div style="margin-bottom:16px">
         <div style="font-size:12px;color:var(--text2);margin-bottom:8px">Color acento lateral izquierdo</div>
-        <input type="color" id="dj-cap-borde-color" value="#ffffff" oninput="actualizarPreviewDiseno()"
-          style="width:52px;height:38px;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;padding:2px">
+        <input type="color" id="dj-cap-borde-color" value="#ffffff" oninput="actualizarPreviewDiseno()" style="width:52px;height:38px;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;padding:2px">
       </div>
 
       <div style="font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px">👁 Preview</div>
-      <div id="dj-preview" style="border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:14px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif"></div>
+      <div id="dj-preview" style="border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:14px;font-family:-apple-system,BlinkMacSystemFont,&#39;Segoe UI&#39;,Arial,sans-serif"></div>
 
       <div style="display:flex;gap:8px">
         <button onclick="guardarDisenoPres()" style="flex:3;padding:12px;background:var(--red);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer">💾 Guardar diseño</button>
@@ -8316,8 +8289,7 @@ window.renderAjustesScreen = function(){
       <div style="font-size:15px;font-weight:700;margin-bottom:4px">🔑 Contraseña de acceso</div>
       <div style="font-size:12px;color:var(--text2);margin-bottom:14px">Clave que se pide al abrir la app. La clave actual es <strong id="aj-clave-actual" style="color:var(--red)">···</strong></div>
       <label style="font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;display:block;margin-bottom:6px">Nueva contraseña</label>
-      <input id="aj-nueva-clave" type="text" placeholder="Ej: MIEMPRESA-2025" autocomplete="off"
-        style="width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:15px;margin-bottom:10px;background:var(--surface2);color:var(--text)">
+      <input id="aj-nueva-clave" type="text" placeholder="Ej: MIEMPRESA-2025" autocomplete="off" style="width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:15px;margin-bottom:10px;background:var(--surface2);color:var(--text)">
       <div style="display:flex;gap:8px">
         <button onclick="guardarNuevaClave()" style="flex:2;padding:12px;background:var(--red);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer">💾 Guardar contraseña</button>
         <button onclick="mostrarClaveActual()" style="flex:1;padding:12px;background:var(--gray);color:var(--text2);border:1px solid var(--border);border-radius:10px;font-size:14px;cursor:pointer">👁 Ver</button>
@@ -9467,24 +9439,24 @@ setTimeout(()=>{
 }, 600);
 
 console.log('[RIPCI v8] Motor profesional cargado ✓');
-</script>
+</script><div id="v8-save-indicator"><div class="v8-si-dot"></div><span id="v8-si-text">Guardado</span></div>
 
 <!-- ===== MODAL INVENTARIO EXTINTORES ===== -->
-<div id="modal-inv-ext" class="modal-wrap">
+<div id="modal-inv-ext" class="modal-wrap v5-init">
   <div class="mbox" style="max-width:600px">
     <h2>🧯 Inventario de Extintores</h2>
     <div style="font-size:12px;color:var(--text2);margin-bottom:10px">Cada fila es un extintor de la revisión actual.</div>
     <div id="inv-ext-list"></div>
     <button class="bsm bsm-o" style="width:100%;margin-bottom:10px" onclick="addExtRow()">+ Añadir extintor</button>
     <div class="macts">
-      <button class="mcancel" onclick="closeM('modal-inv-ext')">Cancelar</button>
+      <button class="mcancel" onclick="closeM(&#39;modal-inv-ext&#39;)">Cancelar</button>
       <button class="mok" onclick="guardarInvExt()">Guardar</button>
     </div>
   </div>
 </div>
 
 <!-- ===== MODAL INVENTARIO BIEs ===== -->
-<div id="modal-inv-bie" class="modal-wrap">
+<div id="modal-inv-bie" class="modal-wrap v5-init">
   <div class="mbox" style="max-width:600px">
     <h2>🚒 Inventario de BIEs</h2>
     <div style="font-size:12px;color:var(--text2);margin-bottom:10px">Cada fila es una BIE de la revisión actual.</div>
@@ -9499,7 +9471,7 @@ console.log('[RIPCI v8] Motor profesional cargado ✓');
       </select>
     </div>
     <div class="macts">
-      <button class="mcancel" onclick="closeM('modal-inv-bie')">Cancelar</button>
+      <button class="mcancel" onclick="closeM(&#39;modal-inv-bie&#39;)">Cancelar</button>
       <button class="mok" onclick="guardarInvBIE()">Guardar</button>
     </div>
   </div>
@@ -9508,12 +9480,8 @@ console.log('[RIPCI v8] Motor profesional cargado ✓');
 <script>
 // ─── Inventario Extintores ───────────────────────────────────────────────────
 function abrirInvExt(){
-  if(!cid)return;
-  ensureRevision();
-  const rev=DB[cid].revisiones[cYear];
-  const list=rev.inventarioExtintores||[];
-  renderInvExtList(list);
-  openM('modal-inv-ext');
+  // El inventario y el acta están unificados — abrimos directamente el acta completa
+  abrirActaExtintores();
 }
 function renderInvExtList(list){
   const container=document.getElementById('inv-ext-list');
@@ -9578,14 +9546,8 @@ function guardarInvExt(){
 
 // ─── Inventario BIEs ─────────────────────────────────────────────────────────
 function abrirInvBIE(){
-  if(!cid)return;
-  ensureRevision();
-  const rev=DB[cid].revisiones[cYear];
-  const list=rev.inventarioBIEs||[];
-  renderInvBIEList(list);
-  const sel=document.getElementById('bie-estado-sel');
-  if(sel)sel.value=rev.bieEstado||'';
-  openM('modal-inv-bie');
+  // El inventario y el acta están unificados — abrimos directamente el acta completa
+  abrirActaBIE();
 }
 function renderInvBIEList(list){
   const container=document.getElementById('inv-bie-list');
@@ -9639,7 +9601,7 @@ function guardarInvBIE(){
 </script>
 
 <!-- ===== MODAL INVENTARIO DETECCIÓN DE INCENDIOS ===== -->
-<div id="modal-inv-det" class="modal-wrap">
+<div id="modal-inv-det" class="modal-wrap v5-init">
   <div class="mbox" style="max-width:640px">
     <h2>🔥 Detección de Incendios</h2>
     <div style="font-size:12px;color:var(--text2);margin-bottom:10px">Datos de la central y pruebas por zona/elemento.</div>
@@ -9665,7 +9627,7 @@ function guardarInvBIE(){
       </select>
     </div>
     <div class="macts">
-      <button class="mcancel" onclick="closeM('modal-inv-det')">Cancelar</button>
+      <button class="mcancel" onclick="closeM(&#39;modal-inv-det&#39;)">Cancelar</button>
       <button class="mok" onclick="guardarInvDeteccion()">Guardar</button>
     </div>
   </div>
@@ -9764,7 +9726,7 @@ function guardarInvDeteccion(){
 </script>
 
 <!-- ===== MODAL INVENTARIO GRUPOS CONTRA INCENDIOS ===== -->
-<div id="modal-inv-gci" class="modal-wrap">
+<div id="modal-inv-gci" class="modal-wrap v5-init">
   <div class="mbox" style="max-width:640px">
     <h2>💧 Grupos Contra Incendios</h2>
     <div style="font-size:12px;color:var(--text2);margin-bottom:10px">Abastecimiento de agua: depósito, sala de bombas y grupos de bombeo.</div>
@@ -9796,7 +9758,7 @@ function guardarInvDeteccion(){
       </select>
     </div>
     <div class="macts">
-      <button class="mcancel" onclick="closeM('modal-inv-gci')">Cancelar</button>
+      <button class="mcancel" onclick="closeM(&#39;modal-inv-gci&#39;)">Cancelar</button>
       <button class="mok" onclick="guardarInvGruposCI()">Guardar</button>
     </div>
   </div>
@@ -9901,7 +9863,7 @@ function guardarInvGruposCI(){
 </script>
 
 <!-- ===== MODAL INVENTARIO HIDRANTES ===== -->
-<div id="modal-inv-hid" class="modal-wrap">
+<div id="modal-inv-hid" class="modal-wrap v5-init">
   <div class="mbox" style="max-width:640px">
     <h2>🔧 Inventario de Hidrantes</h2>
     <div style="font-size:12px;color:var(--text2);margin-bottom:12px">Red general de hidrantes, válvulas y dotación.</div>
@@ -9916,7 +9878,7 @@ function guardarInvGruposCI(){
       </select>
     </div>
     <div class="macts">
-      <button class="mcancel" onclick="closeM('modal-inv-hid')">Cancelar</button>
+      <button class="mcancel" onclick="closeM(&#39;modal-inv-hid&#39;)">Cancelar</button>
       <button class="mok" onclick="guardarInvHidrantes()">Guardar</button>
     </div>
   </div>
@@ -10010,7 +9972,7 @@ function guardarInvHidrantes(){
 
 
 <!-- ===== MODAL ACTA UNE 23580-2: DETECCIÓN Y ALARMA ===== -->
-<div id="modal-une2" class="modal-wrap">
+<div id="modal-une2" class="modal-wrap v5-init">
   <div class="mbox" style="max-width:760px">
     <h2>🔥 Acta UNE 23580-2 — Detección y Alarma</h2>
     <div style="font-size:12px;color:var(--text2);margin-bottom:10px">Lista de verificación según norma UNE 23580-2:2022. Marque SÍ / NO / N/A para cada punto.</div>
@@ -10044,14 +10006,14 @@ function guardarInvHidrantes(){
     </div>
 
     <div class="macts">
-      <button class="mcancel" onclick="closeM('modal-une2')">Cerrar</button>
+      <button class="mcancel" onclick="closeM(&#39;modal-une2&#39;)">Cerrar</button>
       <button class="mok" onclick="guardarActaUNE2()">💾 Guardar acta</button>
     </div>
   </div>
 </div>
 
 <!-- ===== MODAL ACTA UNE 23580-3: ABASTECIMIENTO DE AGUA ===== -->
-<div id="modal-une3" class="modal-wrap">
+<div id="modal-une3" class="modal-wrap v5-init">
   <div class="mbox" style="max-width:760px">
     <h2>💧 Acta UNE 23580-3 — Abastecimiento de Agua</h2>
     <div style="font-size:12px;color:var(--text2);margin-bottom:10px">Lista de verificación según norma UNE 23580-3:2022. Marque SÍ / NO / N/A para cada punto.</div>
@@ -10100,7 +10062,7 @@ function guardarInvHidrantes(){
     </div>
 
     <div class="macts">
-      <button class="mcancel" onclick="closeM('modal-une3')">Cerrar</button>
+      <button class="mcancel" onclick="closeM(&#39;modal-une3&#39;)">Cerrar</button>
       <button class="mok" onclick="guardarActaUNE3()">💾 Guardar acta</button>
     </div>
   </div>
@@ -10108,7 +10070,7 @@ function guardarInvHidrantes(){
 
 
 <!-- ===== MODAL ACTA UNE 23580-4: HIDRANTES Y VÁLVULAS ===== -->
-<div id="modal-une4" class="modal-wrap">
+<div id="modal-une4" class="modal-wrap v5-init">
   <div class="mbox" style="max-width:760px">
     <h2>🔧 Acta UNE 23580-4 — Hidrantes y Válvulas</h2>
     <div style="font-size:12px;color:var(--text2);margin-bottom:10px">Lista de verificación según norma UNE 23580-4:2022. Marque SÍ / NO / N/A para cada punto.</div>
@@ -10136,14 +10098,14 @@ function guardarInvHidrantes(){
       </select>
     </div>
     <div class="macts">
-      <button class="mcancel" onclick="closeM('modal-une4')">Cerrar</button>
+      <button class="mcancel" onclick="closeM(&#39;modal-une4&#39;)">Cerrar</button>
       <button class="mok" onclick="guardarActaUNE4()">💾 Guardar acta</button>
     </div>
   </div>
 </div>
 
 <!-- ===== MODAL ACTA UNE 23580-5: RED DE BIES ===== -->
-<div id="modal-une5" class="modal-wrap">
+<div id="modal-une5" class="modal-wrap v5-init">
   <div class="mbox" style="max-width:760px">
     <h2>🚒 Acta UNE 23580-5 — Red de BIEs 25/45</h2>
     <div style="font-size:12px;color:var(--text2);margin-bottom:10px">Lista de verificación según norma UNE 23580-5:2022. Marque SÍ / NO / N/A para cada punto.</div>
@@ -10170,7 +10132,7 @@ function guardarInvHidrantes(){
       </select>
     </div>
     <div class="macts">
-      <button class="mcancel" onclick="closeM('modal-une5')">Cerrar</button>
+      <button class="mcancel" onclick="closeM(&#39;modal-une5&#39;)">Cerrar</button>
       <button class="mok" onclick="guardarActaUNE5()">💾 Guardar acta</button>
     </div>
   </div>
@@ -10953,11 +10915,12 @@ function generarDocActaUNE(){
 </script>
 
 <!-- ===== MODAL ACTA EXTINTORES ===== -->
-<div id="modal-acta-ext" class="modal-wrap">
+<div id="modal-acta-ext" class="modal-wrap v5-init">
   <div class="mbox" style="max-width:700px">
     <h2>🧯 Acta — Inventario de Extintores</h2>
-    <div style="font-size:12px;color:var(--text2);margin-bottom:10px">Rellena los datos de revisión para cada extintor registrado.</div>
+    <div style="font-size:12px;color:var(--text2);margin-bottom:10px">Rellena los datos de revisión para cada extintor registrado. <strong style="color:var(--red)">Este formulario es la fuente única de datos</strong> — los cambios aquí actualizan automáticamente el inventario del certificado.</div>
     <div id="acta-ext-body"></div>
+    <button class="bsm bsm-o" style="width:100%;margin-bottom:10px" onclick="addActaExtRow()">+ Añadir extintor manualmente</button>
     <div class="field" style="margin-top:8px">
       <label>Estado del sistema tras las pruebas</label>
       <select id="acta-ext-estado">
@@ -10967,18 +10930,19 @@ function generarDocActaUNE(){
       </select>
     </div>
     <div class="macts">
-      <button class="mcancel" onclick="closeM('modal-acta-ext')">Cerrar</button>
+      <button class="mcancel" onclick="closeM(&#39;modal-acta-ext&#39;)">Cerrar</button>
       <button class="mok" onclick="guardarActaExt()">💾 Guardar acta</button>
     </div>
   </div>
 </div>
 
 <!-- ===== MODAL ACTA BIE ===== -->
-<div id="modal-acta-bie" class="modal-wrap">
+<div id="modal-acta-bie" class="modal-wrap v5-init">
   <div class="mbox" style="max-width:700px">
     <h2>🚒 Acta — Inventario de BIEs</h2>
-    <div style="font-size:12px;color:var(--text2);margin-bottom:10px">Rellena los datos de revisión para cada BIE registrada.</div>
+    <div style="font-size:12px;color:var(--text2);margin-bottom:10px">Rellena los datos de revisión para cada BIE registrada. <strong style="color:#1a6e8e">Este formulario es la fuente única de datos</strong> — los cambios aquí actualizan automáticamente el inventario del certificado.</div>
     <div id="acta-bie-body"></div>
+    <button class="bsm bsm-o" style="width:100%;margin-bottom:10px" onclick="addActaBIERow()">+ Añadir BIE manualmente</button>
     <div class="field" style="margin-top:8px">
       <label>Estado del sistema tras las pruebas</label>
       <select id="acta-bie-estado">
@@ -10988,14 +10952,14 @@ function generarDocActaUNE(){
       </select>
     </div>
     <div class="macts">
-      <button class="mcancel" onclick="closeM('modal-acta-bie')">Cerrar</button>
+      <button class="mcancel" onclick="closeM(&#39;modal-acta-bie&#39;)">Cerrar</button>
       <button class="mok" onclick="guardarActaBIE()">💾 Guardar acta</button>
     </div>
   </div>
 </div>
 
 <!-- ===== MODAL ACTA DETECCIÓN ===== -->
-<div id="modal-acta-det" class="modal-wrap">
+<div id="modal-acta-det" class="modal-wrap v5-init">
   <div class="mbox" style="max-width:720px">
     <h2>🔥 Acta — Detección de Incendios</h2>
     <div style="font-size:12px;color:var(--text2);margin-bottom:12px">Datos de la central y pruebas de detección y alarma por zona.</div>
@@ -11045,14 +11009,14 @@ function generarDocActaUNE(){
     </div>
 
     <div class="macts">
-      <button class="mcancel" onclick="closeM('modal-acta-det')">Cerrar</button>
+      <button class="mcancel" onclick="closeM(&#39;modal-acta-det&#39;)">Cerrar</button>
       <button class="mok" onclick="guardarActaDeteccion()">💾 Guardar acta</button>
     </div>
   </div>
 </div>
 
 <!-- ===== MODAL ACTA ABASTECIMIENTO ===== -->
-<div id="modal-acta-abas" class="modal-wrap">
+<div id="modal-acta-abas" class="modal-wrap v5-init">
   <div class="mbox" style="max-width:720px">
     <h2>💧 Acta — Abastecimiento de Agua CI</h2>
     <div style="font-size:12px;color:var(--text2);margin-bottom:12px">Revisión de reserva de agua, sala de bombas y equipos de bombeo.</div>
@@ -11096,7 +11060,7 @@ function generarDocActaUNE(){
           <input type="text" id="abas-jockey-arr" placeholder="Nº arranques"></div>
         <div class="field"><label>Válvulas aspiración engrasadas</label>
           <select id="abas-engrase"><option value="">—</option><option>Sí</option><option>No</option><option>N/A</option></select></div>
-        <div class="field"><label>Temperatura ambiente > 4ºC</label>
+        <div class="field"><label>Temperatura ambiente &gt; 4ºC</label>
           <select id="abas-temp"><option value="">—</option><option>Sí</option><option>No</option><option>N/A</option></select></div>
       </div>
     </div>
@@ -11115,7 +11079,7 @@ function generarDocActaUNE(){
     </div>
 
     <div class="macts">
-      <button class="mcancel" onclick="closeM('modal-acta-abas')">Cerrar</button>
+      <button class="mcancel" onclick="closeM(&#39;modal-acta-abas&#39;)">Cerrar</button>
       <button class="mok" onclick="guardarActaAbastecimiento()">💾 Guardar acta</button>
     </div>
   </div>
@@ -11132,107 +11096,145 @@ function abrirActaExtintores(){
   ensureRevision();
   const rev=DB[cid].revisiones[cYear];
   const eqs=(DB[cid].equipos||[]).filter(e=>e.tipo==='Extintor');
-  // Sincronizar filas con equipos registrados (precarga datos si ya existen)
   const existing=rev.actaExtintores||[];
+  // También recuperar datos del inventario guardado como respaldo
+  const invExisting=rev.inventarioExtintores||[];
   const rows=eqs.map((e,i)=>{
     const saved=existing.find(r=>r.eqId===e.id)||{};
+    // Si no hay datos en el acta, buscar en el inventario antiguo por posición o ubicación
+    const invSaved=(!saved.marca&&!saved.modelo)?
+      (invExisting.find(r=>r.situacion===e.ubicacion)||invExisting[i]||{}):{};
     return Object.assign({eqId:e.id,codigo:e.codigo,ubicacion:e.ubicacion,
-      marca:'',modelo:'',nPlaca:'',ffab:e.ffab||'',ultimaRev:e.frev||'',
-      retimbrado:e.retimbrado||'',tipo:e.tipoExt||'',agente:e.agente||'',
-      presion:e.presion||'',obs:''},saved);
+      marca:invSaved.marca||'',modelo:invSaved.modelo||'',nPlaca:invSaved.nPlaca||'',
+      ffab:e.ffab||invSaved.ffab||'',ultimaRev:e.frev||invSaved.frev||'',
+      retimbrado:e.retimbrado||invSaved.retimbrado||'',tipo:e.tipoExt||invSaved.tipo||'',
+      agente:e.agente||invSaved.agente||'',presion:e.presion||invSaved.presion||'',obs:invSaved.obs||''},saved);
   });
-  rev.actaExtintores=rows;
-  renderActaExtBody(rows);
+  // Si no hay equipos registrados pero sí hay inventario manual, usar inventario
+  if(!eqs.length && invExisting.length){
+    const invRows=invExisting.map((inv,i)=>{
+      const saved=existing[i]||{};
+      return Object.assign({eqId:'inv_'+i,codigo:inv.codigo||('EXT-'+(i+1)),ubicacion:inv.situacion||'',
+        marca:inv.marca||'',modelo:inv.modelo||'',nPlaca:inv.nPlaca||'',
+        ffab:inv.ffab||'',ultimaRev:inv.frev||'',retimbrado:inv.retimbrado||'',
+        tipo:inv.tipo||'',agente:inv.agente||'',presion:inv.presion||'',obs:inv.obs||''},saved);
+    });
+    rev.actaExtintores=invRows;
+    renderActaExtBody(invRows);
+  } else {
+    rev.actaExtintores=rows;
+    renderActaExtBody(rows);
+  }
   document.getElementById('acta-ext-estado').value=rev.actaExtEstado||'';
   openM('modal-acta-ext');
 }
+// Datos de verificación UNE 23580-9 — definidos fuera para evitar backticks anidados
+var EXT_CHECKS=[
+  {pe:'T',txt:'Dispone de marcado CE como equipo a presi\u00f3n'},
+  {pe:'T',txt:'Dispone de etiqueta de revisi\u00f3n en correcto estado, visible y legible'},
+  {pe:'T',txt:'Est\u00e1 en su lugar asignado y no presenta muestras aparentes de da\u00f1os'},
+  {pe:'T',txt:'Distancia desde cualquier punto de evacuaci\u00f3n a un extintor \u226415 m'},
+  {pe:'T',txt:'Es adecuado conforme al riesgo a proteger'},
+  {pe:'T',txt:'Si es de m\u00e1s de 3 kg, tiene manguera'},
+  {pe:'T',txt:'Est\u00e1 correctamente se\u00f1alizado, se\u00f1al visible desde todos los \u00e1ngulos'},
+  {pe:'T',txt:'Es accesible'},
+  {pe:'T',txt:'Instrucciones de manejo en la parte delantera y legibles'},
+  {pe:'T',txt:'Presi\u00f3n seg\u00fan man\u00f3metro (excluido CO2 y presi\u00f3n adosada) es correcta'},
+  {pe:'T',txt:'Aspecto externo libre de corrosi\u00f3n, golpes o abolladuras'},
+  {pe:'T',txt:'Componentes (boquillas, v\u00e1lvula, manguera, maneta) en buen estado'},
+  {pe:'T',txt:'Dispone y no est\u00e1 roto el precinto o tapones indicadores de uso'},
+  {pe:'T',txt:'En caso de haber sido abierto, dispone del sistema indicativo de apertura'},
+  {pe:'T',txt:'No ha sido descargado total o parcialmente'},
+  {pe:'T',txt:'Altura de la maneta al suelo entre 0,8 y 1,2 m (RD 513/2017) o menor de 1,70 m (RD 1942/93)'},
+  {pe:'T',txt:'El anclaje y soporte son correctos'},
+  {pe:'A',txt:'Se ha pesado el extintor de CO2 sin manguera/boquilla y su masa corresponde a tara+carga'},
+  {pe:'A',txt:'Extintor retimbrado conforme a reglamentaci\u00f3n vigente y con etiqueta identificativa'},
+  {pe:'A',txt:'Para extintores de presi\u00f3n adosada: botell\u00edn pesado y masa corresponde a tara+carga'},
+  {pe:'A',txt:'Para extintores m\u00f3viles: sistema de traslado comprobado y funciona correctamente'},
+  {pe:'A',txt:'Se ha cumplimentado la etiqueta de mantenimiento'},
+  {pe:'A',txt:'El \u00faltimo retimbrado es inferior a 5 a\u00f1os'},
+  {pe:'Q',txt:'Se ha realizado la prueba de nivel C (timbrado) seg\u00fan Anexo III RD 2060/2008'}
+];
+
+function buildExtCheckRow(c, ci, rowIdx, savedVal){
+  var key='ae-chk-'+rowIdx+'-'+ci;
+  var peBg=c.pe==='T'?'#ddf0f5':c.pe==='A'?'#fff3cd':'#f8d7da';
+  var peColor=c.pe==='T'?'#0c5460':c.pe==='A'?'#856404':'#721c24';
+  var rowBg=ci%2===0?'#fff':'#fafafa';
+  var opts='';
+  ['S\u00ed','No','N/A'].forEach(function(opt){
+    var chk=savedVal===opt?'checked':'';
+    opts+='<td style="padding:3px 5px;border:1px solid #ddd;text-align:center">'
+      +'<label style="cursor:pointer;font-size:11px">'
+      +'<input type="radio" name="'+key+'" value="'+opt+'" '+chk+'> '+opt
+      +'</label></td>';
+  });
+  return '<tr style="background:'+rowBg+'">'
+    +'<td style="padding:3px 5px;border:1px solid #ddd;text-align:center">'
+    +'<span style="font-size:9px;font-weight:700;padding:2px 5px;border-radius:8px;background:'+peBg+';color:'+peColor+'">'+c.pe+'</span>'
+    +'</td>'
+    +'<td style="padding:3px 6px;border:1px solid #ddd;font-size:11px">'+c.txt+'</td>'
+    +opts
+    +'</tr>';
+}
+
+function buildExtCheckTable(rowIdx, savedRow){
+  var rows='';
+  EXT_CHECKS.forEach(function(c,ci){
+    var key='ae-chk-'+rowIdx+'-'+ci;
+    rows+=buildExtCheckRow(c,ci,rowIdx,savedRow[key]||'');
+  });
+  return '<div style="margin-top:10px">'
+    +'<div style="font-size:10px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;border-bottom:1px solid #ddd;padding-bottom:4px">Verificaciones UNE 23580-9 / RD 513/2017</div>'
+    +'<div style="overflow-x:auto">'
+    +'<table style="width:100%;border-collapse:collapse;font-size:11px;min-width:500px">'
+    +'<thead><tr style="background:#c0392b;color:#fff">'
+    +'<th style="padding:4px 6px;border:1px solid #999;width:36px">PE</th>'
+    +'<th style="padding:4px 6px;border:1px solid #999;text-align:left">Concepto</th>'
+    +'<th style="padding:4px 5px;border:1px solid #999;width:44px">S\u00ed</th>'
+    +'<th style="padding:4px 5px;border:1px solid #999;width:44px">No</th>'
+    +'<th style="padding:4px 5px;border:1px solid #999;width:44px">N/A</th>'
+    +'</tr></thead>'
+    +'<tbody>'+rows+'</tbody>'
+    +'</table>'
+    +'</div></div>';
+}
+
+function buildExtSelectOpts(opts, selected){
+  var html='<option value="">—</option>';
+  opts.forEach(function(t){ html+='<option'+(selected===t?' selected':'')+'>'+t+'</option>'; });
+  return html;
+}
+
 function renderActaExtBody(rows){
-  const c=document.getElementById('acta-ext-body');
-  if(!rows.length){c.innerHTML='<p style="color:var(--text2);font-size:13px;text-align:center;padding:16px">Sin extintores registrados.</p>';return;}
-  c.innerHTML=rows.map((r,i)=>`
-  <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--rsm);padding:10px 12px;margin-bottom:8px">
-    <div style="font-size:11px;font-weight:700;color:var(--red);margin-bottom:6px">Extintor ${i+1} · ${esc(r.codigo||'Sin código')} — ${esc(r.ubicacion||'Sin ubicación')}</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
-      <div class="field" style="background:#fff"><label>Marca</label><input type="text" id="ae-marca-${i}" value="${esc(r.marca||'')}" placeholder="Ej: Cervantes"></div>
-      <div class="field" style="background:#fff"><label>Modelo</label><input type="text" id="ae-modelo-${i}" value="${esc(r.modelo||'')}" placeholder="Ej: PC-6"></div>
-      <div class="field" style="background:#fff"><label>Nº Placa / Botella</label><input type="text" id="ae-placa-${i}" value="${esc(r.nPlaca||'')}" placeholder="PX-12345"></div>
-      <div class="field" style="background:#fff"><label>Tipo extintor</label>
-        <select id="ae-tipo-${i}">
-          <option value="">—</option>
-          ${['Portátil','Móvil','Fijo'].map(t=>`<option ${r.tipo===t?'selected':''}>${t}</option>`).join('')}
-        </select></div>
-      <div class="field" style="background:#fff"><label>Agente extintor</label>
-        <select id="ae-agente-${i}">
-          <option value="">—</option>
-          ${['Polvo ABC','Polvo BC','CO₂','Agua','Espuma','Halón','Halocarbono'].map(t=>`<option ${r.agente===t?'selected':''}>${t}</option>`).join('')}
-        </select></div>
-      <div class="field" style="background:#fff"><label>F. Fabricación (mm/aa)</label><input type="text" id="ae-ffab-${i}" value="${esc(r.ffab||'')}" placeholder="01/20"></div>
-      <div class="field" style="background:#fff"><label>Última revisión (mm/aa)</label><input type="text" id="ae-frev-${i}" value="${esc(r.ultimaRev||'')}" placeholder="01/24"></div>
-      <div class="field" style="background:#fff"><label>Último retimbrado (mm/aa)</label><input type="text" id="ae-retimbrado-${i}" value="${esc(r.retimbrado||'')}" placeholder="01/20"></div>
-      <div class="field" style="background:#fff"><label>Presión (bar)</label><input type="text" id="ae-presion-${i}" value="${esc(r.presion||'')}" placeholder="15"></div>
-      <div class="field" style="background:#fff"><label>Situación</label>
-        <select id="ae-situacion-${i}">
-          <option value="">—</option>
-          ${['Correcto','Sustituido','Retimbre necesario','Recarga necesaria','Baja'].map(t=>`<option ${r.situacion===t?'selected':''}>${t}</option>`).join('')}
-        </select></div>
-      <div class="field" style="background:#fff"><label>Carga — Peso extintor (kg)</label><input type="text" id="ae-cargapeso-${i}" value="${esc(r.cargaPeso||'')}" placeholder="6"></div>
-      <div class="field" style="background:#fff"><label>Carga — Presión botellín (bar)</label><input type="text" id="ae-cargapresbot-${i}" value="${esc(r.cargaPresionBot||'')}" placeholder="—"></div>
-      <div class="field" style="background:#fff"><label>Carga — Peso botellín (kg)</label><input type="text" id="ae-cargapesobot-${i}" value="${esc(r.cargaPesoBot||'')}" placeholder="—"></div>
-      <div class="field" style="background:#fff;grid-column:1/-1"><label>Observaciones / Código incidencia</label><input type="text" id="ae-obs-${i}" value="${esc(r.obs||'')}" placeholder="Opcional"></div>
-    </div>
-    <!-- TABLA VERIFICACIÓN UNE 23580-9 -->
-    <div style="margin-top:10px">
-      <div style="font-size:10px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;border-bottom:1px solid var(--border);padding-bottom:4px">✅ Verificaciones UNE 23580-9 / RD 513/2017</div>
-      <div style="overflow-x:auto">
-      <table style="width:100%;border-collapse:collapse;font-size:11px;min-width:520px">
-        <thead><tr style="background:#c0392b;color:#fff">
-          <th style="padding:4px 6px;border:1px solid #999;width:32px">PE</th>
-          <th style="padding:4px 6px;border:1px solid #999;text-align:left">Concepto</th>
-          <th style="padding:4px 5px;border:1px solid #999;width:42px">Sí</th>
-          <th style="padding:4px 5px;border:1px solid #999;width:42px">No</th>
-          <th style="padding:4px 5px;border:1px solid #999;width:42px">N/A</th>
-        </tr></thead>
-        <tbody>
-        ${[
-          {pe:'T',txt:'Dispone de marcado CE como equipo a presión'},
-          {pe:'T',txt:'Dispone de etiqueta de revisión en correcto estado, visible y legible'},
-          {pe:'T',txt:'Está en su lugar asignado y no presenta muestras aparentes de daños'},
-          {pe:'T',txt:'Distancia desde cualquier punto de evacuación a un extintor ≤15 m'},
-          {pe:'T',txt:'Es adecuado conforme al riesgo a proteger'},
-          {pe:'T',txt:'Si es de más de 3 kg, tiene manguera'},
-          {pe:'T',txt:'Está correctamente señalizado, señal visible desde todos los ángulos'},
-          {pe:'T',txt:'Es accesible'},
-          {pe:'T',txt:'Instrucciones de manejo en la parte delantera y legibles'},
-          {pe:'T',txt:'Presión según manómetro (excluido CO₂ y presión adosada) es correcta'},
-          {pe:'T',txt:'Aspecto externo libre de corrosión, golpes o abolladuras'},
-          {pe:'T',txt:'Componentes (boquillas, válvula, manguera, maneta…) en buen estado'},
-          {pe:'T',txt:'Dispone y no está roto el precinto o tapones indicadores de uso'},
-          {pe:'T',txt:'En caso de haber sido abierto, dispone del sistema indicativo de apertura'},
-          {pe:'T',txt:'No ha sido descargado total o parcialmente'},
-          {pe:'T',txt:'Altura de la maneta al suelo entre 0,8 y 1,2 m (RD 513/2017) o <1,70 m (RD 1942/93)'},
-          {pe:'T',txt:'El anclaje y soporte son correctos'},
-          {pe:'A',txt:'Se ha pesado el extintor de CO₂ sin manguera/boquilla y su masa corresponde a tara+carga'},
-          {pe:'A',txt:'Extintor retimbrado conforme a reglamentación vigente y con etiqueta identificativa'},
-          {pe:'A',txt:'Para extintores de presión adosada: botellín pesado y masa corresponde a tara+carga'},
-          {pe:'A',txt:'Para extintores móviles: sistema de traslado comprobado y funciona correctamente'},
-          {pe:'A',txt:'Se ha cumplimentado la etiqueta de mantenimiento'},
-          {pe:'A',txt:'¿El último retimbrado es inferior a 5 años?'},
-          {pe:'Q',txt:'Se ha realizado la prueba de nivel C (timbrado) según Anexo III RD 2060/2008'},
-        ].map((c,ci)=>{
-          const key=`ae-chk-${i}-${ci}`;
-          const val=r[key]||'';
-          const pestyle=c.pe==='T'?'background:#ddf0f5;color:#0c5460':c.pe==='A'?'background:#fff3cd;color:#856404':'background:#f8d7da;color:#721c24';
-          return `<tr style="${ci%2===0?'':'background:#fafafa'}">
-            <td style="padding:3px 5px;border:1px solid #ddd;text-align:center"><span style="font-size:9px;font-weight:700;padding:1px 4px;border-radius:8px;${pestyle}">${c.pe}</span></td>
-            <td style="padding:3px 6px;border:1px solid #ddd;font-size:11px">${c.txt}</td>
-            ${['Sí','No','N/A'].map(opt=>`<td style="padding:3px 5px;border:1px solid #ddd;text-align:center"><label style="cursor:pointer"><input type="radio" name="${key}" value="${opt}" ${val===opt?'checked':''}> ${opt}</label></td>`).join('')}
-          </tr>`;
-        }).join('')}
-        </tbody>
-      </table>
-      </div>
-    </div>
-  </div>`).join('');
+  var c=document.getElementById('acta-ext-body');
+  if(!rows.length){c.innerHTML='<p style="color:var(--text2);font-size:13px;text-align:center;padding:16px">Sin extintores registrados. Usa el botón de abajo para añadir.</p>';return;}
+  var html='';
+  rows.forEach(function(r,i){
+    var isManual=(r.eqId||'').indexOf('manual_')===0||(r.eqId||'').indexOf('inv_')===0;
+    html+='<div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--rsm);padding:10px 12px;margin-bottom:8px;position:relative">'
+      +(isManual?'<button onclick="delActaExtRow('+i+')" style="position:absolute;top:6px;right:8px;background:none;border:none;color:var(--text3);font-size:16px;cursor:pointer">✕</button>':'')
+      +'<div style="font-size:11px;font-weight:700;color:var(--red);margin-bottom:6px">Extintor '+(i+1)+' \u00b7 '+esc(r.codigo||'Sin c\u00f3digo')+' \u2014 '+esc(r.ubicacion||'Sin ubicaci\u00f3n')+'</div>'
+      +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">'
+      +'<div class="field" style="background:#fff"><label>Marca</label><input type="text" id="ae-marca-'+i+'" value="'+esc(r.marca||'')+'" placeholder="Ej: Cervantes"></div>'
+      +'<div class="field" style="background:#fff"><label>Modelo</label><input type="text" id="ae-modelo-'+i+'" value="'+esc(r.modelo||'')+'" placeholder="Ej: PC-6"></div>'
+      +'<div class="field" style="background:#fff"><label>N\u00ba Placa / Botella</label><input type="text" id="ae-placa-'+i+'" value="'+esc(r.nPlaca||'')+'" placeholder="PX-12345"></div>'
+      +'<div class="field" style="background:#fff"><label>Tipo extintor</label><select id="ae-tipo-'+i+'">'+buildExtSelectOpts(['Port\u00e1til','M\u00f3vil','Fijo'],r.tipo)+'</select></div>'
+      +'<div class="field" style="background:#fff"><label>Agente extintor</label><select id="ae-agente-'+i+'">'+buildExtSelectOpts(['Polvo ABC','Polvo BC','CO2','Agua','Espuma','Hal\u00f3n','Halocarbono'],r.agente)+'</select></div>'
+      +'<div class="field" style="background:#fff"><label>F. Fabricaci\u00f3n (mm/aa)</label><input type="text" id="ae-ffab-'+i+'" value="'+esc(r.ffab||'')+'" placeholder="01/20"></div>'
+      +'<div class="field" style="background:#fff"><label>\u00daltima revisi\u00f3n (mm/aa)</label><input type="text" id="ae-frev-'+i+'" value="'+esc(r.ultimaRev||'')+'" placeholder="01/24"></div>'
+      +'<div class="field" style="background:#fff"><label>\u00daltimo retimbrado (mm/aa)</label><input type="text" id="ae-retimbrado-'+i+'" value="'+esc(r.retimbrado||'')+'" placeholder="01/20"></div>'
+      +'<div class="field" style="background:#fff"><label>Presi\u00f3n (bar)</label><input type="text" id="ae-presion-'+i+'" value="'+esc(r.presion||'')+'" placeholder="15"></div>'
+      +'<div class="field" style="background:#fff"><label>Situaci\u00f3n</label><select id="ae-situacion-'+i+'">'+buildExtSelectOpts(['Correcto','Sustituido','Retimbre necesario','Recarga necesaria','Baja'],r.situacion)+'</select></div>'
+      +'<div class="field" style="background:#fff"><label>Carga \u2014 Peso extintor (kg)</label><input type="text" id="ae-cargapeso-'+i+'" value="'+esc(r.cargaPeso||'')+'" placeholder="6"></div>'
+      +'<div class="field" style="background:#fff"><label>Carga \u2014 Presi\u00f3n botell\u00edn (bar)</label><input type="text" id="ae-cargapresbot-'+i+'" value="'+esc(r.cargaPresionBot||'')+'" placeholder="\u2014"></div>'
+      +'<div class="field" style="background:#fff"><label>Carga \u2014 Peso botell\u00edn (kg)</label><input type="text" id="ae-cargapesobot-'+i+'" value="'+esc(r.cargaPesoBot||'')+'" placeholder="\u2014"></div>'
+      +'<div class="field" style="background:#fff;grid-column:1/-1"><label>Observaciones / C\u00f3digo incidencia</label><input type="text" id="ae-obs-'+i+'" value="'+esc(r.obs||'')+'" placeholder="Opcional"></div>'
+      +'</div>'
+      +buildExtCheckTable(i,r)
+      +'</div>';
+  });
+  c.innerHTML=html;
 }
 function guardarActaExt(){
   const rev=DB[cid].revisiones[cYear];
@@ -11260,25 +11262,100 @@ function guardarActaExt(){
     }
   });
   rev.actaExtEstado=document.getElementById('acta-ext-estado')?.value||'';
+  // Sincronizar inventarioExtintores con los datos del acta (fuente única de verdad)
+  rev.inventarioExtintores=rows.map(r=>({
+    situacion:r.ubicacion||'',
+    codigo:r.codigo||'',
+    tipo:r.tipo||'',
+    agente:r.agente||'',
+    ffab:r.ffab||'',
+    frev:r.ultimaRev||'',
+    retimbrado:r.retimbrado||'',
+    presion:r.presion||'',
+    marca:r.marca||'',
+    modelo:r.modelo||'',
+    nPlaca:r.nPlaca||'',
+    obs:r.obs||''
+  }));
   sched();closeM('modal-acta-ext');renderCert();
   showToast('✅ Acta extintores guardada','ok');
 }
 
-// ─── ACTA BIE ─────────────────────────────────────────────────────────────────
+// Añadir extintor manualmente al acta (sin equipo registrado)
+function addActaExtRow(){
+  const rev=DB[cid].revisiones[cYear];
+  if(!rev.actaExtintores)rev.actaExtintores=[];
+  const idx=rev.actaExtintores.length;
+  rev.actaExtintores.push({eqId:'manual_'+idx,codigo:'EXT-'+(idx+1),ubicacion:'',
+    marca:'',modelo:'',nPlaca:'',ffab:'',ultimaRev:'',retimbrado:'',tipo:'',agente:'',presion:'',obs:''});
+  renderActaExtBody(rev.actaExtintores);
+}
+function delActaExtRow(i){
+  const rev=DB[cid].revisiones[cYear];
+  if(!rev.actaExtintores)return;
+  // Guardar estado actual antes de eliminar
+  guardarActaExtSilent();
+  rev.actaExtintores.splice(i,1);
+  renderActaExtBody(rev.actaExtintores);
+}
+function guardarActaExtSilent(){
+  const rev=DB[cid].revisiones[cYear];
+  const rows=rev.actaExtintores||[];
+  rows.forEach((r,i)=>{
+    r.marca=document.getElementById('ae-marca-'+i)?.value.trim()||r.marca||'';
+    r.modelo=document.getElementById('ae-modelo-'+i)?.value.trim()||r.modelo||'';
+    r.nPlaca=document.getElementById('ae-placa-'+i)?.value.trim()||r.nPlaca||'';
+    r.tipo=document.getElementById('ae-tipo-'+i)?.value||r.tipo||'';
+    r.agente=document.getElementById('ae-agente-'+i)?.value||r.agente||'';
+    r.ffab=document.getElementById('ae-ffab-'+i)?.value.trim()||r.ffab||'';
+    r.ultimaRev=document.getElementById('ae-frev-'+i)?.value.trim()||r.ultimaRev||'';
+    r.retimbrado=document.getElementById('ae-retimbrado-'+i)?.value.trim()||r.retimbrado||'';
+    r.presion=document.getElementById('ae-presion-'+i)?.value.trim()||r.presion||'';
+    r.situacion=document.getElementById('ae-situacion-'+i)?.value||r.situacion||'';
+    r.cargaPeso=document.getElementById('ae-cargapeso-'+i)?.value.trim()||r.cargaPeso||'';
+    r.obs=document.getElementById('ae-obs-'+i)?.value.trim()||r.obs||'';
+  });
+}
+
+// Añadir BIE manualmente al acta
+function addActaBIERow(){
+  const rev=DB[cid].revisiones[cYear];
+  if(!rev.actaBIE)rev.actaBIE=[];
+  const idx=rev.actaBIE.length;
+  rev.actaBIE.push({eqId:'manual_'+idx,codigo:'BIE-'+(idx+1),ubicacion:'',
+    marca:'',modelo:'',anofab:'',ph:'',phprx:'',presion:'',obs:''});
+  renderActaBIEBody(rev.actaBIE);
+}
 function abrirActaBIE(){
   if(!cid)return;
   ensureRevision();
   const rev=DB[cid].revisiones[cYear];
   const eqs=(DB[cid].equipos||[]).filter(e=>e.tipo==='BIE (Boca de Incendio Equipada)');
   const existing=rev.actaBIE||[];
+  const invExisting=rev.inventarioBIEs||[];
   const rows=eqs.map((e,i)=>{
     const saved=existing.find(r=>r.eqId===e.id)||{};
+    const invSaved=(!saved.marca&&!saved.modelo)?
+      (invExisting.find(r=>r.situacion===e.ubicacion)||invExisting[i]||{}):{};
     return Object.assign({eqId:e.id,codigo:e.codigo,ubicacion:e.ubicacion,
-      marca:e.marcaBIE||'',modelo:'',anofab:e.anofabBIE||'',
-      ph:e.phBIE||'',phprx:e.phprxBIE||'',presion:e.presionBIE||'',obs:''},saved);
+      marca:e.marcaBIE||invSaved.marca||'',modelo:invSaved.modelo||'',
+      anofab:e.anofabBIE||invSaved.anofab||'',
+      ph:e.phBIE||invSaved.ph||'',phprx:e.phprxBIE||invSaved.phprx||'',
+      presion:e.presionBIE||invSaved.presion||'',obs:invSaved.obs||''},saved);
   });
-  rev.actaBIE=rows;
-  renderActaBIEBody(rows);
+  if(!eqs.length && invExisting.length){
+    const invRows=invExisting.map((inv,i)=>{
+      const saved=existing[i]||{};
+      return Object.assign({eqId:'inv_'+i,codigo:inv.codigo||('BIE-'+(i+1)),ubicacion:inv.situacion||'',
+        marca:inv.marca||'',modelo:inv.modelo||'',anofab:inv.anofab||'',
+        ph:inv.ph||'',phprx:inv.phprx||'',presion:inv.presion||'',obs:inv.obs||''},saved);
+    });
+    rev.actaBIE=invRows;
+    renderActaBIEBody(invRows);
+  } else {
+    rev.actaBIE=rows;
+    renderActaBIEBody(rows);
+  }
   document.getElementById('acta-bie-estado').value=rev.actaBIEEstado||'';
   openM('modal-acta-bie');
 }
@@ -11312,6 +11389,18 @@ function guardarActaBIE(){
     r.obs=document.getElementById('ab-obs-'+i)?.value.trim()||'';
   });
   rev.actaBIEEstado=document.getElementById('acta-bie-estado')?.value||'';
+  // Sincronizar inventarioBIEs con los datos del acta (fuente única de verdad)
+  rev.inventarioBIEs=rows.map(r=>({
+    situacion:r.ubicacion||'',
+    codigo:r.codigo||'',
+    marca:r.marca||'',
+    modelo:r.modelo||'',
+    anofab:r.anofab||'',
+    ph:r.ph||'',
+    phprx:r.phprx||'',
+    presion:r.presion||'',
+    obs:r.obs||''
+  }));
   sched();closeM('modal-acta-bie');renderCert();
   showToast('✅ Acta BIEs guardada','ok');
 }
@@ -11819,17 +11908,17 @@ function renderActasEnCert(rev){
 </script>
 
 <!-- ===== MODAL ACTA ROCIADORES (UNE 23580-6) ===== -->
-<div id="modal-acta-roc" class="modal-wrap">
+<div id="modal-acta-roc" class="modal-wrap v5-init">
   <div class="mbox" style="max-width:740px">
-    <h2>🚿 Acta — Sistemas de Rociadores (UNE 23580-6)</h2>
+    <h2>🚷 Acta — Sistemas de Rociadores (UNE 23580-6)</h2>
     <div style="font-size:12px;color:var(--text2);margin-bottom:12px">Verificación según UNE 23580-6:2022 y RD 513/2017. Seleccione el tipo de sistema e introduzca los datos de cada puesto de control.</div>
 
-    <!-- Tipo de sistema -->
+    <!-- Datos generales -->
     <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--rsm);padding:12px;margin-bottom:10px">
       <div class="stitle" style="margin-bottom:8px">Datos generales del sistema</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
         <div class="field"><label>Tipo de sistema</label>
-          <select id="roc-tipo">
+          <select id="roc-tipo" onchange="rocTipoChanged()">
             <option value="">— Seleccionar —</option>
             <option>Tubería húmeda</option>
             <option>Tubería seca</option>
@@ -11853,7 +11942,7 @@ function renderActasEnCert(rev){
       </div>
     </div>
 
-    <!-- Tabla de verificación -->
+    <!-- Tabla de verificaci&#243;n (generada din&#225;micamente) -->
     <div id="roc-tabla-body"></div>
 
     <!-- Tabla resumen de puestos de control -->
@@ -11863,39 +11952,8 @@ function renderActasEnCert(rev){
       <button class="bsm bsm-o" style="width:100%;margin-bottom:4px" onclick="addRocPuesto()">+ Añadir puesto de control</button>
     </div>
 
-    <!-- Pruebas 10 y 25 años -->
-    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--rsm);padding:10px 12px;margin-bottom:10px">
-      <div class="stitle" style="margin-bottom:8px">Pruebas decenales (10 años) y a los 25 años</div>
-      <div style="overflow-x:auto">
-      <table style="width:100%;border-collapse:collapse;font-size:11px">
-        <thead><tr style="background:#555;color:#fff">
-          <th style="padding:4px 6px;border:1px solid #999;width:32px">PE</th>
-          <th style="padding:4px 6px;border:1px solid #999;text-align:left">Concepto</th>
-          <th style="padding:4px 5px;border:1px solid #999;width:42px">Sí</th>
-          <th style="padding:4px 5px;border:1px solid #999;width:42px">No</th>
-          <th style="padding:4px 5px;border:1px solid #999;width:42px">N/A</th>
-        </tr></thead>
-        <tbody>
-        ${[
-          {pe:'D',txt:'Se han limpiado los depósitos y éstos se conservan correctamente'},
-          {pe:'25',txt:'Se han limpiado las tuberías y han superado la prueba hidrostática a la presión estática máxima o 12 bar (la que sea mayor)'},
-          {pe:'25',txt:'Inspección visual de toda la red de tuberías externamente, ¿es conforme?'},
-          {pe:'25',txt:'Inspección del estado interior de, al menos 1 tramo de ramal por cada 100 rociadores, verificando la reducción del diámetro interior'},
-          {pe:'25',txt:'Inspección de dos secciones de tubo de un metro de longitud por cada diámetro de tubo, ¿se encuentra en correcto estado?'},
-          {pe:'25',txt:'Si hay instalados varios puestos de control en un edificio, se han inspeccionado al menos el 10% (húmeda) o el 100% (seca/acción previa/diluvio)'},
-          {pe:'25',txt:'Toma de muestras y prueba de rociadores según Anexo K de la UNE-EN 12845. ¿Es conforme?'},
-        ].map((c,ci)=>{
-          const key=`roc-dp-${ci}`;
-          return `<tr style="${ci%2===0?'':'background:#fafafa'}">
-            <td style="padding:3px 5px;border:1px solid #ddd;text-align:center"><span style="font-size:9px;font-weight:700;padding:1px 4px;border-radius:8px;background:#e2e3e5;color:#333">${c.pe}</span></td>
-            <td style="padding:3px 6px;border:1px solid #ddd;font-size:11px">${c.txt}</td>
-            ${['Sí','No','N/A'].map(opt=>`<td style="padding:3px 5px;border:1px solid #ddd;text-align:center"><label style="cursor:pointer"><input type="radio" name="${key}" id="${key}-${opt}" value="${opt}"> ${opt}</label></td>`).join('')}
-          </tr>`;
-        }).join('')}
-        </tbody>
-      </table>
-      </div>
-    </div>
+    <!-- Pruebas 10 y 25 a&#241;os (generada din&#225;micamente) -->
+    <div id="roc-dp-body"></div>
 
     <!-- Observaciones -->
     <div class="field">
@@ -11913,7 +11971,7 @@ function renderActasEnCert(rev){
     </div>
 
     <div class="macts">
-      <button class="mcancel" onclick="closeM('modal-acta-roc')">Cerrar</button>
+      <button class="mcancel" onclick="closeM(&#39;modal-acta-roc&#39;)">Cerrar</button>
       <button class="mok" onclick="guardarActaRociadores()">💾 Guardar acta</button>
     </div>
   </div>
@@ -11921,158 +11979,197 @@ function renderActasEnCert(rev){
 
 <script>
 // ─── ACTA ROCIADORES (UNE 23580-6) ───────────────────────────────────────────
-const ROC_CHECKS_HUMEDA=[
-  {pe:'T',txt:'Dispone de etiqueta de revisión por empresa responsable del mantenimiento en correcto estado, visible, legible'},
-  {pe:'T',txt:'El estado de los equipos en general es correcto'},
-  {pe:'T',txt:'El estado general de las tuberías es correcto (sin daños mecánicos, faltas de pintura ni síntomas de corrosión)'},
-  {pe:'T',txt:'El estado de la suportación de las tuberías y equipos es correcto'},
-  {pe:'T',txt:'Todos los rociadores están en buen estado y libres de obstáculos. Se mantiene espacio libre alrededor del rociador'},
-  {pe:'T',txt:'¿Está señalizado e identificado cada sistema de rociadores en los puestos de control?'},
-  {pe:'T',txt:'Existe armario conteniendo el número de rociadores y llaves de montaje requeridos por la normativa'},
-  {pe:'T',txt:'El acceso al puesto de control y válvulas de seccionamiento está libre de obstáculos'},
-  {pe:'T',txt:'Si las válvulas disponen de interruptor final de carrera, ¿se transmite señal de alarma a la central al cambiar de posición normal?'},
-  {pe:'T',txt:'La válvula de prueba del sistema de rociadores, ¿es accesible y está en buen estado?'},
-  {pe:'T',txt:'Prueba de funcionamiento de la alarma hidráulica durante 30 s. ¿Funciona correctamente y no presenta pérdidas de agua?'},
-  {pe:'T',txt:'Si dispone de presostato, ¿transmite señal de alarma a la central de incendios?'},
-  {pe:'T',txt:'Si dispone de detector de flujo, ¿al abrir el punto de prueba transmite señal de alarma a la central?'},
-  {pe:'T',txt:'La válvula de corte del puesto de control ¿está abierta y precintada?'},
-  {pe:'T',txt:'Las válvulas auxiliares del puesto de control ¿están en posición correcta?'},
-  {pe:'T',txt:'Al abrir la válvula del punto de prueba ¿funciona la alarma hidráulica en menos de 5 minutos?'},
-  {pe:'A',txt:'Comprobación de presiones: presión dinámica medida. ¿No es un 5% inferior a la medida el año anterior?'},
-  {pe:'A',txt:'Al finalizar las pruebas: todas las válvulas quedan precintadas y en posición normal de operación'},
-  {pe:'A',txt:'El suministro de agua queda abierto y en condiciones de servicio'},
-  {pe:'A',txt:'La válvula de la alarma hidráulica queda en posición abierta y operativa'},
-  {pe:'A',txt:'La central de detección queda operativa y sin ninguna señal indicada'},
-  {pe:'A',txt:'Lectura de manómetros: niveles de presión dentro de los márgenes permitidos'},
-];
-const ROC_CHECKS_SECA=[
-  {pe:'T',txt:'Dispone de etiqueta de revisión en correcto estado, visible, legible'},
-  {pe:'T',txt:'¿El estado de los equipos y mecanismos de disparo es correcto?'},
-  {pe:'T',txt:'¿El estado general de las tuberías es correcto (sin daños mecánicos ni síntomas de corrosión)?'},
-  {pe:'T',txt:'¿El estado de la suportación de las tuberías y equipos es correcto?'},
-  {pe:'T',txt:'¿Todos los rociadores están en buen estado y libres de obstáculos?'},
-  {pe:'T',txt:'¿Está señalizada e identificada cada instalación de rociadores?'},
-  {pe:'T',txt:'Existe armario con número de rociadores y llaves de montaje requeridos'},
-  {pe:'T',txt:'¿Existen instrucciones de funcionamiento y rearme del equipo en caso de disparo?'},
-  {pe:'T',txt:'¿El acceso al puesto de control y válvulas de seccionamiento está libre de obstáculos?'},
-  {pe:'T',txt:'Si las válvulas disponen de interruptor final de carrera, ¿se transmite señal de alarma al cambiar de posición?'},
-  {pe:'T',txt:'La válvula de prueba del sistema de rociadores, ¿es accesible y está en buen estado?'},
-  {pe:'T',txt:'Prueba de la alarma hidráulica durante 30 s. ¿Funciona correctamente y sin pérdidas de agua?'},
-  {pe:'T',txt:'Prueba del presostato, ¿transmite señal de alarma a la central de incendios?'},
-  {pe:'T',txt:'Al cerrar la válvula principal y abrir drenaje, ¿arranca el compresor?'},
-  {pe:'T',txt:'¿Funciona el presostato de la línea de aire y se transmite la señal de forma adecuada?'},
-  {pe:'T',txt:'¿Una vez cerrada la válvula, se detiene el compresor?'},
-  {pe:'T',txt:'La válvula de corte del puesto de control ¿está abierta y precintada?'},
-  {pe:'T',txt:'Las válvulas auxiliares ¿están en posición correcta?'},
-  {pe:'T',txt:'¿El compresor indica la presión adecuada para el funcionamiento de la instalación?'},
-  {pe:'T',txt:'¿Funciona adecuadamente el sistema de transmisión de alarma por baja presión de aire?'},
-  {pe:'A',txt:'Al disparar el puesto de control: ¿funciona el acelerador y queda rearmado según fabricante?'},
-  {pe:'A',txt:'Comprobación de presiones dinámicas. ¿No es un 5% inferior a la medida el año anterior?'},
-  {pe:'A',txt:'Al abrir válvula del punto de prueba: ¿la alarma mecánica funciona en tiempo similar al de puesta en marcha (±5%)?'},
-  {pe:'A',txt:'¿La alarma del puesto de control se transmite a la central de control e indicación?'},
-  {pe:'A',txt:'Al cerrar parcialmente la válvula de corte: ¿se transmite la alarma al panel central?'},
-];
-const ROC_CHECKS_PREVIA=[
-  {pe:'T',txt:'Dispone de etiqueta de revisión en correcto estado, visible, legible'},
-  {pe:'T',txt:'El estado de los equipos y mecanismos de disparo es correcto'},
-  {pe:'T',txt:'El estado de los equipos en general es correcto'},
-  {pe:'T',txt:'El estado general de las tuberías es correcto (sin daños mecánicos, faltas de pintura ni corrosión)'},
-  {pe:'T',txt:'El estado de la suportación de las tuberías y equipos es correcto'},
-  {pe:'T',txt:'Todos los rociadores en buen estado y libres de obstáculos. Espacio libre alrededor del rociador conforme a normativa'},
-  {pe:'T',txt:'¿Está señalizada e identificada cada sistema de rociadores?'},
-  {pe:'T',txt:'Existe armario con rociadores y llaves de montaje requeridos'},
-  {pe:'T',txt:'Existen instrucciones de funcionamiento y rearme del equipo'},
-  {pe:'T',txt:'El acceso al puesto de control y válvulas de seccionamiento está libre de obstáculos'},
-  {pe:'T',txt:'Si las válvulas disponen de interruptor final de carrera, ¿se transmite señal de alarma al cambiar de posición?'},
-  {pe:'T',txt:'La válvula de prueba del sistema, ¿es accesible y está en buen estado?'},
-  {pe:'T',txt:'Alarma hidráulica durante 30 s, ¿funciona correctamente y sin fugas de agua?'},
-  {pe:'T',txt:'Si dispone de presostato, ¿transmite señal de alarma a la central de incendios?'},
-  {pe:'T',txt:'Al abrir válvula de drenaje de la válvula de retención, ¿arranca el compresor?'},
-  {pe:'T',txt:'¿Funciona el presostato de la línea de aire y se transmite la señal de forma adecuada?'},
-  {pe:'T',txt:'¿Una vez cerrada la válvula, se detiene el compresor?'},
-  {pe:'T',txt:'La válvula de corte del puesto de control ¿está abierta y precintada?'},
-  {pe:'T',txt:'Las válvulas auxiliares ¿están en posición correcta?'},
-  {pe:'T',txt:'¿El compresor indica la presión adecuada para el funcionamiento de la instalación?'},
-  {pe:'A',txt:'Comprobación de presiones dinámicas. ¿No es un 5% inferior a la medida el año anterior?'},
-  {pe:'A',txt:'Al abrir válvula del punto de prueba, ¿la alarma mecánica funciona en tiempo similar a puesta en marcha?'},
-  {pe:'A',txt:'¿La alarma del puesto de control se transmite a la central de control e indicación?'},
-  {pe:'A',txt:'Al cerrar parcialmente la válvula de corte, ¿se transmite la alarma a la central?'},
-];
-const ROC_CHECKS_DILUVIO=[
-  {pe:'T',txt:'Dispone de etiqueta de revisión en correcto estado, visible, legible'},
-  {pe:'T',txt:'El estado de los equipos y mecanismos de disparo es correcto'},
-  {pe:'T',txt:'El estado de los equipos en general es correcto'},
-  {pe:'T',txt:'El estado general de las tuberías es correcto (sin daños mecánicos, faltas de pintura ni corrosión)'},
-  {pe:'T',txt:'El estado de la suportación de las tuberías y equipos es correcto'},
-  {pe:'T',txt:'Todos los rociadores/boquillas son abiertos y están en buen estado y libres de obstáculos'},
-  {pe:'T',txt:'¿Está señalizada e identificada cada sistema de diluvio?'},
-  {pe:'T',txt:'Existe armario con rociadores y llaves de montaje requeridos'},
-  {pe:'T',txt:'Existen instrucciones de funcionamiento y rearme del equipo'},
-  {pe:'T',txt:'¿Todos los elementos de detección en la línea piloto están en buen estado y libres de obstáculos?'},
-  {pe:'T',txt:'Al cerrar válvula de alimentación de aire/agua a la línea piloto: ¿se mantiene la presión sin variación apreciable en los primeros 5 min?'},
-  {pe:'T',txt:'Alarma hidráulica durante 30 s, ¿funciona correctamente y sin fugas de agua?'},
-  {pe:'T',txt:'Si dispone de presostato, ¿transmite señal de alarma a la central de incendios?'},
-  {pe:'T',txt:'El acceso al puesto de control y válvulas de seccionamiento están libres de obstáculos'},
-  {pe:'T',txt:'Si las válvulas disponen de interruptor final de carrera, ¿se transmite señal de alarma al cambiar de posición?'},
-  {pe:'T',txt:'La válvula de corte del puesto de control ¿está abierta y asegurada (precintada o monitorizada)?'},
-  {pe:'T',txt:'Las válvulas auxiliares del puesto de control ¿están en posición correcta?'},
-  {pe:'A',txt:'Disparar la válvula de diluvio con el actuador manual de emergencia y el sistema automático de detección. ¿Se comprueba la transmisión de alarmas?'},
-  {pe:'A',txt:'Comprobación de presiones dinámicas. ¿No es un 5% inferior a la medida el año anterior?'},
-  {pe:'A',txt:'Al finalizar: todas las válvulas quedan precintadas y en posición normal de operación'},
-  {pe:'A',txt:'El suministro de agua queda abierto y en condiciones de servicio'},
-  {pe:'A',txt:'La central de detección queda operativa y sin ninguna señal indicada'},
-  {pe:'A',txt:'Lectura de manómetros: niveles de presión dentro de los márgenes permitidos'},
+var ROC_CHECKS={
+  'Tuberia humeda':[
+    {pe:'T',txt:'Dispone de etiqueta de revisi\u00f3n por empresa responsable del mantenimiento en correcto estado, visible, legible'},
+    {pe:'T',txt:'El estado de los equipos en general es correcto'},
+    {pe:'T',txt:'El estado general de las tuber\u00edas es correcto (sin da\u00f1os mec\u00e1nicos, faltas de pintura ni s\u00edntomas de corrosi\u00f3n)'},
+    {pe:'T',txt:'El estado de la suportaci\u00f3n de las tuber\u00edas y equipos es correcto'},
+    {pe:'T',txt:'Todos los rociadores est\u00e1n en buen estado y libres de obst\u00e1culos. Se mantiene espacio libre alrededor del rociador conforme a normativa'},
+    {pe:'T',txt:'\u00bfEst\u00e1 se\u00f1alizado e identificado cada sistema de rociadores en los puestos de control?'},
+    {pe:'T',txt:'Existe armario con el n\u00famero de rociadores y llaves de montaje requeridos por la normativa'},
+    {pe:'T',txt:'El acceso al puesto de control y v\u00e1lvulas de seccionamiento est\u00e1 libre de obst\u00e1culos'},
+    {pe:'T',txt:'Si las v\u00e1lvulas disponen de interruptor final de carrera, \u00bfse transmite se\u00f1al de alarma a la central al cambiar de posici\u00f3n?'},
+    {pe:'T',txt:'La v\u00e1lvula de prueba del sistema, \u00bfes accesible y est\u00e1 en buen estado?'},
+    {pe:'T',txt:'Prueba alarma hidr\u00e1ulica 30 s. \u00bfFunciona correctamente y sin p\u00e9rdidas de agua?'},
+    {pe:'T',txt:'Si dispone de presostato, \u00bftransmite se\u00f1al de alarma a la central de incendios?'},
+    {pe:'T',txt:'Si dispone de detector de flujo, al abrir el punto de prueba, \u00bftransmite se\u00f1al de alarma a la central?'},
+    {pe:'T',txt:'La v\u00e1lvula de corte del puesto de control \u00bfest\u00e1 abierta y precintada?'},
+    {pe:'T',txt:'Las v\u00e1lvulas auxiliares del puesto de control \u00bfest\u00e1n en posici\u00f3n correcta?'},
+    {pe:'T',txt:'Al abrir la v\u00e1lvula del punto de prueba \u00bffunciona la alarma hidr\u00e1ulica en menos de 5 minutos?'},
+    {pe:'A',txt:'Comprob. de presiones: la presi\u00f3n din\u00e1mica no es un 5% inferior a la medida el a\u00f1o anterior'},
+    {pe:'A',txt:'Al finalizar pruebas: todas las v\u00e1lvulas quedan precintadas y en posici\u00f3n normal de operaci\u00f3n'},
+    {pe:'A',txt:'El suministro de agua queda abierto y en condiciones de servicio'},
+    {pe:'A',txt:'La v\u00e1lvula de la alarma hidr\u00e1ulica queda en posici\u00f3n abierta y operativa'},
+    {pe:'A',txt:'La central de detecci\u00f3n queda operativa y sin ninguna se\u00f1al indicada'},
+    {pe:'A',txt:'Lectura de man\u00f3metros: niveles de presi\u00f3n dentro de los m\u00e1rgenes permitidos'}
+  ],
+  'Tuberia seca':[
+    {pe:'T',txt:'Dispone de etiqueta de revisi\u00f3n en correcto estado, visible, legible'},
+    {pe:'T',txt:'\u00bfEl estado de los equipos y mecanismos de disparo es correcto?'},
+    {pe:'T',txt:'\u00bfEl estado general de las tuber\u00edas es correcto (sin da\u00f1os mec\u00e1nicos ni corrosi\u00f3n)?'},
+    {pe:'T',txt:'\u00bfEl estado de la suportaci\u00f3n de las tuber\u00edas y equipos es correcto?'},
+    {pe:'T',txt:'\u00bfTodos los rociadores en buen estado y libres de obst\u00e1culos?'},
+    {pe:'T',txt:'\u00bfEst\u00e1 se\u00f1alizada e identificada cada instalaci\u00f3n de rociadores?'},
+    {pe:'T',txt:'Existe armario con n\u00famero de rociadores y llaves de montaje requeridos'},
+    {pe:'T',txt:'\u00bfExisten instrucciones de funcionamiento y rearme del equipo en caso de disparo?'},
+    {pe:'T',txt:'\u00bfEl acceso al puesto de control y v\u00e1lvulas de seccionamiento est\u00e1 libre de obst\u00e1culos?'},
+    {pe:'T',txt:'Si las v\u00e1lvulas disponen de interruptor final de carrera, \u00bfse transmite se\u00f1al de alarma al cambiar de posici\u00f3n?'},
+    {pe:'T',txt:'La v\u00e1lvula de prueba del sistema, \u00bfes accesible y est\u00e1 en buen estado?'},
+    {pe:'T',txt:'Prueba alarma hidr\u00e1ulica 30 s. \u00bfFunciona correctamente y sin p\u00e9rdidas de agua?'},
+    {pe:'T',txt:'Prueba del presostato, \u00bftransmite se\u00f1al de alarma a la central de incendios?'},
+    {pe:'T',txt:'Al cerrar v\u00e1lvula principal y abrir drenaje, \u00bfarranca el compresor?'},
+    {pe:'T',txt:'\u00bfFunciona el presostato de la l\u00ednea de aire y se transmite la se\u00f1al de forma adecuada?'},
+    {pe:'T',txt:'\u00bfUna vez cerrada la v\u00e1lvula, se detiene el compresor?'},
+    {pe:'T',txt:'La v\u00e1lvula de corte del puesto de control \u00bfest\u00e1 abierta y precintada?'},
+    {pe:'T',txt:'Las v\u00e1lvulas auxiliares \u00bfest\u00e1n en posici\u00f3n correcta?'},
+    {pe:'T',txt:'\u00bfEl compresor indica la presi\u00f3n adecuada para el funcionamiento de la instalaci\u00f3n?'},
+    {pe:'T',txt:'\u00bfFunciona adecuadamente el sistema de transmisi\u00f3n de alarma por baja presi\u00f3n de aire?'},
+    {pe:'A',txt:'Al disparar el puesto de control: \u00bffunciona el acelerador y queda rearmado seg\u00fan fabricante?'},
+    {pe:'A',txt:'Comprob. presiones din\u00e1micas. La medici\u00f3n no es un 5% inferior a la del a\u00f1o anterior'},
+    {pe:'A',txt:'Al abrir v\u00e1lvula del punto de prueba: \u00bfla alarma mec\u00e1nica funciona en tiempo similar al de puesta en marcha (+-5%)?'},
+    {pe:'A',txt:'\u00bfLa alarma del puesto de control se transmite a la central de control e indicaci\u00f3n?'},
+    {pe:'A',txt:'Al cerrar parcialmente la v\u00e1lvula de corte: \u00bfse transmite la alarma al panel central?'}
+  ],
+  'Accion previa':[
+    {pe:'T',txt:'Dispone de etiqueta de revisi\u00f3n en correcto estado, visible, legible'},
+    {pe:'T',txt:'El estado de los equipos y mecanismos de disparo es correcto'},
+    {pe:'T',txt:'El estado de los equipos en general es correcto'},
+    {pe:'T',txt:'El estado general de las tuber\u00edas es correcto (sin da\u00f1os, faltas de pintura ni corrosi\u00f3n)'},
+    {pe:'T',txt:'El estado de la suportaci\u00f3n de las tuber\u00edas y equipos es correcto'},
+    {pe:'T',txt:'Todos los rociadores en buen estado y libres de obst\u00e1culos. Espacio libre conforme a normativa'},
+    {pe:'T',txt:'\u00bfEst\u00e1 se\u00f1alizada e identificada cada sistema de rociadores?'},
+    {pe:'T',txt:'Existe armario con rociadores y llaves de montaje requeridos'},
+    {pe:'T',txt:'Existen instrucciones de funcionamiento y rearme del equipo'},
+    {pe:'T',txt:'El acceso al puesto de control y v\u00e1lvulas de seccionamiento est\u00e1 libre de obst\u00e1culos'},
+    {pe:'T',txt:'Si las v\u00e1lvulas disponen de interruptor final de carrera, \u00bfse transmite se\u00f1al de alarma al cambiar de posici\u00f3n?'},
+    {pe:'T',txt:'La v\u00e1lvula de prueba del sistema, \u00bfes accesible y est\u00e1 en buen estado?'},
+    {pe:'T',txt:'Alarma hidr\u00e1ulica durante 30 s, \u00bffunciona correctamente y sin fugas de agua?'},
+    {pe:'T',txt:'Si dispone de presostato, \u00bftransmite se\u00f1al de alarma a la central de incendios?'},
+    {pe:'T',txt:'Al abrir v\u00e1lvula de drenaje de la v\u00e1lvula de retenci\u00f3n, \u00bfarranca el compresor?'},
+    {pe:'T',txt:'\u00bfFunciona el presostato de la l\u00ednea de aire y se transmite la se\u00f1al de forma adecuada?'},
+    {pe:'T',txt:'\u00bfUna vez cerrada la v\u00e1lvula, se detiene el compresor?'},
+    {pe:'T',txt:'La v\u00e1lvula de corte del puesto de control \u00bfest\u00e1 abierta y precintada?'},
+    {pe:'T',txt:'Las v\u00e1lvulas auxiliares \u00bfest\u00e1n en posici\u00f3n correcta?'},
+    {pe:'T',txt:'\u00bfEl compresor indica la presi\u00f3n adecuada para el funcionamiento de la instalaci\u00f3n?'},
+    {pe:'A',txt:'Comprob. presiones din\u00e1micas. La medici\u00f3n no es un 5% inferior a la del a\u00f1o anterior'},
+    {pe:'A',txt:'Al abrir v\u00e1lvula del punto de prueba: \u00bfla alarma mec\u00e1nica funciona en tiempo similar al de puesta en marcha?'},
+    {pe:'A',txt:'\u00bfLa alarma del puesto de control se transmite a la central de control e indicaci\u00f3n?'},
+    {pe:'A',txt:'Al cerrar parcialmente la v\u00e1lvula de corte: \u00bfse transmite la alarma a la central?'}
+  ],
+  'Diluvio':[
+    {pe:'T',txt:'Dispone de etiqueta de revisi\u00f3n en correcto estado, visible, legible'},
+    {pe:'T',txt:'El estado de los equipos y mecanismos de disparo es correcto'},
+    {pe:'T',txt:'El estado de los equipos en general es correcto'},
+    {pe:'T',txt:'El estado general de las tuber\u00edas es correcto (sin da\u00f1os, faltas de pintura ni corrosi\u00f3n)'},
+    {pe:'T',txt:'El estado de la suportaci\u00f3n de las tuber\u00edas y equipos es correcto'},
+    {pe:'T',txt:'Todos los rociadores/boquillas son abiertos y est\u00e1n en buen estado y libres de obst\u00e1culos'},
+    {pe:'T',txt:'\u00bfEst\u00e1 se\u00f1alizada e identificada cada sistema de diluvio?'},
+    {pe:'T',txt:'Existe armario con rociadores y llaves de montaje requeridos'},
+    {pe:'T',txt:'Existen instrucciones de funcionamiento y rearme del equipo'},
+    {pe:'T',txt:'\u00bfTodos los elementos de detecci\u00f3n en la l\u00ednea piloto est\u00e1n en buen estado y libres de obst\u00e1culos?'},
+    {pe:'T',txt:'Al cerrar v\u00e1lvula de alimentaci\u00f3n de aire/agua a la l\u00ednea piloto: \u00bfse mantiene la presi\u00f3n sin variaci\u00f3n apreciable en los primeros 5 min?'},
+    {pe:'T',txt:'Alarma hidr\u00e1ulica durante 30 s, \u00bffunciona correctamente y sin fugas de agua?'},
+    {pe:'T',txt:'Si dispone de presostato, \u00bftransmite se\u00f1al de alarma a la central de incendios?'},
+    {pe:'T',txt:'El acceso al puesto de control y v\u00e1lvulas de seccionamiento est\u00e1n libres de obst\u00e1culos'},
+    {pe:'T',txt:'Si las v\u00e1lvulas disponen de interruptor final de carrera, \u00bfse transmite se\u00f1al de alarma al cambiar de posici\u00f3n?'},
+    {pe:'T',txt:'La v\u00e1lvula de corte del puesto de control \u00bfest\u00e1 abierta y asegurada (precintada o monitorizada)?'},
+    {pe:'T',txt:'Las v\u00e1lvulas auxiliares del puesto de control \u00bfest\u00e1n en posici\u00f3n correcta?'},
+    {pe:'A',txt:'Disparar la v\u00e1lvula de diluvio con el actuador manual y el sistema autom\u00e1tico de detecci\u00f3n. \u00bfSe comprueba la transmisi\u00f3n de alarmas?'},
+    {pe:'A',txt:'Comprob. presiones din\u00e1micas. La medici\u00f3n no es un 5% inferior a la del a\u00f1o anterior'},
+    {pe:'A',txt:'Al finalizar: todas las v\u00e1lvulas quedan precintadas y en posici\u00f3n normal de operaci\u00f3n'},
+    {pe:'A',txt:'El suministro de agua queda abierto y en condiciones de servicio'},
+    {pe:'A',txt:'La central de detecci\u00f3n queda operativa y sin ninguna se\u00f1al indicada'},
+    {pe:'A',txt:'Lectura de man\u00f3metros: niveles de presi\u00f3n dentro de los m\u00e1rgenes permitidos'}
+  ]
+};
+
+var ROC_DP_CHECKS=[
+  {pe:'D',txt:'Se han limpiado los dep\u00f3sitos y \u00e9stos se conservan correctamente'},
+  {pe:'25',txt:'Se han limpiado las tuber\u00edas y han superado la prueba hidroest\u00e1tica a la presi\u00f3n est\u00e1tica m\u00e1xima o 12 bar (la que sea mayor)'},
+  {pe:'25',txt:'Inspecci\u00f3n visual de toda la red de tuber\u00edas externamente, \u00bfes conforme?'},
+  {pe:'25',txt:'Inspecci\u00f3n del estado interior de al menos 1 tramo de ramal por cada 100 rociadores, verificando la reducci\u00f3n del di\u00e1metro interior'},
+  {pe:'25',txt:'Inspecci\u00f3n de dos secciones de tubo de un metro de longitud por cada di\u00e1metro de tubo, \u00bfse encuentra en correcto estado?'},
+  {pe:'25',txt:'Si hay instalados varios puestos de control en un edificio, se han inspeccionado al menos el 10% (h\u00fameda) o el 100% (seca/acci\u00f3n previa/diluvio)'},
+  {pe:'25',txt:'Toma de muestras y prueba de rociadores seg\u00fan Anexo K de la UNE-EN 12845. \u00bfEs conforme?'}
 ];
 
-function getRocChecks(tipo){
-  if(tipo==='Tubería húmeda') return ROC_CHECKS_HUMEDA;
-  if(tipo==='Tubería seca') return ROC_CHECKS_SECA;
-  if(tipo==='Acción previa') return ROC_CHECKS_PREVIA;
-  if(tipo==='Diluvio') return ROC_CHECKS_DILUVIO;
-  return ROC_CHECKS_HUMEDA;
+function getRocKey(tipo){
+  if(tipo==='Tuber\u00eda h\u00fameda'||tipo==='Tuberia humeda') return 'Tuberia humeda';
+  if(tipo==='Tuber\u00eda seca'||tipo==='Tuberia seca') return 'Tuberia seca';
+  if(tipo==='Acci\u00f3n previa'||tipo==='Accion previa') return 'Accion previa';
+  if(tipo==='Diluvio') return 'Diluvio';
+  return 'Tuberia humeda';
 }
 
-function buildRocTabla(tipo, saved){
-  const checks=getRocChecks(tipo||'Tubería húmeda');
-  const colors={T:'background:#ddf0f5;color:#0c5460',A:'background:#fff3cd;color:#856404'};
-  const hdrColor=tipo==='Diluvio'?'#1a6e8e':'#1b5e20';
-  return `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--rsm);padding:10px 12px;margin-bottom:10px">
-    <div class="stitle" style="margin-bottom:8px;color:${hdrColor}">Verificaciones — ${tipo||'Tubería húmeda'} (UNE 23580-6:2022)</div>
-    <div style="overflow-x:auto">
-    <table style="width:100%;border-collapse:collapse;font-size:11px;min-width:540px">
-      <thead><tr style="background:${hdrColor};color:#fff">
-        <th style="padding:4px 6px;border:1px solid #999;width:32px">PE</th>
-        <th style="padding:4px 6px;border:1px solid #999;text-align:left">Concepto</th>
-        <th style="padding:4px 5px;border:1px solid #999;width:42px">Sí</th>
-        <th style="padding:4px 5px;border:1px solid #999;width:42px">No</th>
-        <th style="padding:4px 5px;border:1px solid #999;width:42px">N/A</th>
-      </tr></thead>
-      <tbody>
-      ${checks.map((c,ci)=>{
-        const key=`roc-chk-${ci}`;
-        const val=(saved&&saved[key])||'';
-        const pestyle=colors[c.pe]||'background:#e2e3e5;color:#333';
-        return `<tr style="${ci%2===0?'':'background:#fafafa'}">
-          <td style="padding:3px 5px;border:1px solid #ddd;text-align:center"><span style="font-size:9px;font-weight:700;padding:1px 4px;border-radius:8px;${pestyle}">${c.pe}</span></td>
-          <td style="padding:3px 6px;border:1px solid #ddd;font-size:11px">${c.txt}</td>
-          ${['Sí','No','N/A'].map(opt=>`<td style="padding:3px 5px;border:1px solid #ddd;text-align:center"><label style="cursor:pointer"><input type="radio" name="${key}" value="${opt}" ${val===opt?'checked':''}> ${opt}</label></td>`).join('')}
-        </tr>`;
-      }).join('')}
-      </tbody>
-    </table>
-    </div>
-    <div style="margin-top:8px">
-      <label style="font-size:11px;font-weight:600;color:var(--text2)">Presión dinámica medida (bar)</label>
-      <input type="text" id="roc-pdin" style="width:120px;padding:5px 8px;border:1px solid var(--border);border-radius:var(--rsm);font-size:13px;margin-left:8px" placeholder="—" value="${(saved&&saved.presionDinamica)||''}">
-    </div>
-  </div>`;
+function buildRocChecksTable(tipo, saved){
+  var key=getRocKey(tipo);
+  var checks=ROC_CHECKS[key]||ROC_CHECKS['Tuberia humeda'];
+  var hdrColor=tipo==='Diluvio'?'#1a6e8e':'#1b5e20';
+  var rows='';
+  checks.forEach(function(c,ci){
+    var rkey='roc-chk-'+ci;
+    var val=(saved&&saved[rkey])||'';
+    var peBg=c.pe==='T'?'#ddf0f5':'#fff3cd';
+    var peColor=c.pe==='T'?'#0c5460':'#856404';
+    var rowBg=ci%2===0?'#fff':'#fafafa';
+    var opts='';
+    ['\u0053\u00ed','No','N/A'].forEach(function(opt){
+      opts+='<td style="padding:3px 4px;border:1px solid #ddd;text-align:center"><label style="cursor:pointer;font-size:11px"><input type="radio" name="'+rkey+'" value="'+opt+'"'+(val===opt?' checked':'')+'>'+opt+'</label></td>';
+    });
+    rows+='<tr style="background:'+rowBg+'">'
+      +'<td style="padding:3px 5px;border:1px solid #ddd;text-align:center"><span style="font-size:9px;font-weight:700;padding:2px 4px;border-radius:8px;background:'+peBg+';color:'+peColor+'">'+c.pe+'</span></td>'
+      +'<td style="padding:3px 6px;border:1px solid #ddd;font-size:11px">'+c.txt+'</td>'
+      +opts+'</tr>';
+  });
+  return '<div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--rsm);padding:10px 12px;margin-bottom:10px">'
+    +'<div style="font-size:10px;font-weight:700;color:'+hdrColor+';text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Verificaciones \u2014 '+(tipo||'Tuber\u00eda h\u00fameda')+' (UNE 23580-6:2022)</div>'
+    +'<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:11px;min-width:500px">'
+    +'<thead><tr style="background:'+hdrColor+';color:#fff">'
+    +'<th style="padding:4px 6px;border:1px solid #999;width:36px">PE</th>'
+    +'<th style="padding:4px 6px;border:1px solid #999;text-align:left">Concepto</th>'
+    +'<th style="padding:4px 5px;border:1px solid #999;width:44px">S\u00ed</th>'
+    +'<th style="padding:4px 5px;border:1px solid #999;width:44px">No</th>'
+    +'<th style="padding:4px 5px;border:1px solid #999;width:44px">N/A</th>'
+    +'</tr></thead><tbody>'+rows+'</tbody></table></div>'
+    +'<div style="margin-top:8px;display:flex;align-items:center;gap:8px">'
+    +'<span style="font-size:11px;font-weight:600;color:var(--text2)">Presi\u00f3n din\u00e1mica medida (bar):</span>'
+    +'<input type="text" id="roc-pdin" style="width:100px;padding:5px 8px;border:1px solid var(--border);border-radius:var(--rsm);font-size:13px" placeholder="\u2014" value="'+((saved&&saved.presionDinamica)||'')+'">'
+    +'</div></div>';
+}
+
+function buildRocDpTable(saved){
+  var rows='';
+  ROC_DP_CHECKS.forEach(function(c,ci){
+    var rkey='roc-dp-'+ci;
+    var val=(saved&&saved.dpChecks&&saved.dpChecks[ci])||'';
+    var rowBg=ci%2===0?'#fff':'#fafafa';
+    var opts='';
+    ['\u0053\u00ed','No','N/A'].forEach(function(opt){
+      opts+='<td style="padding:3px 4px;border:1px solid #ddd;text-align:center"><label style="cursor:pointer;font-size:11px"><input type="radio" name="'+rkey+'" value="'+opt+'"'+(val===opt?' checked':'')+'>'+opt+'</label></td>';
+    });
+    rows+='<tr style="background:'+rowBg+'">'
+      +'<td style="padding:3px 5px;border:1px solid #ddd;text-align:center"><span style="font-size:9px;font-weight:700;padding:2px 4px;border-radius:8px;background:#e2e3e5;color:#333">'+c.pe+'</span></td>'
+      +'<td style="padding:3px 6px;border:1px solid #ddd;font-size:11px">'+c.txt+'</td>'
+      +opts+'</tr>';
+  });
+  return '<div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--rsm);padding:10px 12px;margin-bottom:10px">'
+    +'<div style="font-size:10px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Pruebas decenales (10 a\u00f1os) y a los 25 a\u00f1os</div>'
+    +'<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:11px;min-width:500px">'
+    +'<thead><tr style="background:#555;color:#fff">'
+    +'<th style="padding:4px 6px;border:1px solid #999;width:36px">PE</th>'
+    +'<th style="padding:4px 6px;border:1px solid #999;text-align:left">Concepto</th>'
+    +'<th style="padding:4px 5px;border:1px solid #999;width:44px">S\u00ed</th>'
+    +'<th style="padding:4px 5px;border:1px solid #999;width:44px">No</th>'
+    +'<th style="padding:4px 5px;border:1px solid #999;width:44px">N/A</th>'
+    +'</tr></thead><tbody>'+rows+'</tbody></table></div></div>';
 }
 
 function abrirActaRociadores(){
   if(!cid)return;
   ensureRevision();
-  const rev=DB[cid].revisiones[cYear];
-  const saved=rev.actaRociadores||{};
+  var rev=DB[cid].revisiones[cYear];
+  var saved=rev.actaRociadores||{};
   document.getElementById('roc-tipo').value=saved.tipo||'';
   document.getElementById('roc-npuestos').value=saved.npuestos||'';
   document.getElementById('roc-ubic').value=saved.ubic||'';
@@ -12081,52 +12178,52 @@ function abrirActaRociadores(){
   document.getElementById('roc-riesgo').value=saved.riesgo||'';
   document.getElementById('roc-obs').value=saved.obs||'';
   document.getElementById('roc-estado-final').value=saved.estadoFinal||'';
-  // Build verification table
-  document.getElementById('roc-tabla-body').innerHTML=buildRocTabla(saved.tipo,saved);
-  // Build puestos list
+  document.getElementById('roc-tabla-body').innerHTML=buildRocChecksTable(saved.tipo||'Tuber\u00eda h\u00fameda',saved);
+  document.getElementById('roc-dp-body').innerHTML=buildRocDpTable(saved);
   renderRocPuestos(saved.puestos||[]);
-  // Restore decennial checks
-  (saved.dpChecks||[]).forEach((v,ci)=>{
-    const el=document.querySelector(`input[name="roc-dp-${ci}"][value="${v}"]`);
-    if(el)el.checked=true;
-  });
   openM('modal-acta-roc');
 }
 
-// Update table when tipo changes
-document.getElementById('roc-tipo').addEventListener('change',function(){
-  const rev=DB[cid]&&DB[cid].revisiones[cYear];
-  document.getElementById('roc-tabla-body').innerHTML=buildRocTabla(this.value,(rev&&rev.actaRociadores)||{});
-});
+function rocTipoChanged(){
+  var tipo=document.getElementById('roc-tipo').value;
+  var rev=DB[cid]&&DB[cid].revisiones&&DB[cid].revisiones[cYear];
+  var saved=(rev&&rev.actaRociadores)||{};
+  document.getElementById('roc-tabla-body').innerHTML=buildRocChecksTable(tipo,saved);
+}
 
 function renderRocPuestos(puestos){
-  const c=document.getElementById('roc-puestos-list');
-  if(!puestos.length){c.innerHTML='<p style="color:var(--text2);font-size:12px;padding:6px 0">Sin puestos añadidos.</p>';return;}
-  c.innerHTML=puestos.map((p,i)=>`
-  <div style="background:#fff;border:1px solid var(--border);border-radius:var(--rsm);padding:8px 10px;margin-bottom:6px">
-    <div style="font-size:11px;font-weight:700;color:#1b5e20;margin-bottom:6px">Puesto ${i+1}</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">
-      <div class="field" style="background:#fafafa"><label>Nº / Zona que protege</label><input type="text" id="rp-zona-${i}" value="${esc(p.zona||'')}" placeholder="Zona 1 - Planta baja"></div>
-      <div class="field" style="background:#fafafa"><label>Presión agua suministro (bar)</label><input type="text" id="rp-pagua-${i}" value="${esc(p.pAgua||'')}" placeholder="—"></div>
-      <div class="field" style="background:#fafafa"><label>Presión instalación (bar)</label><input type="text" id="rp-pinst-${i}" value="${esc(p.pInst||'')}" placeholder="—"></div>
-      <div class="field" style="background:#fafafa"><label>Apertura/cierre válvulas</label>
-        <select id="rp-valv-${i}"><option value="">—</option><option ${p.valv==='Bien'?'selected':''}>Bien</option><option ${p.valv==='Mal'?'selected':''}>Mal</option></select></div>
-      <div class="field" style="background:#fafafa"><label>Actuación alarma hidráulica</label>
-        <select id="rp-alarma-${i}"><option value="">—</option><option ${p.alarma==='Bien'?'selected':''}>Bien</option><option ${p.alarma==='Mal'?'selected':''}>Mal</option></select></div>
-      <div class="field" style="background:#fafafa"><label>Actuación presostato alarma</label>
-        <select id="rp-presostato-${i}"><option value="">—</option><option ${p.presostato==='Bien'?'selected':''}>Bien</option><option ${p.presostato==='Mal'?'selected':''}>Mal</option></select></div>
-      <div class="field" style="background:#fafafa;grid-column:1/-1"><label>Observaciones</label><input type="text" id="rp-obs-${i}" value="${esc(p.obs||'')}" placeholder="—"></div>
-    </div>
-    <button onclick="removeRocPuesto(${i})" style="margin-top:4px;background:none;border:none;color:var(--red);font-size:12px;cursor:pointer">🗑 Eliminar puesto</button>
-  </div>`).join('');
+  var c=document.getElementById('roc-puestos-list');
+  if(!puestos.length){c.innerHTML='<p style="color:var(--text2);font-size:12px;padding:6px 0">Sin puestos a\u00f1adidos.</p>';return;}
+  var html='';
+  puestos.forEach(function(p,i){
+    function selOpts(id,val){
+      return '<select id="'+id+'"><option value="">—</option>'
+        +'<option'+(val==='Bien'?' selected':'')+'>Bien</option>'
+        +'<option'+(val==='Mal'?' selected':'')+'>Mal</option>'
+        +'</select>';
+    }
+    html+='<div style="background:#fff;border:1px solid var(--border);border-radius:var(--rsm);padding:8px 10px;margin-bottom:6px">'
+      +'<div style="font-size:11px;font-weight:700;color:#1b5e20;margin-bottom:6px">Puesto '+(i+1)+'</div>'
+      +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">'
+      +'<div class="field" style="background:#fafafa"><label>N\u00ba / Zona que protege</label><input type="text" id="rp-zona-'+i+'" value="'+esc(p.zona||'')+'" placeholder="Zona 1 - Planta baja"></div>'
+      +'<div class="field" style="background:#fafafa"><label>Presi\u00f3n agua suministro (bar)</label><input type="text" id="rp-pagua-'+i+'" value="'+esc(p.pAgua||'')+'" placeholder="\u2014"></div>'
+      +'<div class="field" style="background:#fafafa"><label>Presi\u00f3n instalaci\u00f3n (bar)</label><input type="text" id="rp-pinst-'+i+'" value="'+esc(p.pInst||'')+'" placeholder="\u2014"></div>'
+      +'<div class="field" style="background:#fafafa"><label>Apertura/cierre v\u00e1lvulas</label>'+selOpts('rp-valv-'+i,p.valv)+'</div>'
+      +'<div class="field" style="background:#fafafa"><label>Actuaci\u00f3n alarma hidr\u00e1ulica</label>'+selOpts('rp-alarma-'+i,p.alarma)+'</div>'
+      +'<div class="field" style="background:#fafafa"><label>Actuaci\u00f3n presostato alarma</label>'+selOpts('rp-presostato-'+i,p.presostato)+'</div>'
+      +'<div class="field" style="background:#fafafa;grid-column:1/-1"><label>Observaciones</label><input type="text" id="rp-obs-'+i+'" value="'+esc(p.obs||'')+'" placeholder="\u2014"></div>'
+      +'</div>'
+      +'<button onclick="removeRocPuesto('+i+')" style="margin-top:4px;background:none;border:none;color:var(--red);font-size:12px;cursor:pointer">\ud83d\uddd1 Eliminar puesto</button>'
+      +'</div>';
+  });
+  c.innerHTML=html;
 }
 
 function addRocPuesto(){
-  const rev=DB[cid].revisiones[cYear];
-  const saved=rev.actaRociadores||{};
-  const puestos=saved.puestos||[];
-  // Save current state first
+  var rev=DB[cid].revisiones[cYear];
+  var saved=rev.actaRociadores||{};
   saveRocPuestosFromDOM(saved);
+  var puestos=saved.puestos||[];
   puestos.push({zona:'',pAgua:'',pInst:'',valv:'',alarma:'',presostato:'',obs:''});
   saved.puestos=puestos;
   rev.actaRociadores=saved;
@@ -12134,8 +12231,8 @@ function addRocPuesto(){
 }
 
 function removeRocPuesto(idx){
-  const rev=DB[cid].revisiones[cYear];
-  const saved=rev.actaRociadores||{};
+  var rev=DB[cid].revisiones[cYear];
+  var saved=rev.actaRociadores||{};
   saveRocPuestosFromDOM(saved);
   saved.puestos.splice(idx,1);
   rev.actaRociadores=saved;
@@ -12143,54 +12240,403 @@ function removeRocPuesto(idx){
 }
 
 function saveRocPuestosFromDOM(saved){
-  const items=document.querySelectorAll('#roc-puestos-list > div');
-  const puestos=[];
-  items.forEach((_,i)=>{
+  var items=document.querySelectorAll('#roc-puestos-list > div');
+  var puestos=[];
+  for(var i=0;i<items.length;i++){
     puestos.push({
-      zona:document.getElementById('rp-zona-'+i)?.value.trim()||'',
-      pAgua:document.getElementById('rp-pagua-'+i)?.value.trim()||'',
-      pInst:document.getElementById('rp-pinst-'+i)?.value.trim()||'',
-      valv:document.getElementById('rp-valv-'+i)?.value||'',
-      alarma:document.getElementById('rp-alarma-'+i)?.value||'',
-      presostato:document.getElementById('rp-presostato-'+i)?.value||'',
-      obs:document.getElementById('rp-obs-'+i)?.value.trim()||'',
+      zona:(document.getElementById('rp-zona-'+i)||{}).value||'',
+      pAgua:(document.getElementById('rp-pagua-'+i)||{}).value||'',
+      pInst:(document.getElementById('rp-pinst-'+i)||{}).value||'',
+      valv:(document.getElementById('rp-valv-'+i)||{}).value||'',
+      alarma:(document.getElementById('rp-alarma-'+i)||{}).value||'',
+      presostato:(document.getElementById('rp-presostato-'+i)||{}).value||'',
+      obs:(document.getElementById('rp-obs-'+i)||{}).value||''
     });
-  });
+  }
   saved.puestos=puestos;
 }
 
 function guardarActaRociadores(){
-  const rev=DB[cid].revisiones[cYear];
-  const saved=rev.actaRociadores||{};
-  const tipo=document.getElementById('roc-tipo').value;
+  var rev=DB[cid].revisiones[cYear];
+  var saved=rev.actaRociadores||{};
+  var tipo=document.getElementById('roc-tipo').value;
   saved.tipo=tipo;
-  saved.npuestos=document.getElementById('roc-npuestos').value.trim();
-  saved.ubic=document.getElementById('roc-ubic').value.trim();
-  saved.diam=document.getElementById('roc-diam').value.trim();
-  saved.modelo=document.getElementById('roc-modelo').value.trim();
-  saved.riesgo=document.getElementById('roc-riesgo').value;
-  saved.obs=document.getElementById('roc-obs').value.trim();
-  saved.estadoFinal=document.getElementById('roc-estado-final').value;
+  saved.npuestos=(document.getElementById('roc-npuestos')||{}).value||'';
+  saved.ubic=(document.getElementById('roc-ubic')||{}).value||'';
+  saved.diam=(document.getElementById('roc-diam')||{}).value||'';
+  saved.modelo=(document.getElementById('roc-modelo')||{}).value||'';
+  saved.riesgo=(document.getElementById('roc-riesgo')||{}).value||'';
+  saved.obs=(document.getElementById('roc-obs')||{}).value||'';
+  saved.estadoFinal=(document.getElementById('roc-estado-final')||{}).value||'';
+  saved.presionDinamica=(document.getElementById('roc-pdin')||{}).value||'';
   // Save verification checks
-  const checks=getRocChecks(tipo);
-  checks.forEach((_,ci)=>{
-    const sel=document.querySelector(`input[name="roc-chk-${ci}"]:checked`);
-    saved[`roc-chk-${ci}`]=sel?sel.value:'';
+  var key=getRocKey(tipo);
+  var checks=ROC_CHECKS[key]||ROC_CHECKS['Tuberia humeda'];
+  checks.forEach(function(_,ci){
+    var sel=document.querySelector('input[name="roc-chk-'+ci+'"]:checked');
+    saved['roc-chk-'+ci]=sel?sel.value:'';
   });
-  // Presión dinámica
-  saved.presionDinamica=document.getElementById('roc-pdin')?.value.trim()||'';
-  // Decennial checks
+  // Save decennial checks
   saved.dpChecks=[];
-  for(let ci=0;ci<7;ci++){
-    const sel=document.querySelector(`input[name="roc-dp-${ci}"]:checked`);
+  ROC_DP_CHECKS.forEach(function(_,ci){
+    var sel=document.querySelector('input[name="roc-dp-'+ci+'"]:checked');
     saved.dpChecks[ci]=sel?sel.value:'';
-  }
-  // Save puestos from DOM
+  });
   saveRocPuestosFromDOM(saved);
   rev.actaRociadores=saved;
   sched();closeM('modal-acta-roc');
-  showToast('✅ Acta rociadores guardada','ok');
-}
+  showToast('\u2705 Acta rociadores guardada','ok');
 </script>
-</body>
-</html>
+
+
+
+
+<!-- ═══════════ SCREEN CALENDARIO ═══════════ -->
+<div id="screen-calendario" class="screen" style="display:none;padding:0 0 96px">
+  <div style="background:var(--surface);border-bottom:1px solid var(--border);padding:12px 14px;position:sticky;top:92px;z-index:97">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <button onclick="calPrevMonth()" style="background:none;border:1px solid var(--border);border-radius:var(--rsm);padding:6px 14px;font-size:18px;cursor:pointer;color:var(--text)">&#8249;</button>
+      <div id="cal-mes-label" style="font-size:17px;font-weight:800;letter-spacing:-.3px"></div>
+      <button onclick="calNextMonth()" style="background:none;border:1px solid var(--border);border-radius:var(--rsm);padding:6px 14px;font-size:18px;cursor:pointer;color:var(--text)">&#8250;</button>
+    </div>
+    <div id="gcal-bar" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <button id="gcal-btn" onclick="gcalConnect()" style="display:flex;align-items:center;gap:7px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--rsm);padding:7px 12px;font-size:12px;font-weight:700;cursor:pointer;color:var(--text)">
+        &#128197; Google Calendar
+      </button>
+      <div id="gcal-status" style="font-size:11px;color:var(--text3)"></div>
+    </div>
+  </div>
+  <div style="padding:10px 12px 0">
+    <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:0;margin-bottom:4px">
+      <div style="text-align:center;font-size:10px;font-weight:700;color:var(--text2);padding:4px 0">L</div>
+      <div style="text-align:center;font-size:10px;font-weight:700;color:var(--text2);padding:4px 0">M</div>
+      <div style="text-align:center;font-size:10px;font-weight:700;color:var(--text2);padding:4px 0">X</div>
+      <div style="text-align:center;font-size:10px;font-weight:700;color:var(--text2);padding:4px 0">J</div>
+      <div style="text-align:center;font-size:10px;font-weight:700;color:var(--text2);padding:4px 0">V</div>
+      <div style="text-align:center;font-size:10px;font-weight:700;color:var(--text2);padding:4px 0">S</div>
+      <div style="text-align:center;font-size:10px;font-weight:700;color:var(--text2);padding:4px 0">D</div>
+    </div>
+    <div id="cal-grid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:3px"></div>
+  </div>
+  <div style="padding:10px 12px 0">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+      <div id="cal-eventos-titulo" style="font-size:13px;font-weight:700;color:var(--text2)">Proximos eventos</div>
+      <button onclick="abrirModalEvento(null)" style="background:var(--red);color:#fff;border:none;border-radius:var(--rsm);padding:6px 13px;font-size:12px;font-weight:700;cursor:pointer">+ Cita</button>
+    </div>
+    <div id="cal-eventos-lista"></div>
+  </div>
+</div>
+
+<!-- MODAL NUEVO/EDITAR EVENTO -->
+<div id="modal-evento" class="modal-wrap">
+  <div class="mbox">
+    <h2 id="modal-evento-title">Nueva cita</h2>
+    <div class="field"><label>Titulo</label><input type="text" id="ev-titulo" placeholder="Revision anual, reunion..."></div>
+    <div class="frow">
+      <div class="field"><label>Fecha</label><input type="date" id="ev-fecha"></div>
+      <div class="field"><label>Hora</label><input type="time" id="ev-hora" value="09:00"></div>
+    </div>
+    <div class="field"><label>Cliente (opcional)</label>
+      <select id="ev-cliente"><option value="">-- Sin cliente --</option></select>
+    </div>
+    <div class="field"><label>Tipo</label>
+      <select id="ev-tipo">
+        <option value="cita">Cita</option>
+        <option value="revision">Revision</option>
+        <option value="mantenimiento">Mantenimiento</option>
+        <option value="presupuesto">Presupuesto</option>
+        <option value="otro">Otro</option>
+      </select>
+    </div>
+    <div class="field"><label>Notas</label><textarea id="ev-notas" placeholder="Observaciones..."></textarea></div>
+    <div id="ev-gcal-opt" style="display:none;align-items:center;gap:8px;margin-top:8px;padding:10px;background:var(--surface2);border-radius:var(--rsm)">
+      <input type="checkbox" id="ev-sync-gcal" style="width:16px;height:16px">
+      <label for="ev-sync-gcal" style="font-size:13px;cursor:pointer">Anadir tambien a Google Calendar</label>
+    </div>
+    <div class="macts">
+      <button class="mcancel" onclick="closeM('modal-evento')">Cancelar</button>
+      <button id="ev-del-btn" style="display:none;background:#fde8e8;color:#721c24;border:none;border-radius:var(--rsm);padding:12px;font-size:14px;font-weight:700;cursor:pointer" onclick="eliminarEvento()">Eliminar</button>
+      <button class="mok" onclick="guardarEvento()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ====== DATE PICKERS: convierte inputs mm/aa a type=date ======
+function mmaaToDate(v){
+  if(!v)return'';
+  if(/^\d{4}-\d{2}/.test(v))return v;
+  var p=v.split('/');
+  if(p.length<2)return'';
+  var m=p[0].padStart(2,'0');
+  var y=p[1].length===2?'20'+p[1]:p[1];
+  return y+'-'+m+'-01';
+}
+function dateToMmaa(v){
+  if(!v)return'';
+  var p=v.split('-');
+  if(p.length<2)return v;
+  return p[1]+'/'+p[0].slice(2);
+}
+
+// Monkey-patch upE para convertir YYYY-MM-DD -> mm/aa en campos que lo esperan
+(function(){
+  var _upE=window.upE;
+  var mmaaFields=['ffab','frev','phBIE','phprxBIE','fJuntasHid','fPhHid','anofabBIE'];
+  window.upE=function(id,f,v){
+    if(mmaaFields.indexOf(f)>=0&&v&&/^\d{4}-\d{2}/.test(v)){v=dateToMmaa(v);}
+    _upE(id,f,v);
+  };
+})();
+
+// MutationObserver: convierte inputs text con placeholder MM/AA a type=date automaticamente
+(function(){
+  var obs=new MutationObserver(function(muts){
+    muts.forEach(function(m){
+      m.addedNodes.forEach(function(node){
+        if(node.nodeType!==1)return;
+        var inputs=node.tagName==='INPUT'?[node]:Array.from(node.querySelectorAll('input[type="text"],input:not([type])'));
+        inputs.forEach(function(inp){
+          if(inp.placeholder&&/^\d{2}\/\d{2}$/.test(inp.placeholder)&&inp.type!=='date'){
+            var old=inp.value;
+            inp.type='date';
+            if(old)inp.value=mmaaToDate(old);
+          }
+        });
+      });
+    });
+  });
+  obs.observe(document.body,{childList:true,subtree:true});
+})();
+
+// ====== CALENDARIO ======
+var calYear=new Date().getFullYear();
+var calMonth=new Date().getMonth();
+var calDiaSeleccionado=null;
+var eventoEditandoId=null;
+var gcalConectado=false;
+var gcalTokenClient=null;
+var gcalAccessToken=null;
+
+var CAL_TIPOS={
+  revision:{icon:'📋',color:'#1a73e8'},
+  cita:{icon:'📅',color:'#0f9d58'},
+  mantenimiento:{icon:'🔧',color:'#f4b400'},
+  presupuesto:{icon:'💶',color:'#e74c3c'},
+  otro:{icon:'📝',color:'#9e9e9e'}
+};
+
+function getEventos(){
+  if(!DB.__eventos)DB.__eventos=[];
+  return DB.__eventos;
+}
+
+function calPrevMonth(){calMonth--;if(calMonth<0){calMonth=11;calYear--;}renderCalendario();}
+function calNextMonth(){calMonth++;if(calMonth>11){calMonth=0;calYear++;}renderCalendario();}
+
+function calGetEventosDia(y,m,d){
+  var dateStr=y+'-'+String(m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+  var propios=getEventos().filter(function(e){return e.fecha===dateStr;});
+  var revisiones=[];
+  Object.keys(DB).forEach(function(cid){
+    var c=DB[cid];
+    if(!c||!c.name)return;
+    if(c.proxrev===dateStr)revisiones.push({id:'rev_'+cid,titulo:'Revision: '+c.name,fecha:dateStr,hora:'',tipo:'revision',_auto:true,_cid:cid});
+  });
+  return propios.concat(revisiones);
+}
+
+function renderCalendario(){
+  var meses=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  document.getElementById('cal-mes-label').textContent=meses[calMonth]+' '+calYear;
+  var hoy=new Date();
+  var primerDia=new Date(calYear,calMonth,1);
+  var dow=primerDia.getDay();
+  dow=dow===0?6:dow-1;
+  var diasMes=new Date(calYear,calMonth+1,0).getDate();
+  var grid=document.getElementById('cal-grid');
+  var html='';
+  for(var i=0;i<dow;i++)html+='<div></div>';
+  for(var d=1;d<=diasMes;d++){
+    var eventos=calGetEventosDia(calYear,calMonth,d);
+    var esHoy=hoy.getFullYear()===calYear&&hoy.getMonth()===calMonth&&hoy.getDate()===d;
+    var dateStr=calYear+'-'+String(calMonth+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+    var sel=calDiaSeleccionado===dateStr;
+    var dots=eventos.slice(0,3).map(function(e){return'<div style="width:5px;height:5px;border-radius:50%;background:'+(CAL_TIPOS[e.tipo]?CAL_TIPOS[e.tipo].color:'#666')+';flex-shrink:0"></div>';}).join('');
+    html+='<div onclick="calSelDia(\''+dateStr+'\')" style="min-height:46px;padding:4px 3px;border-radius:8px;cursor:pointer;text-align:center;'
+      +'background:'+(sel?'var(--red)':esHoy?'var(--red-light)':'var(--surface)')
+      +';border:1.5px solid '+(sel?'var(--red)':esHoy?'var(--red)':'var(--border)')
+      +';transition:background .15s">'
+      +'<div style="font-size:13px;font-weight:'+(esHoy?'800':'600')+';color:'+(sel?'#fff':esHoy?'var(--red)':'var(--text)')+';line-height:1.3">'+d+'</div>'
+      +'<div style="display:flex;justify-content:center;gap:2px;flex-wrap:wrap;margin-top:2px">'+dots+'</div>'
+      +'</div>';
+  }
+  grid.innerHTML=html;
+  renderEventosDia(calDiaSeleccionado);
+}
+
+function calSelDia(dateStr){calDiaSeleccionado=dateStr;renderCalendario();}
+
+function renderEventosDia(dateStr){
+  var lista=document.getElementById('cal-eventos-lista');
+  var tituloEl=document.getElementById('cal-eventos-titulo');
+  var eventos;
+  if(dateStr){
+    var p=dateStr.split('-');
+    eventos=calGetEventosDia(parseInt(p[0]),parseInt(p[1])-1,parseInt(p[2]));
+    tituloEl.textContent='Eventos del '+parseInt(p[2])+'/'+parseInt(p[1])+'/'+p[0];
+  } else {
+    var hoy2=new Date();eventos=[];
+    for(var i=0;i<30;i++){var di=new Date(hoy2);di.setDate(hoy2.getDate()+i);eventos=eventos.concat(calGetEventosDia(di.getFullYear(),di.getMonth(),di.getDate()));}
+    eventos.sort(function(a,b){return a.fecha.localeCompare(b.fecha)||(a.hora||'').localeCompare(b.hora||'');});
+    tituloEl.textContent='Proximos eventos (30 dias)';
+  }
+  if(!eventos.length){lista.innerHTML='<div style="text-align:center;padding:24px;color:var(--text2)"><div style="font-size:32px;margin-bottom:8px">&#128197;</div><p style="font-size:13px">Sin eventos</p></div>';return;}
+  lista.innerHTML=eventos.map(function(ev){
+    var tipo=CAL_TIPOS[ev.tipo]||CAL_TIPOS.otro;
+    var cName='';
+    if(ev.cliente&&DB[ev.cliente])cName=DB[ev.cliente].name||'';
+    return'<div style="background:var(--surface);border:1px solid var(--border);border-left:3px solid '+tipo.color+';border-radius:var(--rsm);padding:10px 13px;margin-bottom:7px;display:flex;align-items:flex-start;gap:10px;cursor:'+(ev._auto?'pointer':'pointer')+'" '+(ev._auto?'onclick="openClient(\''+ev._cid+'\')"':'')+'>'
+      +'<div style="font-size:20px;margin-top:1px">'+tipo.icon+'</div>'
+      +'<div style="flex:1;min-width:0">'
+      +'<div style="font-size:14px;font-weight:700">'+esc(ev.titulo)+'</div>'
+      +'<div style="font-size:11px;color:var(--text2);margin-top:2px">'+(ev.hora?ev.hora+' · ':'')+fmtDate(ev.fecha)+(cName?' · '+esc(cName):'')+'</div>'
+      +(ev.notas?'<div style="font-size:12px;color:var(--text2);margin-top:3px">'+esc(ev.notas)+'</div>':'')
+      +'</div>'
+      +(!ev._auto?'<button onclick="event.stopPropagation();abrirModalEvento(\''+ev.id+'\')" style="background:none;border:none;font-size:16px;cursor:pointer;color:var(--text3);padding:0 2px">&#9998;</button>':'')
+      +'</div>';
+  }).join('');
+}
+
+function abrirModalEvento(id){
+  eventoEditandoId=id;
+  var ev=id?getEventos().find(function(e){return e.id===id;}):null;
+  document.getElementById('modal-evento-title').textContent=ev?'Editar cita':'Nueva cita';
+  document.getElementById('ev-titulo').value=ev?ev.titulo:'';
+  document.getElementById('ev-fecha').value=ev?ev.fecha:(calDiaSeleccionado||new Date().toISOString().slice(0,10));
+  document.getElementById('ev-hora').value=ev?ev.hora||'09:00':'09:00';
+  document.getElementById('ev-notas').value=ev?ev.notas||'':'';
+  document.getElementById('ev-tipo').value=ev?ev.tipo:'cita';
+  document.getElementById('ev-del-btn').style.display=ev?'block':'none';
+  document.getElementById('ev-gcal-opt').style.display=gcalConectado?'flex':'none';
+  if(gcalConectado)document.getElementById('ev-sync-gcal').checked=true;
+  var sel=document.getElementById('ev-cliente');
+  sel.innerHTML='<option value="">-- Sin cliente --</option>';
+  Object.keys(DB).forEach(function(cid){
+    var c=DB[cid];if(!c||!c.name)return;
+    var opt=document.createElement('option');opt.value=cid;opt.textContent=c.name;
+    if(ev&&ev.cliente===cid)opt.selected=true;
+    sel.appendChild(opt);
+  });
+  openM('modal-evento');
+}
+
+function guardarEvento(){
+  var titulo=document.getElementById('ev-titulo').value.trim();
+  if(!titulo){alert('Introduce un titulo.');return;}
+  var ev={id:eventoEditandoId||uid(),titulo:titulo,fecha:document.getElementById('ev-fecha').value,hora:document.getElementById('ev-hora').value,cliente:document.getElementById('ev-cliente').value,tipo:document.getElementById('ev-tipo').value,notas:document.getElementById('ev-notas').value.trim()};
+  var existing=eventoEditandoId?getEventos().find(function(e){return e.id===eventoEditandoId;}):null;
+  ev.gcalId=existing?existing.gcalId||null:null;
+  if(!DB.__eventos)DB.__eventos=[];
+  var idx=DB.__eventos.findIndex(function(e){return e.id===ev.id;});
+  if(idx>=0)DB.__eventos[idx]=ev;else DB.__eventos.push(ev);
+  sched();closeM('modal-evento');renderCalendario();
+  if(gcalConectado&&document.getElementById('ev-sync-gcal').checked)gcalPushEvento(ev);
+  showToast('Cita guardada','ok');
+}
+
+function eliminarEvento(){
+  if(!eventoEditandoId||!confirm('Eliminar esta cita?'))return;
+  var ev=getEventos().find(function(e){return e.id===eventoEditandoId;});
+  DB.__eventos=DB.__eventos.filter(function(e){return e.id!==eventoEditandoId;});
+  sched();closeM('modal-evento');renderCalendario();
+  if(gcalConectado&&ev&&ev.gcalId)gcalDeleteEvento(ev.gcalId);
+  showToast('Cita eliminada','ok');
+}
+
+// ====== GOOGLE CALENDAR OAUTH ======
+function gcalConnect(){
+  var clientId=localStorage.getItem('ripci_gcal_cid')||'';
+  if(!clientId){
+    clientId=prompt('Para conectar Google Calendar necesitas un Client ID de Google OAuth 2.0.\n\nPuedes crearlo en console.cloud.google.com\n(API y servicios > Credenciales > OAuth 2.0)\n\nIntroduce tu Client ID:','');
+    if(!clientId)return;
+    localStorage.setItem('ripci_gcal_cid',clientId);
+  }
+  if(!window.google||!window.google.accounts){
+    var sc=document.createElement('script');sc.src='https://accounts.google.com/gsi/client';
+    sc.onload=function(){gcalInitTokenClient(clientId);};document.head.appendChild(sc);
+  } else {gcalInitTokenClient(clientId);}
+}
+function gcalInitTokenClient(clientId){
+  gcalTokenClient=google.accounts.oauth2.initTokenClient({
+    client_id:clientId,scope:'https://www.googleapis.com/auth/calendar.events',
+    callback:function(resp){
+      if(resp.error){showToast('Error Google: '+resp.error,'err');return;}
+      gcalAccessToken=resp.access_token;gcalConectado=true;
+      var btn=document.getElementById('gcal-btn');
+      btn.innerHTML='&#128197; Conectado &#10003;';btn.style.borderColor='var(--green)';btn.style.color='var(--green)';
+      btn.onclick=gcalImportarEventos;
+      document.getElementById('gcal-status').textContent='Pulsa para importar eventos';
+      showToast('Google Calendar conectado','ok');gcalImportarEventos();
+    }
+  });
+  gcalTokenClient.requestAccessToken();
+}
+function gcalPushEvento(ev){
+  if(!gcalAccessToken)return;
+  var body={summary:ev.titulo,description:ev.notas||'',start:{date:ev.fecha},end:{date:ev.fecha}};
+  if(ev.hora&&ev.hora!==''){body.start={dateTime:ev.fecha+'T'+ev.hora+':00',timeZone:'Europe/Madrid'};body.end={dateTime:ev.fecha+'T'+ev.hora+':00',timeZone:'Europe/Madrid'};}
+  var url=ev.gcalId?'https://www.googleapis.com/calendar/v3/calendars/primary/events/'+ev.gcalId:'https://www.googleapis.com/calendar/v3/calendars/primary/events';
+  fetch(url,{method:ev.gcalId?'PUT':'POST',headers:{'Authorization':'Bearer '+gcalAccessToken,'Content-Type':'application/json'},body:JSON.stringify(body)})
+    .then(function(r){return r.json();}).then(function(data){if(data.id){var e=getEventos().find(function(x){return x.id===ev.id;});if(e){e.gcalId=data.id;sched();}showToast('Sincronizado con Google Calendar','ok');}})
+    .catch(function(){showToast('Error sincronizando','err');});
+}
+function gcalDeleteEvento(gcalId){
+  if(!gcalAccessToken||!gcalId)return;
+  fetch('https://www.googleapis.com/calendar/v3/calendars/primary/events/'+gcalId,{method:'DELETE',headers:{'Authorization':'Bearer '+gcalAccessToken}});
+}
+function gcalImportarEventos(){
+  if(!gcalAccessToken)return;
+  var from=new Date().toISOString();var to=new Date(Date.now()+90*24*3600*1000).toISOString();
+  fetch('https://www.googleapis.com/calendar/v3/calendars/primary/events?timeMin='+from+'&timeMax='+to+'&singleEvents=true&orderBy=startTime&maxResults=50',{headers:{'Authorization':'Bearer '+gcalAccessToken}})
+    .then(function(r){return r.json();}).then(function(data){
+      if(!data.items)return;var nuevos=0;
+      data.items.forEach(function(item){
+        var fecha=(item.start.date||(item.start.dateTime||'').slice(0,10));var hora=item.start.dateTime?(item.start.dateTime||'').slice(11,16):'';
+        if(!fecha)return;if(getEventos().find(function(e){return e.gcalId===item.id;}))return;
+        DB.__eventos.push({id:uid(),titulo:item.summary||'(sin titulo)',fecha:fecha,hora:hora,cliente:'',tipo:'otro',notas:item.description||'',gcalId:item.id});nuevos++;
+      });
+      if(nuevos>0){sched();renderCalendario();showToast(nuevos+' eventos importados','ok');}else showToast('Google Calendar al dia','ok');
+    }).catch(function(){showToast('Error importando eventos','err');});
+}
+
+// ====== REGISTRAR SECCION ======
+var _origIrSeccion2=window.irSeccion;
+window.irSeccion=function(sec){
+  if(sec==='calendario'){
+    document.getElementById('nav-global').style.display='block';
+    setNavGlobalActive('calendario');
+    document.getElementById('tb-back').style.display='none';
+    document.getElementById('tb-title').textContent='Calendario';
+    document.getElementById('tb-action').style.display='block';
+    document.getElementById('tb-action').textContent='+ Cita';
+    document.getElementById('tb-action').onclick=function(){abrirModalEvento(null);};
+    document.getElementById('tb-cat').style.display='none';
+    document.getElementById('tab-bar').style.display='none';
+    calYear=new Date().getFullYear();calMonth=new Date().getMonth();calDiaSeleccionado=null;
+    renderCalendario();showRaw('calendario');return;
+  }
+  _origIrSeccion2(sec);
+};
+var _origSetNav2=window.setNavGlobalActive;
+window.setNavGlobalActive=function(sec){
+  _origSetNav2(sec);
+  if(sec==='calendario'){
+    document.querySelectorAll('.nav-global-btn').forEach(function(b){b.style.color='var(--text2)';b.style.borderBottom='2px solid transparent';b.style.fontWeight='600';});
+    var btn=document.getElementById('ng-calendario');
+    if(btn){btn.style.color='var(--red)';btn.style.borderBottom='2px solid var(--red)';btn.style.fontWeight='700';}
+  }
+};
+</script>
+
+</body></html>
