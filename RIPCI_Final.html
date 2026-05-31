@@ -2570,6 +2570,38 @@ function renderInv(){
           <div style="margin-top:8px"><span class="bsm ${nCSECA>0?'bsm-o':'bsm-r'}" style="font-size:11px;padding:5px 12px">${nCSECA>0?'✏️ Editar acta':'📋 Nueva acta'}</span></div>
         </div>
 
+        <!-- ESPUMA -->
+        <div style="background:var(--surface);border:1.5px solid ${(rev&&rev.actaUNE7)?'var(--green)':'var(--border)'};border-radius:var(--r);padding:14px;text-align:center;cursor:pointer" onclick="ensureRevision();abrirActaUNE7()">
+          <div style="font-size:28px;margin-bottom:4px">🫧</div>
+          <div style="font-size:13px;font-weight:700;margin-bottom:2px">Espuma</div>
+          <div style="font-size:11px;color:${(rev&&rev.actaUNE7)?'var(--green)':'var(--text3)'};">${(rev&&rev.actaUNE7)?'✅ Acta registrada':'Pulsa para crear acta'}</div>
+          <div style="margin-top:8px"><span class="bsm ${(rev&&rev.actaUNE7)?'bsm-o':'bsm-r'}" style="font-size:11px;padding:5px 12px">${(rev&&rev.actaUNE7)?'✏️ Editar acta':'📋 Nueva acta'}</span></div>
+        </div>
+
+        <!-- AGENTE GASEOSO -->
+        <div style="background:var(--surface);border:1.5px solid ${(rev&&rev.actaUNE8)?'var(--green)':'var(--border)'};border-radius:var(--r);padding:14px;text-align:center;cursor:pointer" onclick="ensureRevision();abrirActaUNE8()">
+          <div style="font-size:28px;margin-bottom:4px">💨</div>
+          <div style="font-size:13px;font-weight:700;margin-bottom:2px">Agente Gaseoso</div>
+          <div style="font-size:11px;color:${(rev&&rev.actaUNE8)?'var(--green)':'var(--text3)'};">${(rev&&rev.actaUNE8)?'✅ Acta registrada':'Pulsa para crear acta'}</div>
+          <div style="margin-top:8px"><span class="bsm ${(rev&&rev.actaUNE8)?'bsm-o':'bsm-r'}" style="font-size:11px;padding:5px 12px">${(rev&&rev.actaUNE8)?'✏️ Editar acta':'📋 Nueva acta'}</span></div>
+        </div>
+
+        <!-- EXTINCIÓN POR POLVO -->
+        <div style="background:var(--surface);border:1.5px solid ${(rev&&rev.actaUNE12)?'var(--green)':'var(--border)'};border-radius:var(--r);padding:14px;text-align:center;cursor:pointer" onclick="ensureRevision();abrirActaUNE12()">
+          <div style="font-size:28px;margin-bottom:4px">🌫️</div>
+          <div style="font-size:13px;font-weight:700;margin-bottom:2px">Extinción Polvo</div>
+          <div style="font-size:11px;color:${(rev&&rev.actaUNE12)?'var(--green)':'var(--text3)'};">${(rev&&rev.actaUNE12)?'✅ Acta registrada':'Pulsa para crear acta'}</div>
+          <div style="margin-top:8px"><span class="bsm ${(rev&&rev.actaUNE12)?'bsm-o':'bsm-r'}" style="font-size:11px;padding:5px 12px">${(rev&&rev.actaUNE12)?'✏️ Editar acta':'📋 Nueva acta'}</span></div>
+        </div>
+
+        <!-- AEROSOLES CONDENSADOS -->
+        <div style="background:var(--surface);border:1.5px solid ${(rev&&rev.actaUNE13)?'var(--green)':'var(--border)'};border-radius:var(--r);padding:14px;text-align:center;cursor:pointer" onclick="ensureRevision();abrirActaUNE13()">
+          <div style="font-size:28px;margin-bottom:4px">☁️</div>
+          <div style="font-size:13px;font-weight:700;margin-bottom:2px">Aerosoles Cond.</div>
+          <div style="font-size:11px;color:${(rev&&rev.actaUNE13)?'var(--green)':'var(--text3)'};">${(rev&&rev.actaUNE13)?'✅ Acta registrada':'Pulsa para crear acta'}</div>
+          <div style="margin-top:8px"><span class="bsm ${(rev&&rev.actaUNE13)?'bsm-o':'bsm-r'}" style="font-size:11px;padding:5px 12px">${(rev&&rev.actaUNE13)?'✏️ Editar acta':'📋 Nueva acta'}</span></div>
+        </div>
+
         <!-- SEÑALIZACIÓN -->
         <div style="background:var(--surface);border:1.5px solid ${nSENYAL>0?'var(--green)':'var(--border)'};border-radius:var(--r);padding:14px;text-align:center;cursor:pointer;grid-column:1/-1" onclick="ensureRevision();abrirActaSenyal()">
           <div style="font-size:28px;margin-bottom:4px">🚪</div>
@@ -2611,6 +2643,8 @@ function renderInv(){
         <button class="bsm bsm-r" style="padding:11px 8px;font-size:12px" onclick="abrirActaDeteccion()">🔥 Acta Detección</button>
         <button class="bsm bsm-r" style="padding:11px 8px;font-size:12px" onclick="abrirActaAbastecimiento()">💧 Acta Abastecimiento</button>
         <button class="bsm bsm-r" style="padding:11px 8px;font-size:12px" onclick="abrirActaRociadores()">🚿 Acta Rociadores (UNE 23580-6)</button>
+        <button class="bsm bsm-r" style="padding:11px 8px;font-size:12px" onclick="abrirActaAguaNebulizada()">💦 Acta Agua Nebulizada (UNE 23580-11)</button>
+        <button class="bsm bsm-r" style="padding:11px 8px;font-size:12px" onclick="abrirActaAguaPulverizada()">🌊 Acta Agua Pulverizada (UNE 23580-16)</button>
         <button class="bsm bsm-r" style="padding:11px 8px;font-size:12px" onclick="abrirActaColSeca()">🏛️ Acta Columna Seca</button>
         <button class="bsm bsm-r" style="padding:11px 8px;font-size:12px" onclick="abrirActaSenyal()">🚪 Acta Señalización</button>
         ${hasSCTEH?`<button class="bsm bsm-r" style="padding:11px 8px;font-size:12px;grid-column:1/-1" onclick="ensureRevision();abrirActaHumos()">💨 Acta Control Humos — SCTEH (UNE 23580-14)</button>`:''}
@@ -7119,6 +7153,10 @@ function renderDocumentosPanel(){
         <button class="btn btn-out" style="padding:11px;font-size:13px;margin-bottom:0;border-color:#00695c;color:#00695c" onclick="abrirActaUNE3()">💧 Acta Abastecimiento<br><span style="font-size:10px;font-weight:400">UNE 23580-3</span></button>
         <button class="btn btn-out" style="padding:11px;font-size:13px;margin-bottom:0;border-color:#1a5276;color:#1a5276" onclick="abrirActaUNE4()">🔧 Acta Hidrantes y Válvulas<br><span style="font-size:10px;font-weight:400">UNE 23580-4</span></button>
         <button class="btn btn-out" style="padding:11px;font-size:13px;margin-bottom:0;border-color:#922b21;color:#922b21" onclick="abrirActaUNE5()">🚒 Acta BIEs 25/45<br><span style="font-size:10px;font-weight:400">UNE 23580-5</span></button>
+        <button class="btn btn-out" style="padding:11px;font-size:13px;margin-bottom:0;border-color:#1b6ca8;color:#1b6ca8" onclick="abrirActaUNE7()">🫧 Acta Espuma<br><span style="font-size:10px;font-weight:400">UNE 23580-7</span></button>
+        <button class="btn btn-out" style="padding:11px;font-size:13px;margin-bottom:0;border-color:#6c3483;color:#6c3483" onclick="abrirActaUNE8()">💨 Acta Agente Gaseoso<br><span style="font-size:10px;font-weight:400">UNE 23580-8</span></button>
+        <button class="btn btn-out" style="padding:11px;font-size:13px;margin-bottom:0;border-color:#7d6608;color:#7d6608" onclick="abrirActaUNE12()">🌫️ Acta Extinción Polvo<br><span style="font-size:10px;font-weight:400">UNE 23580-12</span></button>
+        <button class="btn btn-out" style="padding:11px;font-size:13px;margin-bottom:0;border-color:#1e8449;color:#1e8449" onclick="abrirActaUNE13()">☁️ Acta Aerosoles Cond.<br><span style="font-size:10px;font-weight:400">UNE 23580-13</span></button>
       </div>
       <button class="btn" style="margin-top:8px;background:linear-gradient(135deg,#8e1a1a,#c0392b);padding:12px;font-size:13px" onclick="generarDocActaUNE()">🖨️ Generar Acta UNE 23580 Completa (imprimible)</button>
     </div>
@@ -10201,6 +10239,135 @@ function guardarInvHidrantes(){
   </div>
 </div>
 
+<!-- ===== MODAL ACTA UNE 23580-7: SISTEMAS DE ESPUMA ===== -->
+<div id="modal-une7" class="modal-wrap">
+  <div class="mbox" style="max-width:560px">
+    <h2>🫧 Acta UNE 23580-7 — Sistemas de Espuma</h2>
+    <div class="section">
+      <div class="stitle">5. Revisión general de la instalación</div>
+      <div id="une7-checks-rev" style="margin-bottom:8px"></div>
+      <div class="field"><label>Observaciones revisión general</label><textarea id="une7-obs-rev"></textarea></div>
+    </div>
+    <div class="section">
+      <div class="stitle">6. Depósito de espumógeno atmosférico</div>
+      <div id="une7-checks-dep" style="margin-bottom:8px"></div>
+      <div class="field"><label>Observaciones depósito</label><textarea id="une7-obs-dep"></textarea></div>
+    </div>
+    <div class="section">
+      <div class="stitle">8/9. Proporcionador / Mezclador</div>
+      <div id="une7-checks-prop" style="margin-bottom:8px"></div>
+      <div class="field"><label>Observaciones proporcionador</label><textarea id="une7-obs-prop"></textarea></div>
+    </div>
+    <div class="section">
+      <div class="stitle">11. Cámara de espuma</div>
+      <div id="une7-checks-cam" style="margin-bottom:8px"></div>
+      <div class="field"><label>Observaciones cámara de espuma</label><textarea id="une7-obs-cam"></textarea></div>
+    </div>
+    <div class="field">
+      <label>Estado final del sistema</label>
+      <select id="une7-estado-final">
+        <option value="">— Seleccionar —</option>
+        <option>Sin anomalías</option>
+        <option>Con las anomalías indicadas en Deficiencias pendientes de reparación</option>
+      </select>
+    </div>
+    <div class="macts">
+      <button class="mcancel" onclick="closeM('modal-une7')">Cerrar</button>
+      <button class="mok" onclick="guardarActaUNE7()">💾 Guardar acta</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL ACTA UNE 23580-8: AGENTE GASEOSO ===== -->
+<div id="modal-une8" class="modal-wrap">
+  <div class="mbox" style="max-width:560px">
+    <h2>💨 Acta UNE 23580-8 — Sistemas Fijos por Agentes Gaseosos</h2>
+    <div class="section">
+      <div class="stitle">Anexo B — Comprobación del sistema de extinción automática</div>
+      <div id="une8-checks-b" style="margin-bottom:8px"></div>
+      <div class="field"><label>Observaciones sistema extinción automática</label><textarea id="une8-obs-b"></textarea></div>
+    </div>
+    <div class="section">
+      <div class="stitle">Anexo C — Central de detección y extinción</div>
+      <div id="une8-checks-c" style="margin-bottom:8px"></div>
+      <div class="field"><label>Fabricante central</label><input type="text" id="une8-fab-central" placeholder="Fabricante / Modelo"></div>
+      <div class="field"><label>Observaciones central</label><textarea id="une8-obs-c"></textarea></div>
+    </div>
+    <div class="field">
+      <label>Estado final del sistema</label>
+      <select id="une8-estado-final">
+        <option value="">— Seleccionar —</option>
+        <option>En automático sin anomalías</option>
+        <option>Con las anomalías indicadas en Deficiencias pendientes de reparación</option>
+      </select>
+    </div>
+    <div class="macts">
+      <button class="mcancel" onclick="closeM('modal-une8')">Cerrar</button>
+      <button class="mok" onclick="guardarActaUNE8()">💾 Guardar acta</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL ACTA UNE 23580-12: EXTINCIÓN POR POLVO ===== -->
+<div id="modal-une12" class="modal-wrap">
+  <div class="mbox" style="max-width:560px">
+    <h2>🌫️ Acta UNE 23580-12 — Sistemas de Extinción por Polvo</h2>
+    <div class="section">
+      <div class="stitle">Datos del sistema</div>
+      <div class="frow">
+        <div class="field"><label>Tipo de riesgo</label><input type="text" id="une12-riesgo" placeholder="Tipo de riesgo protegido"></div>
+        <div class="field"><label>Tipo de polvo</label><input type="text" id="une12-polvo" placeholder="Tipo de polvo extintor"></div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="stitle">4. Sistema de extinción automática por polvo</div>
+      <div id="une12-checks" style="margin-bottom:8px"></div>
+      <div class="field"><label>Observaciones</label><textarea id="une12-obs"></textarea></div>
+    </div>
+    <div class="field">
+      <label>Estado final del sistema</label>
+      <select id="une12-estado-final">
+        <option value="">— Seleccionar —</option>
+        <option>Sin anomalías</option>
+        <option>Con las anomalías indicadas en Deficiencias pendientes de reparación</option>
+      </select>
+    </div>
+    <div class="macts">
+      <button class="mcancel" onclick="closeM('modal-une12')">Cerrar</button>
+      <button class="mok" onclick="guardarActaUNE12()">💾 Guardar acta</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL ACTA UNE 23580-13: AEROSOLES CONDENSADOS ===== -->
+<div id="modal-une13" class="modal-wrap">
+  <div class="mbox" style="max-width:560px">
+    <h2>☁️ Acta UNE 23580-13 — Aerosoles Condensados</h2>
+    <div class="section">
+      <div class="stitle">Anexo A — Revisión general de la instalación</div>
+      <div id="une13-checks-a" style="margin-bottom:8px"></div>
+      <div class="field"><label>Observaciones revisión general</label><textarea id="une13-obs-a"></textarea></div>
+    </div>
+    <div class="section">
+      <div class="stitle">Anexo B — Equipos de activación</div>
+      <div id="une13-checks-b" style="margin-bottom:8px"></div>
+      <div class="field"><label>Observaciones equipos de activación</label><textarea id="une13-obs-b"></textarea></div>
+    </div>
+    <div class="field">
+      <label>Estado final del sistema</label>
+      <select id="une13-estado-final">
+        <option value="">— Seleccionar —</option>
+        <option>En automático sin anomalías</option>
+        <option>Con las anomalías indicadas en Deficiencias pendientes de reparación</option>
+      </select>
+    </div>
+    <div class="macts">
+      <button class="mcancel" onclick="closeM('modal-une13')">Cerrar</button>
+      <button class="mok" onclick="guardarActaUNE13()">💾 Guardar acta</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // ══════════════════════════════════════════════════════════════════════════════
 // ACTAS UNE 23580 — LISTAS DE VERIFICACIÓN
@@ -12536,6 +12703,348 @@ function guardarActaRociadores(){
 
 
 
+<!-- ===== MODAL ACTA AGUA NEBULIZADA (UNE 23580-11) ===== -->
+<div id="modal-acta-neb" class="modal-wrap v5-init">
+  <div class="mbox" style="max-width:560px">
+    <h2>💦 Acta — Sistemas de Agua Nebulizada (UNE 23580-11)</h2>
+    <div style="font-size:12px;color:var(--text2);margin-bottom:12px">Verificación según UNE 23580-11:2022 y RD 513/2017.</div>
+    <div id="acta-neb-body"></div>
+    <div class="macts">
+      <button class="mcancel" onclick="closeM('modal-acta-neb')">Cerrar</button>
+      <button class="mok" onclick="guardarActaNeb()">💾 Guardar acta</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── ACTA AGUA NEBULIZADA (UNE 23580-11) ─────────────────────────────────────
+
+var NEB_INSP_CHECKS = [
+  {pe:'T', t:'¿Existen instrucciones de funcionamiento y rearme del equipo?'},
+  {pe:'T', t:'¿Dispone de la etiqueta de revisión por empresa responsable del mantenimiento en correcto estado, visible, legible?'},
+  {pe:'T', t:'En caso de existir central de detección para este sistema ¿está encendida y en estado de reposo?'},
+  {pe:'T', t:'El estado de los equipos y mecanismos de disparo es correcto'},
+  {pe:'T', t:'El estado de los equipos en general es correcto'},
+  {pe:'T', t:'El estado y orientación de las boquillas es correcto'},
+  {pe:'T', t:'La limpieza general de los componentes es correcta'},
+  {pe:'T', t:'Se mantiene un espacio libre de obstáculos alrededor de la descarga de las boquillas de 50 cm'},
+  {pe:'T', t:'La lectura de los manómetros es correcta (cilindros, punto de prueba, salida del grupo de bombeo…)'},
+  {pe:'T', t:'La señalización de los indicadores de control es correcta'},
+  {pe:'T', t:'Existe un armario con el número suficiente de boquillas de repuesto de los distintos tipos según normativa vigente'},
+  {pe:'S', t:'¿El estado de las tuberías, accesorios y sistemas de fijación es correcto?'},
+  {pe:'A', t:'Al activarse las electroválvulas (automática y manualmente) ¿se abren correctamente?'},
+  {pe:'A', t:'Al activarse el punto de prueba en válvulas de control ¿se emite señal de activación al equipo de control e indicación (eci)?'},
+  {pe:'A', t:'Al activarse las señales de elementos tales como detectores de flujo, final de carrera, ¿se emite señal de activación al eci?'},
+  {pe:'Q', t:'¿Se ha realizado y es conforme la prueba de la instalación en las condiciones de su recepción?'}
+];
+
+var NEB_SALA_CHECKS = [
+  {pe:'T', t:'El área donde está ubicada la unidad de bombeo, ¿se encuentra limpia, ordenada y accesible para las operaciones de mantenimiento?'},
+  {pe:'T', t:'¿La unidad está en buen estado de conservación, limpia y sin corrosión?'},
+  {pe:'T', t:'¿Dispone de medios para mantener la temperatura dentro del rango especificado por el fabricante (en su defecto, superior a 4°C)?'},
+  {pe:'T', t:'¿Está el equipo de bombeo correctamente fijado/anclado según indica el fabricante?'},
+  {pe:'T', t:'¿En caso de disponer de bomba diésel, los medios de ventilación natural y/o forzada funcionan correctamente?'},
+  {pe:'T', t:'¿El estado de la suportación de tuberías y accesorios de la unidad es correcto?'},
+  {pe:'T', t:'¿La red de tuberías está correctamente presurizada y no presenta fugas?'}
+];
+
+var NEB_DEPOSITO_CHECKS = [
+  {pe:'T', t:'¿El depósito de agua está a su nivel máximo? (En caso de requerirse rellenar el depósito se debería contactar con el fabricante)'},
+  {pe:'T', t:'¿Los accesorios están en buen estado y sin corrosión?'},
+  {pe:'T', t:'Si es de acero inoxidable, ¿Está conectado a tierra?'},
+  {pe:'T', t:'¿La posición y funcionamiento de válvulas es correcto y está abierta la válvula de llenado automático?'},
+  {pe:'T', t:'El sistema de llenado automático, ¿funciona correctamente?'},
+  {pe:'T', t:'¿Funciona la alarma de nivel mínimo y máximo?'},
+  {pe:'T', t:'¿La válvula en la aspiración a la unidad desde el depósito está abierta y supervisada?'},
+  {pe:'A', t:'¿Se ha sustituido el filtro de la línea de llenado dejando al terminar la válvula abierta?'},
+  {pe:'D', t:'¿Se ha realizado un vaciado y limpiado del depósito de agua con su posterior llenado según indicaciones del fabricante?'}
+];
+
+var NEB_BOMBA_J_CHECKS = [
+  {pe:'T', t:'¿Se encuentra correctamente abierta la válvula de entrada de aire a la bomba Jockey?'},
+  {pe:'T', t:'En caso de ser supervisada dicha válvula, ¿envía señal de cerrado al equipo de control e indicación (eci)?'},
+  {pe:'T', t:'¿Arranca automáticamente mediante el cilindro piloto o compresor cuando se abre la válvula de prueba?'},
+  {pe:'T', t:'En caso de que exista cilindro piloto ¿incorpora presostato que envía señal de baja presión al eci y funciona correctamente?'},
+  {pe:'T', t:'¿Se ha comprobado el correcto funcionamiento del compresor, incluido purgado del calderín? (si dispone de él)'}
+];
+
+var NEB_BOMBA_ED_CHECKS = [
+  {pe:'T', t:'¿Incorpora presostato que envía señal de baja presión al equipo de control e indicación (eci) y funciona correctamente?'},
+  {pe:'T', t:'¿Se transmite señal de bomba en marcha al equipo de control e indicación (eci)?'},
+  {pe:'T', t:'¿Se transmite señal al eci de "Bomba en posición de arranque no automático"?'},
+  {pe:'T', t:'¿Se transmite la señal de falta de alimentación de 220v/400v al eci?'},
+  {pe:'T', t:'¿Está la válvula de prueba cerrada y no presenta fugas?'},
+  {pe:'T', t:'¿La válvula de corte de la unidad a la red de boquillas está abierta y supervisada?'},
+  {pe:'T', t:'¿Se ha verificado y es correcto el nivel de aceite?'},
+  {pe:'A', t:'¿Es correcto el funcionamiento de la válvula antirretorno de acuerdo a la dirección de flujo en línea de descarga y disparo?'},
+  {pe:'A', t:'Realizado el test de lámparas ¿Todas las lámparas/leds del cuadro de control funcionan correctamente?'},
+  {pe:'A', t:'¿Se ha comprobado que el caudal que aporta cada bomba es el correcto según lo indicado en su placa de características?'},
+  {pe:'A', t:'¿Se ha comprobado que la presión máxima que aporta cada bomba es correcta según lo indicado en su placa de características?'},
+  {pe:'A', t:'¿Existen baterías en el cuadro de control y el estado de carga de las baterías es correcto?'},
+  {pe:'A', t:'La alimentación principal eléctrica del cuadro de control, ¿es independiente de cualquier otro circuito?'}
+];
+
+var NEB_TABS = [
+  {id:'insp', label:'🔍 Inspección', checks: NEB_INSP_CHECKS},
+  {id:'sala', label:'⚙️ Sala Bombas', checks: NEB_SALA_CHECKS},
+  {id:'dep', label:'🪣 Depósito', checks: NEB_DEPOSITO_CHECKS},
+  {id:'bjockey', label:'💧 B. Jockey', checks: NEB_BOMBA_J_CHECKS},
+  {id:'bed', label:'⚡ B. Eléc/Diésel', checks: NEB_BOMBA_ED_CHECKS}
+];
+
+var _nebTabActivo = 0;
+
+function abrirActaNeb(){
+  ensureRevision();
+  var rev = DB[cid].revisiones[cYear];
+  if(!rev.actaNeb) rev.actaNeb = {};
+  _nebTabActivo = 0;
+  _renderNebBody();
+  openM('modal-acta-neb');
+}
+
+function _renderNebBody(){
+  var rev = DB[cid].revisiones[cYear];
+  var saved = rev.actaNeb || {};
+
+  // Datos instalación
+  var dotHtml = '<div style="margin-bottom:14px">'
+    +'<div class="stitle">Datos de la instalación</div>'
+    +'<div class="frow"><div class="field"><label>Cant. cilindros N₂</label><input id="neb-ncil" type="text" placeholder="—" value="'+((saved.nCil)||'')+'"></div>'
+    +'<div class="field"><label>Cant. cilindros agua</label><input id="neb-nacil" type="text" placeholder="—" value="'+((saved.nACil)||'')+'"></div></div>'
+    +'<div class="frow"><div class="field"><label>Tipo boquilla</label><input id="neb-tipobq" type="text" placeholder="—" value="'+((saved.tipoBq)||'')+'"></div>'
+    +'<div class="field"><label>Tipo boquilla</label><select id="neb-tipobq-open" style="display:block;width:100%;padding:5px 13px 9px;border:none;font-size:14px;background:transparent"><option value="">—</option><option value="Abierta"'+(saved.tipoBqOpen==='Abierta'?' selected':'')+'> Abierta</option><option value="Cerrada"'+(saved.tipoBqOpen==='Cerrada'?' selected':'')+'> Cerrada</option></select></div></div>'
+    +'<div class="field"><label>Unidad de bombeo (modelo)</label><input id="neb-ubombeo" type="text" placeholder="—" value="'+((saved.uBombeo)||'')+'"></div>'
+    +'</div>';
+
+  // Tabs
+  var tabBtns = '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">';
+  NEB_TABS.forEach(function(tab, i){
+    tabBtns += '<button id="nebtab-'+i+'" class="bsm '+(i===_nebTabActivo?'bsm-r':'bsm-g')+'" onclick="switchNebTab('+i+')" style="font-size:11px;padding:5px 10px">'+tab.label+'</button>';
+  });
+  tabBtns += '</div>';
+
+  // Tab panels
+  var panels = '';
+  NEB_TABS.forEach(function(tab, i){
+    var tabSaved = (saved['s'+i]) || {};
+    var checksHtml = '';
+    tab.checks.forEach(function(c, ci){
+      var peColors = {'T':'#ddf0f5','S':'#d4edda','A':'#fff3cd','Q':'#f8d7da','D':'#f0e0ff'};
+      var peBg = peColors[c.pe] || '#eee';
+      checksHtml += '<div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--rsm);padding:9px 12px;margin-bottom:6px;display:flex;align-items:center;gap:8px">'
+        +'<span style="background:'+peBg+';padding:2px 7px;border-radius:10px;font-size:10px;font-weight:700;white-space:nowrap">'+c.pe+'</span>'
+        +'<span style="flex:1;font-size:13px;line-height:1.4">'+c.t+'</span>'
+        +'<select id="nebc'+i+'_'+ci+'" style="border:1px solid var(--border);border-radius:var(--rsm);padding:4px 8px;font-size:12px;background:var(--surface);color:var(--text);min-width:70px">'
+        +'<option value="">—</option><option value="SI">✅ SÍ</option><option value="NO">❌ NO</option><option value="NA">N/A</option>'
+        +'</select></div>';
+    });
+    panels += '<div id="nebpanel-'+i+'" style="display:'+(i===_nebTabActivo?'block':'none')+'">'
+      +'<div id="neb-checks-'+i+'">'+checksHtml+'</div>'
+      +'<div class="field" style="margin-top:8px"><label>Observaciones</label><textarea id="nebobs-'+i+'" rows="2" style="display:block;width:100%;padding:5px 13px 9px;border:none;font-size:13px;background:transparent">'+((tabSaved.obs)||'')+'</textarea></div>'
+      +'</div>';
+  });
+
+  // Estado final
+  var estadoHtml = '<div style="margin-top:12px"><div class="stitle">Estado final del sistema</div>'
+    +'<select id="acta-neb-estado" style="display:block;width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:var(--rsm);font-size:14px;background:var(--surface);color:var(--text)">'
+    +'<option value="">— Seleccionar estado —</option>'
+    +'<option value="ok"'+(saved.estado==='ok'?' selected':'')+'>✅ En automático sin anomalías</option>'
+    +'<option value="def"'+(saved.estado==='def'?' selected':'')+'>⚠️ Con anomalías pendientes de reparación</option>'
+    +'</select></div>';
+
+  document.getElementById('acta-neb-body').innerHTML = dotHtml + tabBtns + panels + estadoHtml;
+
+  // Restore check values
+  NEB_TABS.forEach(function(tab, i){
+    var tabSaved = (saved['s'+i]) || {};
+    tab.checks.forEach(function(_, ci){
+      var el = document.getElementById('nebc'+i+'_'+ci);
+      if(el && tabSaved['c'+ci]) el.value = tabSaved['c'+ci];
+    });
+  });
+}
+
+function switchNebTab(idx){
+  _guardarNebTabActual();
+  _nebTabActivo = idx;
+  NEB_TABS.forEach(function(_, i){
+    var b = document.getElementById('nebtab-'+i);
+    if(b) b.className = 'bsm '+(i===idx?'bsm-r':'bsm-g');
+    var p = document.getElementById('nebpanel-'+i);
+    if(p) p.style.display = (i===idx)?'block':'none';
+  });
+  // Restore check values for active tab
+  var rev = DB[cid].revisiones[cYear];
+  var saved = rev.actaNeb || {};
+  var tabSaved = saved['s'+idx] || {};
+  NEB_TABS[idx].checks.forEach(function(_, ci){
+    var el = document.getElementById('nebc'+idx+'_'+ci);
+    if(el && tabSaved['c'+ci]) el.value = tabSaved['c'+ci];
+    var obs = document.getElementById('nebobs-'+idx);
+    if(obs) obs.value = tabSaved.obs||'';
+  });
+}
+
+function _guardarNebTabActual(){
+  var idx = _nebTabActivo;
+  var rev = DB[cid].revisiones[cYear];
+  if(!rev.actaNeb) rev.actaNeb = {};
+  var saved = {};
+  NEB_TABS[idx].checks.forEach(function(_, ci){
+    var el = document.getElementById('nebc'+idx+'_'+ci);
+    if(el) saved['c'+ci] = el.value;
+  });
+  var obsEl = document.getElementById('nebobs-'+idx);
+  if(obsEl) saved.obs = obsEl.value.trim();
+  rev.actaNeb['s'+idx] = saved;
+}
+
+function guardarActaNeb(){
+  _guardarNebTabActual();
+  var rev = DB[cid].revisiones[cYear];
+  if(!rev.actaNeb) rev.actaNeb = {};
+  var s = rev.actaNeb;
+  var nCilEl = document.getElementById('neb-ncil');
+  if(nCilEl) s.nCil = nCilEl.value;
+  var nACilEl = document.getElementById('neb-nacil');
+  if(nACilEl) s.nACil = nACilEl.value;
+  var tipoBqEl = document.getElementById('neb-tipobq');
+  if(tipoBqEl) s.tipoBq = tipoBqEl.value;
+  var tipoBqOpenEl = document.getElementById('neb-tipobq-open');
+  if(tipoBqOpenEl) s.tipoBqOpen = tipoBqOpenEl.value;
+  var uBombeoEl = document.getElementById('neb-ubombeo');
+  if(uBombeoEl) s.uBombeo = uBombeoEl.value;
+  var estEl = document.getElementById('acta-neb-estado');
+  if(estEl) s.estado = estEl.value;
+  sched();
+  closeM('modal-acta-neb');
+  showToast('\u2705 Acta agua nebulizada guardada','ok');
+}
+</script>
+
+<!-- ===== MODAL ACTA AGUA PULVERIZADA (UNE 23580-16) ===== -->
+<div id="modal-acta-pulv" class="modal-wrap v5-init">
+  <div class="mbox" style="max-width:560px">
+    <h2>🌊 Acta — Sistemas de Agua Pulverizada (UNE 23580-16)</h2>
+    <div style="font-size:12px;color:var(--text2);margin-bottom:12px">Verificación según UNE 23580-16:2023 y RD 513/2017. Rellene los datos por cada zona/puesto de diluvio.</div>
+    <div id="acta-pulv-body"></div>
+    <div class="macts">
+      <button class="mcancel" onclick="closeM('modal-acta-pulv')">Cerrar</button>
+      <button class="mok" onclick="guardarActaPulv()">💾 Guardar acta</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ACTA AGUA PULVERIZADA (UNE 23580-16)
+
+var PULV_CHECKS = [
+  {pe:'T', t:'Dispone de la etiqueta de revisión por empresa responsable del mantenimiento en correcto estado, visible, legible'},
+  {pe:'T', t:'El estado de los equipos en general es correcto'},
+  {pe:'T', t:'El estado general de las tuberías es correcto (la red de tuberías no presenta daños mecánicos, faltas de pintura ni síntomas de corrosión)'},
+  {pe:'T', t:'El estado de la suportación de las tuberías y equipos es correcto'},
+  {pe:'T', t:'Todas las boquillas están en buen estado y libres de obstáculos a la descarga de agua'},
+  {pe:'T', t:'¿Está señalizado e identificado cada zona de extinción en los puestos de diluvio?'},
+  {pe:'T', t:'Existe un armario conteniendo el número de rociadores piloto/boquillas cerradas y llaves de montaje requeridos por la normativa aplicable'},
+  {pe:'T', t:'El acceso al puesto de diluvio y válvulas de seccionamiento está libre de obstáculos'},
+  {pe:'T', t:'Si las válvulas disponen de interruptor final de carrera, ¿se transmite señal de alarma a la central al cambiar de posición? En caso contrario, ¿está abierta y precintada?'},
+  {pe:'T', t:'Si dispone de alarma hidráulica, prueba de funcionamiento durante 30 s. ¿Funciona correctamente y no presenta pérdidas de agua?'},
+  {pe:'T', t:'¿El presostato transmite la señal de alarma a la central de incendios?'},
+  {pe:'T', t:'Las válvulas auxiliares del puesto de diluvio ¿están en su posición correcta?'},
+  {pe:'T', t:'Cerrar la válvula de alimentación de aire/agua a la línea piloto; ¿se mantiene la presión sin variación apreciable en los primeros 5 min? (Volver a abrir la válvula inmediatamente para evitar el disparo del sistema)'},
+  {pe:'A', t:'Si procede, ¿se han engrasado las válvulas de seccionamiento?'},
+  {pe:'A', t:'Una vez disparada la válvula de diluvio con el actuador manual de emergencia o sistema automático de detección, ¿se ha efectuado correctamente la transmisión de alarmas al ECI?'},
+  {pe:'A', t:'Comprobación de presiones. Abrir completamente la válvula del drenaje principal del puesto de diluvio. Cerrar la válvula y comprobar que la medición no es un 5% inferior a la medida el año anterior'}
+];
+
+function abrirActaAguaPulverizada(){
+  ensureRevision();
+  var rev = DB[cid].revisiones[cYear];
+  if(!rev.actaPulv) rev.actaPulv = {};
+  _renderPulvBody();
+  openM('modal-acta-pulv');
+}
+
+function _renderPulvBody(){
+  var rev = DB[cid].revisiones[cYear];
+  var saved = rev.actaPulv || {};
+  var peColors = {T:'#ddf0f5',S:'#d4edda',A:'#fff3cd',Q:'#f8d7da',D:'#f0e0ff'};
+
+  var html = '<div style="margin-bottom:14px">'
+    + '<div class="stitle">Características de la instalación</div>'
+    + '<div class="field"><label>Zona de extinción</label><input id="pulv-zona" type="text" placeholder="Descripción de la zona" value="'+(saved.zona||'')+'"></div>'
+    + '<div class="frow">'
+    +   '<div class="field"><label>N° puestos de diluvio</label><input id="pulv-npuestos" type="text" placeholder="—" value="'+(saved.nPuestos||'')+'"></div>'
+    +   '<div class="field"><label>N° total boquillas</label><input id="pulv-nboquillas" type="text" placeholder="—" value="'+(saved.nBoquillas||'')+'"></div>'
+    + '</div>'
+    + '<div class="frow">'
+    +   '<div class="field"><label>Tipo</label><input id="pulv-tipo" type="text" placeholder="—" value="'+(saved.tipo||'')+'"></div>'
+    +   '<div class="field"><label>Modelos</label><input id="pulv-modelos" type="text" placeholder="—" value="'+(saved.modelos||'')+'"></div>'
+    + '</div>'
+    + '<div class="frow">'
+    +   '<div class="field"><label>Descripción/ubicación puesto</label><input id="pulv-ubic" type="text" placeholder="—" value="'+(saved.ubic||'')+'"></div>'
+    +   '<div class="field"><label>Diámetro (mm)</label><input id="pulv-diam" type="text" placeholder="—" value="'+(saved.diam||'')+'"></div>'
+    + '</div>'
+    + '<div class="field"><label>Presión dinámica medida (bar)</label><input id="pulv-presion" type="text" placeholder="—" value="'+(saved.presion||'')+'"></div>'
+    + '</div>';
+
+  html += '<div class="stitle">Lista de verificación</div>';
+  PULV_CHECKS.forEach(function(c, ci){
+    var bg = peColors[c.pe] || '#eee';
+    var val = saved['c'+ci] || '';
+    html += '<div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--rsm);padding:9px 12px;margin-bottom:6px;display:flex;align-items:center;gap:8px">'
+      + '<span style="background:'+bg+';padding:2px 7px;border-radius:10px;font-size:10px;font-weight:700;white-space:nowrap">'+c.pe+'</span>'
+      + '<span style="flex:1;font-size:13px;line-height:1.4">'+c.t+'</span>'
+      + '<select id="pulvc_'+ci+'" style="border:1px solid var(--border);border-radius:var(--rsm);padding:4px 8px;font-size:12px;background:var(--surface);color:var(--text);min-width:70px">'
+      + '<option value="">—</option>'
+      + '<option value="SI"'+(val==='SI'?' selected':'')+'>✅ SÍ</option>'
+      + '<option value="NO"'+(val==='NO'?' selected':'')+'>❌ NO</option>'
+      + '<option value="NA"'+(val==='NA'?' selected':'')+'>N/A</option>'
+      + '</select></div>';
+  });
+
+  html += '<div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;margin-top:10px;margin-bottom:10px">'
+    + '<div style="font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;margin-bottom:8px">Comprobaciones finales</div>'
+    + '<div style="font-size:12px;color:var(--text);line-height:1.9">'
+    + '☑ Todas las válvulas quedan precintadas y en posición normal de operación<br>'
+    + '☑ El suministro de agua queda abierto y en condiciones de servicio<br>'
+    + '☑ Si dispone, la válvula de la alarma hidráulica queda en posición abierta y operativa<br>'
+    + '☑ La central de detección queda operativa y sin ninguna señal indicada<br>'
+    + '☑ Lectura de manómetros dentro de los márgenes permitidos'
+    + '</div></div>';
+
+  html += '<div class="field"><label>Observaciones</label>'
+    + '<textarea id="pulv-obs" rows="3" style="display:block;width:100%;padding:5px 13px 9px;border:none;font-size:13px;background:transparent">'+(saved.obs||'')+'</textarea></div>';
+
+  html += '<div style="margin-top:10px"><div class="stitle">Estado final del sistema</div>'
+    + '<select id="acta-pulv-estado" style="display:block;width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:var(--rsm);font-size:14px;background:var(--surface);color:var(--text)">'
+    + '<option value="">— Seleccionar estado —</option>'
+    + '<option value="ok"'+(saved.estado==='ok'?' selected':'')+'>✅ En automático sin anomalías</option>'
+    + '<option value="def"'+(saved.estado==='def'?' selected':'')+'>⚠️ Con anomalías pendientes de reparación</option>'
+    + '</select></div>';
+
+  document.getElementById('acta-pulv-body').innerHTML = html;
+}
+
+function guardarActaPulv(){
+  var rev = DB[cid].revisiones[cYear];
+  if(!rev.actaPulv) rev.actaPulv = {};
+  var s = rev.actaPulv;
+  var campos = [
+    ['zona','pulv-zona'],['nPuestos','pulv-npuestos'],['nBoquillas','pulv-nboquillas'],
+    ['tipo','pulv-tipo'],['modelos','pulv-modelos'],['ubic','pulv-ubic'],
+    ['diam','pulv-diam'],['presion','pulv-presion'],['obs','pulv-obs']
+  ];
+  campos.forEach(function(p){ var el=document.getElementById(p[1]); if(el) s[p[0]]=el.value; });
+  PULV_CHECKS.forEach(function(_,ci){ var el=document.getElementById('pulvc_'+ci); if(el) s['c'+ci]=el.value; });
+  var est=document.getElementById('acta-pulv-estado'); if(est) s.estado=est.value;
+  sched();
+  closeM('modal-acta-pulv');
+  showToast('\u2705 Acta agua pulverizada guardada','ok');
+}
+</script>
+
 <!-- ═══════════ SCREEN CALENDARIO ═══════════ -->
 <div id="screen-calendario" class="screen" style="display:none;padding:0 0 96px">
   <div style="background:var(--surface);border-bottom:1px solid var(--border);padding:12px 14px;position:sticky;top:92px;z-index:97">
@@ -13551,6 +14060,289 @@ function guardarActaHumos(){
   _guardarHumosTabActual();
   sched();
   showToast('✅ Subsistema §'+(_humosTabActivo<4?'4':'_')+'·'+ (_humosTabActivo+1)+' guardado','ok');
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// ACTA UNE 23580-7 — SISTEMAS DE ESPUMA
+// ══════════════════════════════════════════════════════════════════════════════
+const UNE7_CHECKS_REV = [
+  {pe:'T', t:'¿Dispone de etiqueta de revisión por empresa responsable en correcto estado, visible y legible?'},
+  {pe:'T', t:'¿El estado de los equipos y mecanismos de disparo son correctos?'},
+  {pe:'T', t:'¿El estado general de las tuberías es correcto (libre de fugas, daños mecánicos y corrosión)?'},
+  {pe:'T', t:'¿Existen instrucciones de funcionamiento y rearme del equipo?'},
+  {pe:'T', t:'¿Los accesos a los puestos de control/válvulas de diluvio/seccionamiento están libres de obstáculos?'},
+  {pe:'T', t:'¿Están correctamente señalizadas e identificadas las zonas de los depósitos de espuma?'},
+  {pe:'T', t:'¿Se mantiene un espacio libre de obstáculos a la descarga de las boquillas?'},
+  {pe:'T', t:'¿Se mantiene la orientación correcta de las boquillas al riesgo a proteger?'},
+  {pe:'T', t:'¿Se han abierto y cerrado las válvulas completamente y se ha comprobado su correcto engrasado?'},
+  {pe:'T', t:'Si las válvulas disponen de interruptor final de carrera, ¿se transmite señal de alarma al cambiar de posición?'},
+  {pe:'T', t:'¿El funcionamiento y transmisión de alarmas de detectores de flujo son correctos?'},
+  {pe:'T', t:'Si dispone de presostato, ¿transmite señal de alarma a la central de indicación y control?'},
+];
+const UNE7_CHECKS_DEP = [
+  {pe:'T', t:'El nivel del espumógeno en el tanque, ¿es máximo?'},
+  {pe:'T', t:'¿El estado general del depósito es correcto (libre de fugas, daños mecánicos y corrosión)?'},
+  {pe:'T', t:'¿Las válvulas están en posición correcta según el esquema de principio?'},
+  {pe:'T', t:'El estado del depósito y tubuladuras, ¿es correcto?'},
+  {pe:'Q', t:'¿Se ha realizado análisis físico del espumógeno por laboratorio y el resultado es correcto?'},
+];
+const UNE7_CHECKS_PROP = [
+  {pe:'A', t:'Comprobar la dosificación de espumógeno, ¿es correcta?'},
+  {pe:'A', t:'¿Se ha procedido al correcto lavado de la válvula de retención y espadín?'},
+  {pe:'Q', t:'Tras la prueba de funcionamiento con producción de espuma y verificación de dosificación, ¿el resultado es correcto?'},
+];
+const UNE7_CHECKS_CAM = [
+  {pe:'A', t:'El estado de la cámara de espuma y tuberías, ¿es correcto?'},
+  {pe:'A', t:'Abrir cámara de espuma para su inspección, ¿está libre de cuerpos extraños?'},
+  {pe:'A', t:'¿Se ha procedido al correcto montaje del sello y la tapa de la cámara de espuma?'},
+  {pe:'Q', t:'Se ha verificado que antes de las pruebas se colocó dispositivo para impedir que espuma entre en el tanque protegido'},
+  {pe:'Q', t:'Tras la prueba de funcionamiento con producción de espuma y verificación de dosificación, ¿el resultado es correcto?'},
+  {pe:'Q', t:'¿Ausencia de fugas con el funcionamiento?'},
+  {pe:'Q', t:'¿Se ha procedido al correcto lavado con agua la tubería y la cámara de espuma?'},
+  {pe:'Q', t:'¿Se ha procedido al drenaje de toda la instalación y es correcto?'},
+];
+
+function _buildUNEChecks(items, prefix) {
+  const peColors = {T:'#ddf0f5',S:'#d4edda',A:'#fff3cd',Q:'#f8d7da'};
+  return items.map((c,i) => {
+    const bg = peColors[c.pe]||'#eee';
+    return `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--rsm);padding:9px 12px;margin-bottom:6px;display:flex;align-items:center;gap:8px">
+      <span style="background:${bg};padding:2px 7px;border-radius:10px;font-size:10px;font-weight:700;white-space:nowrap">${c.pe}</span>
+      <span style="flex:1;font-size:13px;line-height:1.4">${c.t}</span>
+      <select id="${prefix}_${i}" style="border:1px solid var(--border);border-radius:var(--rsm);padding:4px 8px;font-size:12px;background:var(--surface);color:var(--text);min-width:70px">
+        <option value="">—</option><option value="SI">✅ SÍ</option><option value="NO">❌ NO</option><option value="NA">N/A</option>
+      </select></div>`;
+  }).join('');
+}
+
+function _restoreUNEChecks(items, prefix, saved) {
+  items.forEach((_,i) => {
+    const el = document.getElementById(prefix+'_'+i);
+    if(el && saved[prefix+'_'+i]) el.value = saved[prefix+'_'+i];
+  });
+}
+
+function abrirActaUNE7(){
+  ensureRevision();
+  document.getElementById('une7-checks-rev').innerHTML = _buildUNEChecks(UNE7_CHECKS_REV,'u7r');
+  document.getElementById('une7-checks-dep').innerHTML = _buildUNEChecks(UNE7_CHECKS_DEP,'u7d');
+  document.getElementById('une7-checks-prop').innerHTML = _buildUNEChecks(UNE7_CHECKS_PROP,'u7p');
+  document.getElementById('une7-checks-cam').innerHTML = _buildUNEChecks(UNE7_CHECKS_CAM,'u7c');
+  const saved = (DB[cid]?.revisiones?.[cYear]?.actaUNE7)||{};
+  _restoreUNEChecks(UNE7_CHECKS_REV,'u7r',saved);
+  _restoreUNEChecks(UNE7_CHECKS_DEP,'u7d',saved);
+  _restoreUNEChecks(UNE7_CHECKS_PROP,'u7p',saved);
+  _restoreUNEChecks(UNE7_CHECKS_CAM,'u7c',saved);
+  document.getElementById('une7-obs-rev').value = saved.obsRev||'';
+  document.getElementById('une7-obs-dep').value = saved.obsDep||'';
+  document.getElementById('une7-obs-prop').value = saved.obsProp||'';
+  document.getElementById('une7-obs-cam').value = saved.obsCam||'';
+  document.getElementById('une7-estado-final').value = saved.estado||'';
+  openM('modal-une7');
+}
+
+function guardarActaUNE7(){
+  const rev = DB[cid].revisiones[cYear];
+  const data = {estado: document.getElementById('une7-estado-final').value,
+    obsRev: document.getElementById('une7-obs-rev').value.trim(),
+    obsDep: document.getElementById('une7-obs-dep').value.trim(),
+    obsProp: document.getElementById('une7-obs-prop').value.trim(),
+    obsCam: document.getElementById('une7-obs-cam').value.trim()};
+  [...UNE7_CHECKS_REV.map((_,i)=>'u7r_'+i),
+   ...UNE7_CHECKS_DEP.map((_,i)=>'u7d_'+i),
+   ...UNE7_CHECKS_PROP.map((_,i)=>'u7p_'+i),
+   ...UNE7_CHECKS_CAM.map((_,i)=>'u7c_'+i)].forEach(k=>{
+     const el=document.getElementById(k); if(el) data[k]=el.value;});
+  rev.actaUNE7 = data;
+  sched();
+  showToast('✅ Acta UNE 23580-7 guardada','ok');
+  closeM('modal-une7');
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// ACTA UNE 23580-8 — SISTEMAS FIJOS POR AGENTES GASEOSOS
+// ══════════════════════════════════════════════════════════════════════════════
+const UNE8_CHECKS_B = [
+  {pe:'T', t:'¿Dispone de etiqueta de revisión por empresa responsable en correcto estado, visible y legible?'},
+  {pe:'T', t:'¿Se encuentra el recinto accesible, libre de obstáculos y en adecuado estado de limpieza?'},
+  {pe:'T', t:'¿Son los cilindros y componentes accesibles para correcta manipulación y toma de datos?'},
+  {pe:'T', t:'¿Se han tomado las medidas necesarias para evitar disparos accidentales o indeseados?'},
+  {pe:'T', t:'¿Se encuentran los cilindros fuera del recinto a proteger o se han minimizado riesgos?'},
+  {pe:'T', t:'¿Están los cilindros en la posición correcta según indicaciones del fabricante?'},
+  {pe:'T', t:'¿El recinto cuenta con dispositivo de alivio de presión calculado y libre de obstáculos?'},
+  {pe:'T', t:'¿Están soportados los recipientes adecuadamente y los sistemas de fijación en buen estado?'},
+  {pe:'T', t:'¿Si dispone de presostato de confirmación de disparo, funciona correctamente?'},
+  {pe:'T', t:'¿La red de distribución se encuentra debidamente soportada (libre de tensiones)?'},
+  {pe:'T', t:'¿Los difusores están libres de obstáculos y no orientados a equipos afectados por descarga?'},
+  {pe:'T', t:'El accesorio de bloqueo manual del disparo, ¿está accesible y libre de obstáculos?'},
+  {pe:'T', t:'La línea de disparo piloto, ¿se encuentra libre de daños en toda su longitud?'},
+  {pe:'T', t:'¿Las válvulas direccionables están en posición cerrada?'},
+  {pe:'T', t:'¿Existen precintos de seguridad en los dispositivos de activación manual y están en buen estado?'},
+  {pe:'S', t:'¿Están los cilindros protegidos de inclemencias y posibles daños materiales?'},
+  {pe:'S', t:'¿Se ha comprobado visualmente que los latiguillos no presentan fugas, corrosión o deterioro?'},
+  {pe:'S', t:'¿El estado general de las tuberías es correcto (sin daños mecánicos ni corrosión)?'},
+  {pe:'A', t:'¿En caso de disponer de odorizador, funciona adecuadamente?'},
+  {pe:'A', t:'¿Se encuentra correctamente señalizada la entrada del recinto a proteger?'},
+  {pe:'A', t:'¿Existen carteles con instrucciones para activación manual del sistema?'},
+  {pe:'A', t:'¿El funcionamiento manual de las válvulas direccionales es correcto?'},
+  {pe:'A', t:'¿Es correcta la dirección de flujo de la válvula antirretorno en la línea de descarga?'},
+  {pe:'A', t:'Los cilindros a presión, ¿han sido sometidos a pruebas del reglamento de equipos a presión?'},
+  {pe:'A', t:'Revisar la sala, ¿Se mantiene la estanqueidad en las condiciones de descarga?'},
+  {pe:'A', t:'¿Se mantiene la arquitectura y estructura iniciales sin modificaciones en la sala?'},
+  {pe:'Q', t:'¿Se han realizado pruebas de la instalación en condiciones de recepción (incluido DOOR FAN TEST)?'},
+  {pe:'Q', t:'El sentido de flujo apropiado del sistema de retardo neumático, ¿es adecuado?'},
+];
+const UNE8_CHECKS_C = [
+  {pe:'T', t:'¿El cableado y conductos son correctos?'},
+  {pe:'T', t:'¿El soportado del cable es correcto?'},
+  {pe:'T', t:'¿El estado de los detectores es correcto?'},
+  {pe:'T', t:'¿El estado de los pulsadores es correcto?'},
+  {pe:'T', t:'¿El estado de las sirenas/alarmas es correcto?'},
+  {pe:'T', t:'¿El estado de los paneles de extinción disparada es correcto?'},
+  {pe:'T', t:'¿El estado de la central de detección y extinción es correcto?'},
+  {pe:'T', t:'¿Se encuentra la central conectada a una central principal y/o central receptora?'},
+  {pe:'T', t:'Los pulsadores de paro/bloqueo y disparo, ¿están precintados, señalizados y accesibles?'},
+  {pe:'T', t:'¿El funcionamiento del pulsador de paro/bloqueo es correcto?'},
+  {pe:'T', t:'¿El funcionamiento del pulsador de disparo es correcto?'},
+  {pe:'T', t:'En estado de prealarma, ¿las señales ópticas/acústicas son visibles y audibles?'},
+  {pe:'T', t:'En estado de alarma, las señales ópticas/acústicas incluido panel de señal disparada, ¿son visibles?'},
+  {pe:'T', t:'¿El estado de las baterías es correcto?'},
+  {pe:'A', t:'¿Se activan correctamente los solenoides/electroválvulas de descarga?'},
+  {pe:'A', t:'¿La maniobra de activación/paro de ventilación en el momento de descarga opera correctamente?'},
+  {pe:'A', t:'¿Los mecanismos de cierre de puertas y compuertas operan correctamente?'},
+  {pe:'A', t:'Al provocar alarma de fuego en modo prueba, ¿se activa señal en la central?'},
+  {pe:'A', t:'Al provocar avería en modo prueba, ¿se activa señal de avería en la central?'},
+  {pe:'A', t:'En caso de fallo de red, ¿se indica óptica/acústicamente el fallo de alimentación?'},
+  {pe:'A', t:'La alimentación a los dispositivos eléctricos de activación, ¿está supervisada?'},
+  {pe:'A', t:'Comprobación manual del presostato de verificación de descarga (sin activar sistema), ¿funciona?'},
+];
+
+function abrirActaUNE8(){
+  ensureRevision();
+  document.getElementById('une8-checks-b').innerHTML = _buildUNEChecks(UNE8_CHECKS_B,'u8b');
+  document.getElementById('une8-checks-c').innerHTML = _buildUNEChecks(UNE8_CHECKS_C,'u8c');
+  const saved = (DB[cid]?.revisiones?.[cYear]?.actaUNE8)||{};
+  _restoreUNEChecks(UNE8_CHECKS_B,'u8b',saved);
+  _restoreUNEChecks(UNE8_CHECKS_C,'u8c',saved);
+  document.getElementById('une8-obs-b').value = saved.obsB||'';
+  document.getElementById('une8-obs-c').value = saved.obsC||'';
+  document.getElementById('une8-fab-central').value = saved.fabCentral||'';
+  document.getElementById('une8-estado-final').value = saved.estado||'';
+  openM('modal-une8');
+}
+
+function guardarActaUNE8(){
+  const rev = DB[cid].revisiones[cYear];
+  const data = {estado: document.getElementById('une8-estado-final').value,
+    obsB: document.getElementById('une8-obs-b').value.trim(),
+    obsC: document.getElementById('une8-obs-c').value.trim(),
+    fabCentral: document.getElementById('une8-fab-central').value.trim()};
+  [...UNE8_CHECKS_B.map((_,i)=>'u8b_'+i),
+   ...UNE8_CHECKS_C.map((_,i)=>'u8c_'+i)].forEach(k=>{
+     const el=document.getElementById(k); if(el) data[k]=el.value;});
+  rev.actaUNE8 = data;
+  sched();
+  showToast('✅ Acta UNE 23580-8 guardada','ok');
+  closeM('modal-une8');
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// ACTA UNE 23580-12 — SISTEMAS DE EXTINCIÓN POR POLVO
+// ══════════════════════════════════════════════════════════════════════════════
+const UNE12_CHECKS = [
+  {pe:'T', t:'¿El estado de los equipos y mecanismos de disparo son correctos?'},
+  {pe:'T', t:'¿Las bocas de descarga están libres de obstáculos para su funcionamiento correcto?'},
+  {pe:'T', t:'¿El estado general de las tuberías es correcto (sin daños mecánicos ni corrosión)?'},
+  {pe:'T', t:'¿Las tuberías se encuentran bien soportadas?'},
+  {pe:'T', t:'¿Las boquillas se encuentran en buen estado?'},
+  {pe:'T', t:'¿Está en correcto funcionamiento el sistema del gas impulsor?'},
+  {pe:'T', t:'¿Existe un disparo manual y está señalizado?'},
+  {pe:'T', t:'¿Existe un disparo automático?'},
+  {pe:'A', t:'¿El sistema de extinción está supervisado?'},
+  {pe:'A', t:'¿Se ha comprobado el estado y funcionamiento del sistema de activación y es correcto?'},
+  {pe:'A', t:'¿Está correctamente supervisado el sistema de activación?'},
+  {pe:'A', t:'¿Es correcta la presión de los manómetros?'},
+  {pe:'A', t:'¿Existe una reserva de polvo? (obligatoria en sistemas con más de 5 zonas independientes)'},
+  {pe:'A', t:'En caso de sistema de presión adosada, ¿el estado de carga de las botellas de impulsión es correcto?'},
+  {pe:'A', t:'¿Han sido sometidos a las pruebas establecidas en la reglamentación de equipos a presión?'},
+];
+
+function abrirActaUNE12(){
+  ensureRevision();
+  document.getElementById('une12-checks').innerHTML = _buildUNEChecks(UNE12_CHECKS,'u12');
+  const saved = (DB[cid]?.revisiones?.[cYear]?.actaUNE12)||{};
+  _restoreUNEChecks(UNE12_CHECKS,'u12',saved);
+  document.getElementById('une12-obs').value = saved.obs||'';
+  document.getElementById('une12-riesgo').value = saved.riesgo||'';
+  document.getElementById('une12-polvo').value = saved.polvo||'';
+  document.getElementById('une12-estado-final').value = saved.estado||'';
+  openM('modal-une12');
+}
+
+function guardarActaUNE12(){
+  const rev = DB[cid].revisiones[cYear];
+  const data = {estado: document.getElementById('une12-estado-final').value,
+    obs: document.getElementById('une12-obs').value.trim(),
+    riesgo: document.getElementById('une12-riesgo').value.trim(),
+    polvo: document.getElementById('une12-polvo').value.trim()};
+  UNE12_CHECKS.forEach((_,i)=>{
+    const el=document.getElementById('u12_'+i); if(el) data['u12_'+i]=el.value;});
+  rev.actaUNE12 = data;
+  sched();
+  showToast('✅ Acta UNE 23580-12 guardada','ok');
+  closeM('modal-une12');
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// ACTA UNE 23580-13 — AEROSOLES CONDENSADOS
+// ══════════════════════════════════════════════════════════════════════════════
+const UNE13_CHECKS_A = [
+  {pe:'T', t:'¿Dispone de etiqueta de revisión por empresa responsable en correcto estado, visible y legible?'},
+  {pe:'T', t:'¿El estado de los equipos del sistema es correcto (libre de corrosión, pintura, limpieza)?'},
+  {pe:'T', t:'¿Se mantiene el espacio suficiente libre de obstáculos a la descarga de los generadores?'},
+  {pe:'T', t:'Si existen tuberías o latiguillos, ¿se encuentran en buen estado (libres de corrosión, deformación)?'},
+  {pe:'T', t:'¿Se encuentra el aerosol dentro de su vida útil (no ha superado su fecha de caducidad)?'},
+  {pe:'T', t:'¿La descarga de los generadores no está orientada a puertas ni al posible paso de personas?'},
+  {pe:'T', t:'¿Están correctamente anclados y soportados los generadores de aerosol?'},
+  {pe:'T', t:'¿Existen instrucciones de seguridad de funcionamiento del sistema?'},
+  {pe:'T', t:'¿Son accesibles el panel de control, el pulsador de aislamiento y pulsadores de activación/paro?'},
+  {pe:'T', t:'¿Se encuentran el pulsador de aislamiento y pulsadores de activación/paro fuera del recinto protegido?'},
+  {pe:'A', t:'Comprobación visual del recinto, ¿se mantiene la integridad del recinto?'},
+];
+const UNE13_CHECKS_B = [
+  {pe:'T', t:'¿Están todas las conexiones eléctricas instaladas de manera segura y sin deterioro?'},
+  {pe:'T', t:'¿Está correctamente instalado el pulsador de aislamiento en la línea de activación del sistema?'},
+  {pe:'A', t:'Cuando el sistema entra en modo de alarma, ¿le llega a cada aerosol la energía necesaria para su activación?'},
+  {pe:'A', t:'En caso de activación mediante bulbo (botellín de rotura), ¿se encuentra en óptimas condiciones?'},
+  {pe:'A', t:'¿Están liberados los tornillos de seguridad del botellín de rotura? (activado)'},
+  {pe:'A', t:'En caso de activación mediante válvula neumática, ¿se encuentra presurizada la línea?'},
+];
+
+function abrirActaUNE13(){
+  ensureRevision();
+  document.getElementById('une13-checks-a').innerHTML = _buildUNEChecks(UNE13_CHECKS_A,'u13a');
+  document.getElementById('une13-checks-b').innerHTML = _buildUNEChecks(UNE13_CHECKS_B,'u13b');
+  const saved = (DB[cid]?.revisiones?.[cYear]?.actaUNE13)||{};
+  _restoreUNEChecks(UNE13_CHECKS_A,'u13a',saved);
+  _restoreUNEChecks(UNE13_CHECKS_B,'u13b',saved);
+  document.getElementById('une13-obs-a').value = saved.obsA||'';
+  document.getElementById('une13-obs-b').value = saved.obsB||'';
+  document.getElementById('une13-estado-final').value = saved.estado||'';
+  openM('modal-une13');
+}
+
+function guardarActaUNE13(){
+  const rev = DB[cid].revisiones[cYear];
+  const data = {estado: document.getElementById('une13-estado-final').value,
+    obsA: document.getElementById('une13-obs-a').value.trim(),
+    obsB: document.getElementById('une13-obs-b').value.trim()};
+  [...UNE13_CHECKS_A.map((_,i)=>'u13a_'+i),
+   ...UNE13_CHECKS_B.map((_,i)=>'u13b_'+i)].forEach(k=>{
+     const el=document.getElementById(k); if(el) data[k]=el.value;});
+  rev.actaUNE13 = data;
+  sched();
+  showToast('✅ Acta UNE 23580-13 guardada','ok');
+  closeM('modal-une13');
 }
 </script>
 
