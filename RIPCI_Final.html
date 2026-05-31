@@ -10083,9 +10083,9 @@ function guardarInvHidrantes(){
     <div style="background:#fff3cd;border:1px solid #ffc107;border-radius:var(--rsm);padding:10px 14px;margin-bottom:12px;font-size:12px">
       <strong>Tipo de revisión:</strong>
       <div style="display:flex;gap:10px;margin-top:6px;flex-wrap:wrap">
-        <label style="display:flex;align-items:center;gap:5px;cursor:pointer"><input type="radio" name="une2-tiporev" value="T" id="une2-rev-T"> <span>T – Trimestral</span></label>
-        <label style="display:flex;align-items:center;gap:5px;cursor:pointer"><input type="radio" name="une2-tiporev" value="S" id="une2-rev-S"> <span>S – Semestral</span></label>
-        <label style="display:flex;align-items:center;gap:5px;cursor:pointer"><input type="radio" name="une2-tiporev" value="A" id="une2-rev-A"> <span>A – Anual</span></label>
+        <label style="display:flex;align-items:center;gap:5px;cursor:pointer"><input type="radio" name="une2-tiporev" value="T" id="une2-rev-T" onchange="refrescarUNE2()"> <span>T – Trimestral</span></label>
+        <label style="display:flex;align-items:center;gap:5px;cursor:pointer"><input type="radio" name="une2-tiporev" value="S" id="une2-rev-S" onchange="refrescarUNE2()"> <span>S – Semestral</span></label>
+        <label style="display:flex;align-items:center;gap:5px;cursor:pointer"><input type="radio" name="une2-tiporev" value="A" id="une2-rev-A" onchange="refrescarUNE2()"> <span>A – Anual</span></label>
       </div>
       <div style="font-size:11px;color:#856404;margin-top:5px">ℹ️ Revisión semestral incluye trimestrales. Anual incluye semestrales y trimestrales.</div>
     </div>
@@ -10124,9 +10124,9 @@ function guardarInvHidrantes(){
     <div style="background:#e8f5e9;border:1px solid #4caf50;border-radius:var(--rsm);padding:10px 14px;margin-bottom:12px;font-size:12px">
       <strong>Tipo de revisión:</strong>
       <div style="display:flex;gap:10px;margin-top:6px;flex-wrap:wrap">
-        <label style="display:flex;align-items:center;gap:5px;cursor:pointer"><input type="radio" name="une3-tiporev" value="T" id="une3-rev-T"> <span>T – Trimestral</span></label>
-        <label style="display:flex;align-items:center;gap:5px;cursor:pointer"><input type="radio" name="une3-tiporev" value="S" id="une3-rev-S"> <span>S – Semestral</span></label>
-        <label style="display:flex;align-items:center;gap:5px;cursor:pointer"><input type="radio" name="une3-tiporev" value="A" id="une3-rev-A"> <span>A – Anual</span></label>
+        <label style="display:flex;align-items:center;gap:5px;cursor:pointer"><input type="radio" name="une3-tiporev" value="T" id="une3-rev-T" onchange="refrescarUNE3()"> <span>T – Trimestral</span></label>
+        <label style="display:flex;align-items:center;gap:5px;cursor:pointer"><input type="radio" name="une3-tiporev" value="S" id="une3-rev-S" onchange="refrescarUNE3()"> <span>S – Semestral</span></label>
+        <label style="display:flex;align-items:center;gap:5px;cursor:pointer"><input type="radio" name="une3-tiporev" value="A" id="une3-rev-A" onchange="refrescarUNE3()"> <span>A – Anual</span></label>
       </div>
       <div style="font-size:11px;color:#2e7d32;margin-top:5px">ℹ️ Revisión semestral incluye trimestrales. Anual incluye semestrales y trimestrales.</div>
     </div>
@@ -10179,10 +10179,10 @@ function guardarInvHidrantes(){
     <div style="background:#e8eaf6;border:1px solid #3949ab;border-radius:var(--rsm);padding:10px 14px;margin-bottom:12px;font-size:12px">
       <strong>Tipo de revisión:</strong>
       <div style="display:flex;gap:10px;margin-top:6px;flex-wrap:wrap">
-        <label style="display:flex;align-items:center;gap:5px;cursor:pointer"><input type="radio" name="une4-tiporev" value="T" id="une4-rev-T"> <span>T – Trimestral</span></label>
-        <label style="display:flex;align-items:center;gap:5px;cursor:pointer"><input type="radio" name="une4-tiporev" value="S" id="une4-rev-S"> <span>S – Semestral</span></label>
-        <label style="display:flex;align-items:center;gap:5px;cursor:pointer"><input type="radio" name="une4-tiporev" value="A" id="une4-rev-A"> <span>A – Anual</span></label>
-        <label style="display:flex;align-items:center;gap:5px;cursor:pointer"><input type="radio" name="une4-tiporev" value="Q" id="une4-rev-Q"> <span>Q – Quinquenal</span></label>
+        <label style="display:flex;align-items:center;gap:5px;cursor:pointer"><input type="radio" name="une4-tiporev" value="T" id="une4-rev-T" onchange="refrescarUNE4()"> <span>T – Trimestral</span></label>
+        <label style="display:flex;align-items:center;gap:5px;cursor:pointer"><input type="radio" name="une4-tiporev" value="S" id="une4-rev-S" onchange="refrescarUNE4()"> <span>S – Semestral</span></label>
+        <label style="display:flex;align-items:center;gap:5px;cursor:pointer"><input type="radio" name="une4-tiporev" value="A" id="une4-rev-A" onchange="refrescarUNE4()"> <span>A – Anual</span></label>
+        <label style="display:flex;align-items:center;gap:5px;cursor:pointer"><input type="radio" name="une4-tiporev" value="Q" id="une4-rev-Q" onchange="refrescarUNE4()"> <span>Q – Quinquenal</span></label>
       </div>
       <div style="font-size:11px;color:#283593;margin-top:5px">ℹ️ Revisión semestral incluye trimestrales. Anual incluye semestrales y trimestrales.</div>
     </div>
@@ -10214,13 +10214,21 @@ function guardarInvHidrantes(){
     <div style="background:#fce4ec;border:1px solid #c62828;border-radius:var(--rsm);padding:10px 14px;margin-bottom:12px;font-size:12px">
       <strong>Tipo de revisión:</strong>
       <div style="display:flex;gap:10px;margin-top:6px;flex-wrap:wrap">
-        <label style="display:flex;align-items:center;gap:5px;cursor:pointer"><input type="radio" name="une5-tiporev" value="T" id="une5-rev-T"> <span>T – Trimestral</span></label>
-        <label style="display:flex;align-items:center;gap:5px;cursor:pointer"><input type="radio" name="une5-tiporev" value="A" id="une5-rev-A"> <span>A – Anual</span></label>
-        <label style="display:flex;align-items:center;gap:5px;cursor:pointer"><input type="radio" name="une5-tiporev" value="Q" id="une5-rev-Q"> <span>Q – Quinquenal</span></label>
+        <label style="display:flex;align-items:center;gap:5px;cursor:pointer"><input type="radio" name="une5-tiporev" value="T" id="une5-rev-T" onchange="refrescarUNE5()"> <span>T – Trimestral</span></label>
+        <label style="display:flex;align-items:center;gap:5px;cursor:pointer"><input type="radio" name="une5-tiporev" value="A" id="une5-rev-A" onchange="refrescarUNE5()"> <span>A – Anual</span></label>
+        <label style="display:flex;align-items:center;gap:5px;cursor:pointer"><input type="radio" name="une5-tiporev" value="Q" id="une5-rev-Q" onchange="refrescarUNE5()"> <span>Q – Quinquenal</span></label>
       </div>
       <div style="font-size:11px;color:#b71c1c;margin-top:5px">ℹ️ Revisión anual incluye trimestrales. Quinquenal incluye todas las anteriores.</div>
     </div>
     <div id="une5-items-container"></div>
+    <!-- Inventario de BIEs por unidad -->
+    <div style="background:var(--surface2);border:1px solid #1a6e8e33;border-radius:var(--rsm);padding:12px;margin-top:12px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <div class="stitle" style="margin-bottom:0">🚒 Inventario de BIEs (datos por unidad)</div>
+        <button class="bsm bsm-o" style="font-size:11px;padding:5px 10px" onclick="addUne5BIERow()">+ Añadir BIE</button>
+      </div>
+      <div id="une5-bie-body"></div>
+    </div>
     <div class="field" style="margin-top:8px">
       <label>Observaciones generales / Deficiencias</label>
       <textarea id="une5-obs" rows="3" placeholder="Detallar aquí todos los NO y deficiencias encontradas..."></textarea>
@@ -10845,6 +10853,14 @@ function guardarActaUNE3(){
   sched(); closeM('modal-une3'); renderCert();
   showToast('✅ Acta UNE 23580-3 guardada','ok');
 }
+function refrescarUNE3(){
+  const tipoRev=['T','S','A'].find(v=>{const r=document.getElementById('une3-rev-'+v);return r&&r.checked;})||'T';
+  const fuentes=['deposito','gravedad','presion','inagotable','redpub','salab','electrico','diesel'].filter(f=>{const cb=document.getElementById('une3-f-'+f);return cb&&cb.checked;});
+  const saved=(DB[cid]?.revisiones?.[cYear]?.actaUNE3)||{};
+  const visibleItems=fuentes.length?UNE3_ITEMS.filter(i=>!i.fuente||fuentes.includes(i.fuente)):UNE3_ITEMS;
+  const current=readUneItems(visibleItems);
+  renderUNE3Items(Object.assign({},saved.items||{},current),tipoRev,fuentes);
+}
 
 // ─── Abrir acta UNE 23580-4 ───
 function abrirActaUNE4(){
@@ -10873,8 +10889,14 @@ function guardarActaUNE4(){
   sched(); closeM('modal-une4'); renderCert();
   showToast('✅ Acta UNE 23580-4 guardada','ok');
 }
+function refrescarUNE4(){
+  const tipoRev=['T','S','A','Q'].find(v=>{const r=document.getElementById('une4-rev-'+v);return r&&r.checked;})||'T';
+  const saved=(DB[cid]?.revisiones?.[cYear]?.actaUNE4)||{};
+  const current=readUneItems(UNE4_ITEMS);
+  document.getElementById('une4-items-container').innerHTML=uneItemsHtml(UNE4_ITEMS,Object.assign({},saved.items||{},current),tipoRev);
+}
 
-// ─── Abrir acta UNE 23580-5 ───
+// ─── Abrir acta UNE 23580-5 (unificado con inventario BIEs) ───
 function abrirActaUNE5(){
   if(!cid) return;
   ensureRevision();
@@ -10885,7 +10907,61 @@ function abrirActaUNE5(){
   document.getElementById('une5-obs').value = saved.obs||'';
   document.getElementById('une5-estado-final').value = saved.estadoFinal||'En automático sin anomalías';
   document.getElementById('une5-items-container').innerHTML = uneItemsHtml(UNE5_ITEMS, saved.items||{}, tipoRev);
+  // Cargar inventario de BIEs
+  const eqs=(DB[cid].equipos||[]).filter(e=>e.tipo==='BIE (Boca de Incendio Equipada)');
+  const invExisting=rev.inventarioBIEs||[];
+  const actaBIE=rev.actaBIE||[];
+  let bieRows=[];
+  if(eqs.length){
+    bieRows=eqs.map((e,i)=>{
+      const s2=actaBIE.find(r=>r.eqId===e.id)||{};
+      const inv=invExisting.find(r=>r.situacion===e.ubicacion)||invExisting[i]||{};
+      return Object.assign({eqId:e.id,codigo:e.codigo,ubicacion:e.ubicacion,
+        marca:e.marcaBIE||inv.marca||'',modelo:inv.modelo||'',
+        anofab:e.anofabBIE||inv.anofab||'',
+        ph:e.phBIE||inv.ph||'',phprx:e.phprxBIE||inv.phprx||'',
+        presion:e.presionBIE||inv.presion||'',obs:inv.obs||''},s2);
+    });
+  } else if(invExisting.length){
+    bieRows=invExisting.map((inv,i)=>{
+      const s2=actaBIE[i]||{};
+      return Object.assign({eqId:'inv_'+i,codigo:inv.codigo||('BIE-'+(i+1)),ubicacion:inv.situacion||'',
+        marca:inv.marca||'',modelo:inv.modelo||'',anofab:inv.anofab||'',
+        ph:inv.ph||'',phprx:inv.phprx||'',presion:inv.presion||'',obs:inv.obs||''},s2);
+    });
+  } else if(actaBIE.length){
+    bieRows=actaBIE.slice();
+  }
+  if(!bieRows.length) bieRows=[{eqId:'manual_0',codigo:'BIE-1',ubicacion:'',marca:'',modelo:'',anofab:'',ph:'',phprx:'',presion:'',obs:''}];
+  rev._une5BieRows=bieRows;
+  renderUne5BIEBody(bieRows);
   openM('modal-une5');
+}
+function renderUne5BIEBody(rows){
+  const c=document.getElementById('une5-bie-body');
+  if(!c)return;
+  if(!rows||!rows.length){c.innerHTML='<p style="color:var(--text2);font-size:12px;text-align:center;padding:10px">Sin BIEs registradas.</p>';return;}
+  c.innerHTML=rows.map((r,i)=>`
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--rsm);padding:10px 12px;margin-bottom:8px">
+    <div style="font-size:11px;font-weight:700;color:#1a6e8e;margin-bottom:6px">BIE ${i+1} · ${esc(r.codigo||'Sin código')} — ${esc(r.ubicacion||'Sin ubicación')}</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+      <div class="field" style="background:#fff"><label>Marca</label><input type="text" id="u5b-marca-${i}" value="${esc(r.marca||'')}" placeholder="Ej: Valvulería"></div>
+      <div class="field" style="background:#fff"><label>Modelo</label><input type="text" id="u5b-modelo-${i}" value="${esc(r.modelo||'')}" placeholder="BIE 25mm"></div>
+      <div class="field" style="background:#fff"><label>Año fabricación</label><input type="text" id="u5b-anofab-${i}" value="${esc(r.anofab||'')}" placeholder="2018"></div>
+      <div class="field" style="background:#fff"><label>Presión (bar)</label><input type="text" id="u5b-presion-${i}" value="${esc(r.presion||'')}" placeholder="3.5"></div>
+      <div class="field" style="background:#fff"><label>P. Hidráulica (mm/aa)</label><input type="text" id="u5b-ph-${i}" value="${esc(r.ph||'')}" placeholder="03/20"></div>
+      <div class="field" style="background:#fff"><label>Próx. P. Hidráulica (mm/aa)</label><input type="text" id="u5b-phprx-${i}" value="${esc(r.phprx||'')}" placeholder="03/25"></div>
+      <div class="field" style="background:#fff;grid-column:1/-1"><label>Observaciones</label><input type="text" id="u5b-obs-${i}" value="${esc(r.obs||'')}" placeholder="Opcional"></div>
+    </div>
+  </div>`).join('');
+}
+function addUne5BIERow(){
+  if(!cid)return;
+  const rev=DB[cid].revisiones[cYear];
+  if(!rev._une5BieRows)rev._une5BieRows=[];
+  const i=rev._une5BieRows.length;
+  rev._une5BieRows.push({eqId:'manual_'+i,codigo:'BIE-'+(i+1),ubicacion:'',marca:'',modelo:'',anofab:'',ph:'',phprx:'',presion:'',obs:''});
+  renderUne5BIEBody(rev._une5BieRows);
 }
 function guardarActaUNE5(){
   if(!cid) return;
@@ -10898,8 +10974,37 @@ function guardarActaUNE5(){
     obs: document.getElementById('une5-obs')?.value.trim()||'',
     estadoFinal: document.getElementById('une5-estado-final')?.value||''
   };
+  // Guardar inventario BIEs
+  const rows=rev._une5BieRows||[];
+  rows.forEach((r,i)=>{
+    r.marca=document.getElementById('u5b-marca-'+i)?.value.trim()||r.marca||'';
+    r.modelo=document.getElementById('u5b-modelo-'+i)?.value.trim()||r.modelo||'';
+    r.anofab=document.getElementById('u5b-anofab-'+i)?.value.trim()||r.anofab||'';
+    r.presion=document.getElementById('u5b-presion-'+i)?.value.trim()||r.presion||'';
+    r.ph=document.getElementById('u5b-ph-'+i)?.value.trim()||r.ph||'';
+    r.phprx=document.getElementById('u5b-phprx-'+i)?.value.trim()||r.phprx||'';
+    r.obs=document.getElementById('u5b-obs-'+i)?.value.trim()||r.obs||'';
+  });
+  rev.actaBIE=rows;
+  rev.actaBIEEstado=rev.actaUNE5.estadoFinal;
+  rev.inventarioBIEs=rows.map(r=>({
+    situacion:r.ubicacion||'',codigo:r.codigo||'',
+    marca:r.marca||'',modelo:r.modelo||'',anofab:r.anofab||'',
+    ph:r.ph||'',phprx:r.phprx||'',presion:r.presion||'',obs:r.obs||''
+  }));
+  // Sincronizar equipos
+  _sincronizarEquiposDesdeActa('BIE (Boca de Incendio Equipada)', rows, r=>({
+    anofabBIE:r.anofab||'',presionBIE:r.presion||'',phBIE:r.ph||'',phprxBIE:r.phprx||''
+  }));
+  _marcarTareasActaComoOK(t=>t.tipo&&(t.tipo.toLowerCase().includes('bie')||t.tipo.toLowerCase().includes('boca de incendio')));
   sched(); closeM('modal-une5'); renderCert();
-  showToast('✅ Acta UNE 23580-5 guardada','ok');
+  showToast('✅ Acta BIEs / UNE 23580-5 guardada','ok');
+}
+function refrescarUNE5(){
+  const tipoRev=['T','A','Q'].find(v=>{const r=document.getElementById('une5-rev-'+v);return r&&r.checked;})||'T';
+  const saved=(DB[cid]?.revisiones?.[cYear]?.actaUNE5)||{};
+  const current=readUneItems(UNE5_ITEMS);
+  document.getElementById('une5-items-container').innerHTML=uneItemsHtml(UNE5_ITEMS,Object.assign({},saved.items||{},current),tipoRev);
 }
 
 // ─── Actualizar tablas al cambiar tipo de revisión (live) ───
@@ -11737,7 +11842,8 @@ function addActaBIERow(){
     marca:'',modelo:'',anofab:'',ph:'',phprx:'',presion:'',obs:''});
   renderActaBIEBody(rev.actaBIE);
 }
-function abrirActaBIE(){
+function abrirActaBIE(){ abrirActaUNE5(); }
+function _abrirActaBIE_legacy(){
   if(!cid)return;
   ensureRevision();
   const rev=DB[cid].revisiones[cYear];
