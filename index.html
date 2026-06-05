@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="RIPCI">
 <meta name="theme-color" content="#c0392b">
 <meta name="mobile-web-app-capable" content="yes">
-<link rel="manifest" href="file:///Users/macbook/Downloads/manifest.json">
+<link rel="manifest" href="./manifest.json">
 <title>🔥 RIPCI PCI Pro v7</title>
 <script src="./🔥 RIPCI PCI Pro v7 ole_files/firebase-app-compat.js"></script>
 <script src="./🔥 RIPCI PCI Pro v7 ole_files/firebase-firestore-compat.js"></script>
@@ -19,83 +19,222 @@
 :root{
   --red:#c0392b;--red2:#a93226;--red-light:#fef5f5;
   --green:#27ae60;--yellow:#f39c12;
-  --gray:#f5f5f5;--border:#e0e0e0;
-  --text:#222;--text2:#666;--text3:#aaa;
-  --r:10px;--rsm:7px;
-  --bg:#f0f2f5;--surface:#fff;--surface2:#fafafa;
+  --gray:#f5f5f5;--border:#e8e8ec;
+  --text:#1a1a1f;--text2:#60607a;--text3:#b0b0c0;
+  --r:14px;--rsm:9px;
+  --bg:#f2f3f8;--surface:#ffffff;--surface2:#f8f8fb;
   --topbar-bg:var(--red);--topbar-color:#fff;
+  --shadow-sm:0 1px 4px rgba(0,0,0,.07),0 2px 12px rgba(0,0,0,.05);
+  --shadow-md:0 4px 16px rgba(0,0,0,.1),0 1px 4px rgba(0,0,0,.06);
 }
 body.dark{
   --red:#e05252;--red2:#c0392b;--red-light:#2d1515;
   --green:#2ecc71;--yellow:#f1c40f;
-  --gray:#2a2a2a;--border:#383838;
-  --text:#f0f0f0;--text2:#aaa;--text3:#666;
-  --bg:#1a1a1a;--surface:#242424;--surface2:#2a2a2a;
-  --topbar-bg:#1e1e1e;--topbar-color:#f0f0f0;
+  --gray:#2a2a2a;--border:#2e2e3a;
+  --text:#f0f0f5;--text2:#9090a8;--text3:#505060;
+  --bg:#13131a;--surface:#1e1e28;--surface2:#242432;
+  --topbar-bg:#16161f;--topbar-color:#f0f0f5;
+  --shadow-sm:0 1px 4px rgba(0,0,0,.3),0 2px 12px rgba(0,0,0,.2);
+  --shadow-md:0 4px 16px rgba(0,0,0,.35),0 1px 4px rgba(0,0,0,.2);
 }
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;font-size:15px;background:var(--bg);color:var(--text);min-height:100vh;transition:background .3s,color .3s}
-#topbar{background:var(--topbar-bg);color:var(--topbar-color);padding:12px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.2)}
-#tb-back{background:none;border:none;color:#fff;font-size:22px;padding:0 4px 0 0;cursor:pointer;display:none}
-#tb-title{flex:1;font-size:17px;font-weight:700}
-#tb-action{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.4);color:#fff;padding:7px 13px;border-radius:20px;font-size:13px;cursor:pointer;white-space:nowrap;display:none}
-#sync-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:7px 16px;display:none;align-items:center;justify-content:space-between;font-size:12px;color:var(--text2);position:sticky;top:46px;z-index:99}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,Arial,sans-serif;font-size:15px;background:var(--bg);color:var(--text);min-height:100vh;transition:background .3s,color .3s;-webkit-font-smoothing:antialiased}
+
+/* ── TOPBAR ── */
+#topbar{
+  background:linear-gradient(135deg,#c0392b 0%,#9b2c1f 100%);
+  color:#fff;padding:13px 16px;
+  display:flex;align-items:center;gap:10px;
+  position:sticky;top:0;z-index:100;
+  box-shadow:0 2px 16px rgba(192,57,43,.35),0 1px 3px rgba(0,0,0,.15);
+}
+body.dark #topbar{background:linear-gradient(135deg,#1e1e28 0%,#16161f 100%);box-shadow:0 2px 16px rgba(0,0,0,.5)}
+#tb-back{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;font-size:16px;padding:5px 9px;border-radius:10px;cursor:pointer;display:none;line-height:1}
+#tb-title{flex:1;font-size:17px;font-weight:700;letter-spacing:-.2px}
+#tb-action{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);color:#fff;padding:7px 14px;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;display:none;backdrop-filter:blur(4px)}
+#sync-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:7px 16px;display:none;align-items:center;justify-content:space-between;font-size:12px;color:var(--text2);position:sticky;top:50px;z-index:99}
 #sd{width:8px;height:8px;border-radius:50%;background:var(--text3);flex-shrink:0;margin-right:6px}
 #sd.ok{background:var(--green)}#sd.busy{background:var(--yellow);animation:blink 1s infinite}#sd.err{background:var(--red)}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 #sb-btn{background:none;border:1px solid var(--border);color:var(--text2);padding:4px 10px;border-radius:16px;font-size:11px;cursor:pointer}
 
 /* ALERTS */
-.alert-banner{background:#fff3cd;border:1px solid #ffc107;border-radius:var(--r);padding:10px 14px;margin-bottom:8px;font-size:13px;cursor:pointer}
-.alert-banner.danger{background:#fde8e8;border-color:var(--red)}
+.alert-banner{background:linear-gradient(135deg,#fffbea,#fff8d4);border:1px solid #f0c040;border-radius:var(--r);padding:11px 14px;margin-bottom:8px;font-size:13px;cursor:pointer;box-shadow:var(--shadow-sm)}
+.alert-banner.danger{background:linear-gradient(135deg,#fff0f0,#fde8e8);border-color:var(--red)}
 
 /* SCREENS */
-.screen{display:none;padding:12px;padding-bottom:96px}
+.screen{display:none;padding:14px;padding-bottom:100px}
 .screen.active{display:block}
 #screen-login{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;min-height:72vh;padding:0}
 
 /* LOGIN */
-.btn-google{display:flex;align-items:center;justify-content:center;gap:10px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);padding:14px 24px;font-size:15px;font-weight:600;cursor:pointer;color:var(--text);width:100%;max-width:300px;margin-bottom:4px}
+.btn-google{display:flex;align-items:center;justify-content:center;gap:10px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);padding:14px 24px;font-size:15px;font-weight:600;cursor:pointer;color:var(--text);width:100%;max-width:300px;margin-bottom:4px;box-shadow:var(--shadow-sm);transition:box-shadow .2s}
 .divider{display:flex;align-items:center;gap:10px;width:100%;max-width:300px;margin:14px 0;color:var(--text3);font-size:12px}
 .divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
 .btn-local{background:var(--gray);border:1px solid var(--border);border-radius:var(--r);padding:12px 24px;font-size:14px;cursor:pointer;color:var(--text2);width:100%;max-width:300px}
 
-/* COMMON */
-.search-bar{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:10px 14px;font-size:15px;width:100%;margin-bottom:10px;color:var(--text)}
-.search-bar:focus{outline:none;border-color:var(--red)}
-.client-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:13px 16px;margin-bottom:8px;display:flex;align-items:center;gap:12px;cursor:pointer}
-.client-card:active{background:var(--red-light)}
-.avatar{width:44px;height:44px;border-radius:50%;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;flex-shrink:0}
-.empty{text-align:center;padding:50px 20px;color:var(--text2)}
+/* SEARCH BAR */
+.search-bar{
+  background:var(--surface);
+  border:1.5px solid var(--border);
+  border-radius:12px;
+  padding:11px 16px 11px 40px;
+  font-size:15px;width:100%;margin-bottom:12px;
+  color:var(--text);
+  box-shadow:var(--shadow-sm);
+  transition:border-color .2s,box-shadow .2s;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%23aaa' stroke-width='2' viewBox='0 0 24 24'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:13px center;
+}
+.search-bar:focus{outline:none;border-color:var(--red);box-shadow:0 0 0 3px rgba(192,57,43,.12),var(--shadow-sm)}
 
-/* TABS */
-#tab-bar{background:var(--surface);border-top:1px solid var(--border);position:fixed;bottom:0;left:0;right:0;display:none;z-index:100}
+/* CLIENT CARD */
+.client-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:14px 16px;
+  margin-bottom:9px;
+  display:flex;align-items:center;gap:13px;
+  cursor:pointer;
+  box-shadow:var(--shadow-sm);
+  transition:transform .15s,box-shadow .15s;
+}
+.client-card:active{background:var(--red-light);transform:scale(.985);box-shadow:none}
+
+/* AVATAR */
+.avatar{
+  width:46px;height:46px;
+  border-radius:14px;
+  background:linear-gradient(135deg,var(--red),#9b2c1f);
+  color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;font-weight:700;flex-shrink:0;
+  box-shadow:0 3px 10px rgba(192,57,43,.3);
+}
+.empty{text-align:center;padding:56px 20px;color:var(--text2)}
+
+/* ── TAB BAR ── */
+#tab-bar{
+  background:var(--surface);
+  border-top:1px solid var(--border);
+  position:fixed;bottom:0;left:0;right:0;display:none;z-index:100;
+  box-shadow:0 -4px 20px rgba(0,0,0,.08);
+  padding-bottom:env(safe-area-inset-bottom);
+}
 .tb-inner{display:flex}
-.tab-btn{flex:1;padding:9px 2px 7px;border:none;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--text3);font-size:9px;-webkit-user-select:none}
+.tab-btn{
+  flex:1;padding:9px 2px 8px;border:none;background:none;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  color:var(--text3);font-size:9px;font-weight:600;-webkit-user-select:none;
+  transition:color .2s;
+  position:relative;
+}
 .tab-btn.active{color:var(--red)}
-.ti{font-size:19px;line-height:1}
+.tab-btn.active::before{
+  content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:28px;height:3px;background:var(--red);border-radius:0 0 3px 3px;
+}
+.ti{font-size:20px;line-height:1}
 
-/* FIELDS */
-.section{margin-bottom:14px}
-.stitle{font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
-.field{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);margin-bottom:8px;overflow:hidden}
-.field label{display:block;font-size:11px;font-weight:600;color:var(--text2);padding:7px 13px 0;text-transform:uppercase;letter-spacing:.3px}
-.field input,.field select,.field textarea{display:block;width:100%;padding:5px 13px 9px;border:none;font-size:15px;color:var(--text);background:transparent;-webkit-appearance:none}
+/* ── SECTION TITLES ── */
+.section{margin-bottom:16px}
+.stitle{
+  font-size:11px;font-weight:700;color:var(--text3);
+  text-transform:uppercase;letter-spacing:.8px;margin-bottom:9px;
+}
+
+/* ── FIELDS ── */
+.field{
+  background:var(--surface);
+  border:1.5px solid var(--border);
+  border-radius:12px;
+  margin-bottom:9px;
+  overflow:hidden;
+  box-shadow:var(--shadow-sm);
+  transition:border-color .2s;
+}
+.field:focus-within{border-color:var(--red)}
+.field label{display:block;font-size:10px;font-weight:700;color:var(--text3);padding:8px 14px 0;text-transform:uppercase;letter-spacing:.6px}
+.field input,.field select,.field textarea{display:block;width:100%;padding:4px 14px 10px;border:none;font-size:15px;color:var(--text);background:transparent;-webkit-appearance:none}
 .field input:focus,.field select:focus,.field textarea:focus{outline:none}
 .field textarea{min-height:66px;resize:vertical;line-height:1.5}
-.frow{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-bottom:8px}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-bottom:9px}
 .frow .field{border-radius:0;margin-bottom:0;border-right:none}
-.frow .field:first-child{border-radius:var(--r) 0 0 var(--r)}
-.frow .field:last-child{border-radius:0 var(--r) var(--r) 0;border-right:1px solid var(--border)}
+.frow .field:first-child{border-radius:12px 0 0 12px}
+.frow .field:last-child{border-radius:0 12px 12px 0;border-right:1.5px solid var(--border)}
 
-/* BUTTONS */
-.btn{display:block;width:100%;padding:13px;background:var(--red);color:#fff;border:none;border-radius:var(--r);font-size:15px;font-weight:700;cursor:pointer;text-align:center;margin-bottom:8px}
-.btn:active{background:var(--red2)}
-.btn-out{background:var(--surface);color:var(--red);border:1.5px solid var(--red)}
+/* ── BUTTONS ── */
+.btn{
+  display:block;width:100%;
+  padding:14px;
+  background:linear-gradient(135deg,#c0392b,#9b2c1f);
+  color:#fff;border:none;border-radius:14px;
+  font-size:15px;font-weight:700;cursor:pointer;
+  text-align:center;margin-bottom:8px;
+  box-shadow:0 4px 14px rgba(192,57,43,.35);
+  transition:opacity .15s,transform .1s;
+  letter-spacing:-.1px;
+}
+.btn:active{opacity:.88;transform:scale(.98);box-shadow:none}
+.btn-out{
+  background:var(--surface);
+  color:var(--red);
+  border:1.5px solid var(--red);
+  box-shadow:var(--shadow-sm);
+}
 .btn-gray{background:var(--gray);color:var(--text2);border:1px solid var(--border)}
-.bsm{padding:8px 13px;font-size:13px;font-weight:700;border-radius:var(--rsm);border:none;cursor:pointer}
-.bsm-r{background:var(--red);color:#fff}
+.bsm{padding:9px 14px;font-size:13px;font-weight:700;border-radius:10px;border:none;cursor:pointer;transition:opacity .15s}
+.bsm:active{opacity:.8}
+.bsm-r{background:linear-gradient(135deg,#c0392b,#9b2c1f);color:#fff;box-shadow:0 3px 10px rgba(192,57,43,.3)}
 .bsm-o{background:var(--surface);color:var(--red);border:1.5px solid var(--red)}
 .bsm-g{background:var(--gray);color:var(--text2);border:1px solid var(--border)}
+
+/* ── TASK ROWS ── */
+.tblock{background:var(--surface);border:1px solid var(--border);border-radius:16px;margin-bottom:9px;overflow:hidden;box-shadow:var(--shadow-sm)}
+.tblock-h{padding:13px 15px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;-webkit-user-select:none}
+
+/* ── ECARD ── */
+.ecard{background:var(--surface);border:1px solid var(--border);border-radius:16px;margin-bottom:9px;overflow:hidden;box-shadow:var(--shadow-sm)}
+
+/* ── MODALS ── */
+.modal-wrap{display:none;background:rgba(10,10,20,.6);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);position:fixed;top:0;left:0;right:0;bottom:0;z-index:200;overflow-y:auto;padding:16px 12px}
+.modal-wrap.open{display:flex;align-items:flex-start;justify-content:center}
+.mbox{background:var(--surface);border-radius:20px;padding:22px;width:100%;max-width:500px;margin-top:30px;box-shadow:0 24px 60px rgba(0,0,0,.25)}
+.mbox h2{font-size:18px;font-weight:800;margin-bottom:16px;letter-spacing:-.3px}
+.macts{display:flex;gap:8px;margin-top:16px}
+.macts button{flex:1;padding:13px;border-radius:12px;border:none;font-size:15px;font-weight:700;cursor:pointer;transition:opacity .15s}
+.macts button:active{opacity:.8}
+.mcancel{background:var(--gray);color:var(--text2)}
+.mok{background:linear-gradient(135deg,#c0392b,#9b2c1f);color:#fff;box-shadow:0 4px 14px rgba(192,57,43,.3)}
+
+/* ── STATS / SCARD ── */
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:14px}
+.scard{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:14px;text-align:center;box-shadow:var(--shadow-sm)}
+.snum{font-size:28px;font-weight:800;letter-spacing:-.5px}
+.slbl{font-size:11px;color:var(--text2);margin-top:3px}
+
+/* ── YEAR PILLS ── */
+.ypill{padding:6px 15px;border:1.5px solid var(--border);border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;background:var(--surface);color:var(--text2);box-shadow:var(--shadow-sm);transition:all .2s}
+.ypill.active{background:var(--red);border-color:var(--red);color:#fff;box-shadow:0 3px 12px rgba(192,57,43,.3)}
+
+/* ── TOASTS ── */
+#toast-container{position:fixed;bottom:120px;left:50%;transform:translateX(-50%);z-index:300;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:8px}
+.toast{background:#1a1a2a;color:#fff;padding:11px 20px;border-radius:24px;font-size:13px;font-weight:600;opacity:0;transform:translateY(12px) scale(.95);transition:opacity .25s,transform .25s;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.35)}
+.toast.show{opacity:1;transform:translateY(0) scale(1)}
+.toast.ok{background:linear-gradient(135deg,#1e7a48,#27ae60)}
+.toast.warn{background:linear-gradient(135deg,#c47c0a,#e67e22)}
+.toast.err{background:linear-gradient(135deg,#9b2c1f,var(--red))}
+
+/* ── DARK TOGGLE ── */
+#dark-toggle{position:fixed;bottom:108px;right:12px;width:46px;height:46px;border-radius:50%;background:var(--surface);border:1px solid var(--border);box-shadow:var(--shadow-md);font-size:20px;cursor:pointer;z-index:150;display:flex;align-items:center;justify-content:center;transition:background .3s,box-shadow .2s}
+#dark-toggle:active{transform:scale(.9)}
+
+/* ── EBTN (checklist controls) ── */
+.ebtn{padding:8px 12px;border-radius:20px;border:1.5px solid var(--border);font-size:12px;font-weight:600;cursor:pointer;background:var(--surface);color:var(--text2);transition:all .15s}
+.ebtn.ok{background:#d4f0e0;border-color:var(--green);color:#1a6b3a}
+.ebtn.na{background:#e8e8ef;border-color:#999;color:#444}
+.ebtn.inc{background:#fde8e8;border-color:var(--red);color:#7a1c1c}
 
 /* EQUIPO CARDS */
 .ecard{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);margin-bottom:8px;overflow:hidden}
@@ -1277,6 +1416,7 @@ body.dark .dash-action-btn{box-shadow:0 3px 12px rgba(0,0,0,.35)}
     <button class="nav-global-btn" id="ng-tecnicos" onclick="irSeccion(&#39;tecnicos&#39;)" style="flex:none;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;color:var(--text2)"><span style="font-size:18px;display:block">👷</span>Técnicos</button>
     <button class="nav-global-btn" id="ng-stock" onclick="irSeccion(&#39;stock&#39;)" style="flex:none;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;color:var(--text2)"><span style="font-size:18px;display:block">📦</span>Stock</button>
     <button class="nav-global-btn" id="ng-albaranes" onclick="irSeccion(&#39;albaranes&#39;)" style="flex:none;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;color:var(--text2)"><span style="font-size:18px;display:block">📋</span>Albaranes</button>
+    <button class="nav-global-btn" id="ng-caudal" onclick="irSeccion(&#39;caudal&#39;)" style="flex:none;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;color:var(--text2)"><span style="font-size:18px;display:block">💧</span>Caudal</button>
     <button class="nav-global-btn" id="ng-ajustes" onclick="irSeccion(&#39;ajustes&#39;)" style="flex:none;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;color:var(--text2)"><span style="font-size:18px;display:block">⚙️</span>Ajustes</button>
   </div>
 </div>
@@ -2764,7 +2904,7 @@ function renderDatos(){
       <div class="field"><label>IBAN</label><input value="${esc(c.iban||'')}" placeholder="ES00 0000 0000 0000 0000 0000" onchange="upC('iban',this.value)"></div>
       <div class="frow">
         <div class="field"><label>Forma de pago</label>
-          <select onchange="upC('fpago',this.value)">${['Transferencia','Domiciliación','Efectivo','Cheque','Tarjeta'].map(o=>`<option ${c.fpago===o?'selected':''}>${o}</option>`).join('')}</select>
+          <select onchange="upC('fpago',this.value)">${['Transferencia','TRANSFERENCIA','Domiciliación','RECIBO','CONFIRMING','GIRO','GIRO A 30 DIAS','PAGARÉ','GIRADO','Efectivo','Cheque','Tarjeta'].map(o=>`<option ${c.fpago===o?'selected':''}>${o}</option>`).join('')}</select>
         </div>
         <div class="field"><label>Días pago</label><input value="${esc(c.dpago||'')}" placeholder="30 días" onchange="upC('dpago',this.value)"></div>
       </div>
@@ -2824,7 +2964,7 @@ function renderInv(){
 
         <!-- EXTINTORES -->
         <div style="background:var(--surface);border:1.5px solid ${nExt>0?'var(--green)':'var(--border)'};border-radius:var(--r);padding:14px;text-align:center;cursor:pointer" onclick="ensureRevision();abrirActaExtintores()">
-          <div style="font-size:28px;margin-bottom:4px">🧯</div>
+          <div style="margin-bottom:4px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="36" height="36" style="display:inline-block;vertical-align:middle;flex-shrink:0"><rect width="100" height="100" rx="10" fill="#c0392b"/><rect x="44" y="10" width="12" height="8" rx="3" fill="#f5e6c8"/><rect x="38" y="18" width="24" height="6" rx="2" fill="#f5e6c8"/><ellipse cx="50" cy="35" rx="16" ry="6" fill="#f5e6c8"/><rect x="34" y="35" width="32" height="48" rx="8" fill="#f5e6c8"/><rect x="42" y="42" width="16" height="20" rx="2" fill="#c0392b" opacity="0.5"/><line x1="50" y1="24" x2="68" y2="18" stroke="#f5e6c8" stroke-width="4" stroke-linecap="round"/><line x1="68" y1="18" x2="75" y2="22" stroke="#f5e6c8" stroke-width="4" stroke-linecap="round"/></svg></div>
           <div style="font-size:13px;font-weight:700;margin-bottom:2px">Extintores</div>
           <div style="font-size:11px;color:${nExt>0?'var(--green)':'var(--text3);'};">${nExt>0?'<strong>'+nExt+'</strong> registrado'+(nExt>1?'s':'') : 'Pulsa para crear acta'}</div>
           <div style="margin-top:8px"><span class="bsm ${nExt>0?'bsm-o':'bsm-r'}" style="font-size:11px;padding:5px 12px">${nExt>0?'✏️ Editar acta':'📋 Nueva acta'}</span></div>
@@ -2832,7 +2972,7 @@ function renderInv(){
 
         <!-- BIEs -->
         <div style="background:var(--surface);border:1.5px solid ${nBIE>0?'var(--green)':'var(--border)'};border-radius:var(--r);padding:14px;text-align:center;cursor:pointer" onclick="ensureRevision();abrirActaBIE()">
-          <div style="font-size:28px;margin-bottom:4px">🚒</div>
+          <div style="margin-bottom:4px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="36" height="36" style="display:inline-block;vertical-align:middle;flex-shrink:0"><rect width="100" height="100" rx="10" fill="#c0392b"/><circle cx="50" cy="50" r="28" fill="none" stroke="#f5e6c8" stroke-width="7"/><circle cx="50" cy="50" r="10" fill="#f5e6c8"/><circle cx="50" cy="50" r="4" fill="#c0392b"/><rect x="47" y="22" width="6" height="16" rx="3" fill="#f5e6c8"/><rect x="62" y="47" width="16" height="6" rx="3" fill="#f5e6c8"/><path d="M74 68 L88 68 L88 80 Q88 86 82 86 L74 86 Z" fill="#f5e6c8"/><rect x="82" y="60" width="6" height="8" rx="2" fill="#f5e6c8"/></svg></div>
           <div style="font-size:13px;font-weight:700;margin-bottom:2px">BIEs</div>
           <div style="font-size:11px;color:${nBIE>0?'var(--green)':'var(--text3);'};">${nBIE>0?'<strong>'+nBIE+'</strong> registrada'+(nBIE>1?'s':'') : 'Pulsa para crear acta'}</div>
           <div style="margin-top:8px"><span class="bsm ${nBIE>0?'bsm-o':'bsm-r'}" style="font-size:11px;padding:5px 12px">${nBIE>0?'✏️ Editar acta':'📋 Nueva acta'}</span></div>
@@ -2840,7 +2980,7 @@ function renderInv(){
 
         <!-- DETECCIÓN -->
         <div style="background:var(--surface);border:1.5px solid ${nDET>0?'var(--green)':'var(--border)'};border-radius:var(--r);padding:14px;text-align:center;cursor:pointer" onclick="ensureRevision();abrirActaUNE2()">
-          <div style="font-size:28px;margin-bottom:4px">🔥</div>
+          <div style="margin-bottom:4px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="36" height="36" style="display:inline-block;vertical-align:middle;flex-shrink:0"><rect width="100" height="100" rx="10" fill="#c0392b"/><circle cx="50" cy="42" r="22" fill="none" stroke="#f5e6c8" stroke-width="5"/><circle cx="50" cy="42" r="10" fill="#f5e6c8"/><path d="M30 60 Q20 78 18 85 L82 85 Q80 78 70 60 Q60 72 50 72 Q40 72 30 60 Z" fill="#f5e6c8"/><rect x="46" y="10" width="8" height="12" rx="2" fill="#f5e6c8"/></svg></div>
           <div style="font-size:13px;font-weight:700;margin-bottom:2px">Detección</div>
           <div style="font-size:11px;color:${nDET>0?'var(--green)':'var(--text3);'};">${nDET>0?'<strong>'+nDET+'</strong> elemento'+(nDET>1?'s':'') : 'Pulsa para crear acta'}</div>
           <div style="margin-top:8px"><span class="bsm ${nDET>0?'bsm-o':'bsm-r'}" style="font-size:11px;padding:5px 12px">${nDET>0?'✏️ Editar acta':'📋 Nueva acta'}</span></div>
@@ -2848,7 +2988,7 @@ function renderInv(){
 
         <!-- GRUPOS CI -->
         <div style="background:var(--surface);border:1.5px solid ${nGCI>0?'var(--green)':'var(--border)'};border-radius:var(--r);padding:14px;text-align:center;cursor:pointer" onclick="ensureRevision();abrirActaAbastecimiento()">
-          <div style="font-size:28px;margin-bottom:4px">💧</div>
+          <div style="margin-bottom:4px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="36" height="36" style="display:inline-block;vertical-align:middle;flex-shrink:0"><rect width="100" height="100" rx="10" fill="#c0392b"/><rect x="20" y="38" width="40" height="14" rx="4" fill="#f5e6c8"/><rect x="56" y="44" width="24" height="8" rx="4" fill="#f5e6c8"/><rect x="75" y="36" width="8" height="24" rx="3" fill="#f5e6c8"/><rect x="34" y="28" width="12" height="14" rx="3" fill="#f5e6c8"/><rect x="38" y="52" width="8" height="28" rx="3" fill="#f5e6c8"/><ellipse cx="42" cy="80" rx="12" ry="6" fill="#f5e6c8" opacity="0.7"/><circle cx="60" cy="82" r="5" fill="#f5e6c8"/><circle cx="74" cy="78" r="4" fill="#f5e6c8"/></svg></div>
           <div style="font-size:13px;font-weight:700;margin-bottom:2px">Grupos CI</div>
           <div style="font-size:11px;color:${nGCI>0?'var(--green)':'var(--text3);'};">${nGCI>0?'<strong>'+nGCI+'</strong> grupo'+(nGCI>1?'s':'') : 'Pulsa para crear acta'}</div>
           <div style="margin-top:8px"><span class="bsm ${nGCI>0?'bsm-o':'bsm-r'}" style="font-size:11px;padding:5px 12px">${nGCI>0?'✏️ Editar acta':'📋 Nueva acta'}</span></div>
@@ -2856,7 +2996,7 @@ function renderInv(){
 
         <!-- HIDRANTES -->
         <div style="background:var(--surface);border:1.5px solid ${nHID>0?'var(--green)':'var(--border)'};border-radius:var(--r);padding:14px;text-align:center;cursor:pointer" onclick="ensureRevision();abrirActaUNE4()">
-          <div style="font-size:28px;margin-bottom:4px">🔧</div>
+          <div style="margin-bottom:4px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="36" height="36" style="display:inline-block;vertical-align:middle;flex-shrink:0"><rect width="100" height="100" rx="10" fill="#c0392b"/><rect x="40" y="8" width="20" height="14" rx="3" fill="#f5e6c8"/><ellipse cx="50" cy="28" rx="18" ry="8" fill="#f5e6c8"/><rect x="34" y="26" width="32" height="40" rx="6" fill="#f5e6c8"/><rect x="28" y="38" width="10" height="16" rx="3" fill="#f5e6c8"/><circle cx="24" cy="46" r="5" fill="#f5e6c8"/><rect x="62" y="38" width="10" height="16" rx="3" fill="#f5e6c8"/><circle cx="76" cy="46" r="5" fill="#f5e6c8"/><rect x="30" y="66" width="40" height="10" rx="3" fill="#f5e6c8"/><rect x="22" y="80" width="56" height="6" rx="2" fill="#f5e6c8"/></svg></div>
           <div style="font-size:13px;font-weight:700;margin-bottom:2px">Hidrantes</div>
           <div style="font-size:11px;color:${nHID>0?'var(--green)':'var(--text3);'};">${nHID>0?'<strong>'+nHID+'</strong> registrado'+(nHID>1?'s':'') : 'Pulsa para crear acta'}</div>
           <div style="margin-top:8px"><span class="bsm ${nHID>0?'bsm-o':'bsm-r'}" style="font-size:11px;padding:5px 12px">${nHID>0?'✏️ Editar acta':'📋 Nueva acta'}</span></div>
@@ -2864,7 +3004,7 @@ function renderInv(){
 
         <!-- COLUMNA SECA -->
         <div style="background:var(--surface);border:1.5px solid ${nCSECA>0?'var(--green)':'var(--border)'};border-radius:var(--r);padding:14px;text-align:center;cursor:pointer" onclick="ensureRevision();abrirActaColSeca()">
-          <div style="font-size:28px;margin-bottom:4px">🏛️</div>
+          <div style="margin-bottom:4px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="36" height="36" style="display:inline-block;vertical-align:middle;flex-shrink:0"><rect width="100" height="100" rx="10" fill="#c0392b"/><rect x="44" y="8" width="12" height="84" rx="4" fill="#f5e6c8"/><rect x="20" y="28" width="24" height="10" rx="3" fill="#f5e6c8"/><circle cx="18" cy="33" r="6" fill="#f5e6c8"/><rect x="56" y="28" width="24" height="10" rx="3" fill="#f5e6c8"/><circle cx="82" cy="33" r="6" fill="#f5e6c8"/><rect x="20" y="58" width="24" height="10" rx="3" fill="#f5e6c8"/><circle cx="18" cy="63" r="6" fill="#f5e6c8"/><rect x="56" y="58" width="24" height="10" rx="3" fill="#f5e6c8"/><circle cx="82" cy="63" r="6" fill="#f5e6c8"/></svg></div>
           <div style="font-size:13px;font-weight:700;margin-bottom:2px">Columna Seca</div>
           <div style="font-size:11px;color:${nCSECA>0?'var(--green)':'var(--text3);'};">${nCSECA>0?'<strong>'+nCSECA+'</strong> registrada'+(nCSECA>1?'s':'') : 'Pulsa para crear acta'}</div>
           <div style="margin-top:8px"><span class="bsm ${nCSECA>0?'bsm-o':'bsm-r'}" style="font-size:11px;padding:5px 12px">${nCSECA>0?'✏️ Editar acta':'📋 Nueva acta'}</span></div>
@@ -2872,7 +3012,7 @@ function renderInv(){
 
         <!-- ESPUMA -->
         <div style="background:var(--surface);border:1.5px solid ${(rev&&rev.actaUNE7)?'var(--green)':'var(--border)'};border-radius:var(--r);padding:14px;text-align:center;cursor:pointer" onclick="ensureRevision();abrirActaUNE7()">
-          <div style="font-size:28px;margin-bottom:4px">🫧</div>
+          <div style="margin-bottom:4px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="36" height="36" style="display:inline-block;vertical-align:middle;flex-shrink:0"><rect width="100" height="100" rx="10" fill="#c0392b"/><rect x="46" y="10" width="8" height="28" rx="3" fill="#f5e6c8"/><circle cx="50" cy="42" r="8" fill="#f5e6c8"/><rect x="28" y="44" width="44" height="6" rx="3" fill="#f5e6c8"/><path d="M25 56 Q22 68 20 78 L32 78 Q33 68 36 58 Z" fill="#f5e6c8"/><path d="M42 56 Q40 68 40 78 L52 78 Q52 68 50 58 Z" fill="#f5e6c8"/><path d="M58 56 Q60 68 60 78 L72 78 Q70 68 67 58 Z" fill="#f5e6c8"/><path d="M72 56 Q76 68 78 78 L80 78 Q78 68 75 58 Z" fill="#f5e6c8"/></svg></div>
           <div style="font-size:13px;font-weight:700;margin-bottom:2px">Espuma</div>
           <div style="font-size:11px;color:${(rev&&rev.actaUNE7)?'var(--green)':'var(--text3)'};">${(rev&&rev.actaUNE7)?'✅ Acta registrada':'Pulsa para crear acta'}</div>
           <div style="margin-top:8px"><span class="bsm ${(rev&&rev.actaUNE7)?'bsm-o':'bsm-r'}" style="font-size:11px;padding:5px 12px">${(rev&&rev.actaUNE7)?'✏️ Editar acta':'📋 Nueva acta'}</span></div>
@@ -2880,7 +3020,7 @@ function renderInv(){
 
         <!-- AGENTE GASEOSO -->
         <div style="background:var(--surface);border:1.5px solid ${(rev&&rev.actaUNE8)?'var(--green)':'var(--border)'};border-radius:var(--r);padding:14px;text-align:center;cursor:pointer" onclick="ensureRevision();abrirActaUNE8()">
-          <div style="font-size:28px;margin-bottom:4px">💨</div>
+          <div style="margin-bottom:4px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="36" height="36" style="display:inline-block;vertical-align:middle;flex-shrink:0"><rect width="100" height="100" rx="10" fill="#c0392b"/><rect x="36" y="32" width="28" height="52" rx="10" fill="#f5e6c8"/><ellipse cx="50" cy="32" rx="14" ry="5" fill="#f5e6c8"/><rect x="43" y="18" width="14" height="16" rx="4" fill="#f5e6c8"/><rect x="44" y="12" width="12" height="8" rx="3" fill="#f5e6c8"/><path d="M58 22 L72 16 L74 22 L60 28 Z" fill="#f5e6c8"/><rect x="42" y="48" width="16" height="20" rx="4" fill="#c0392b" opacity="0.4"/></svg></div>
           <div style="font-size:13px;font-weight:700;margin-bottom:2px">Agente Gaseoso</div>
           <div style="font-size:11px;color:${(rev&&rev.actaUNE8)?'var(--green)':'var(--text3)'};">${(rev&&rev.actaUNE8)?'✅ Acta registrada':'Pulsa para crear acta'}</div>
           <div style="margin-top:8px"><span class="bsm ${(rev&&rev.actaUNE8)?'bsm-o':'bsm-r'}" style="font-size:11px;padding:5px 12px">${(rev&&rev.actaUNE8)?'✏️ Editar acta':'📋 Nueva acta'}</span></div>
@@ -2888,7 +3028,7 @@ function renderInv(){
 
         <!-- EXTINCIÓN POR POLVO -->
         <div style="background:var(--surface);border:1.5px solid ${(rev&&rev.actaUNE12)?'var(--green)':'var(--border)'};border-radius:var(--r);padding:14px;text-align:center;cursor:pointer" onclick="ensureRevision();abrirActaUNE12()">
-          <div style="font-size:28px;margin-bottom:4px">🌫️</div>
+          <div style="margin-bottom:4px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="36" height="36" style="display:inline-block;vertical-align:middle;flex-shrink:0"><rect width="100" height="100" rx="10" fill="#c0392b"/><ellipse cx="50" cy="42" rx="24" ry="16" fill="#f5e6c8"/><ellipse cx="32" cy="48" rx="14" ry="12" fill="#f5e6c8"/><ellipse cx="68" cy="48" rx="14" ry="12" fill="#f5e6c8"/><circle cx="28" cy="70" r="5" fill="#f5e6c8"/><circle cx="44" cy="76" r="5" fill="#f5e6c8"/><circle cx="60" cy="74" r="5" fill="#f5e6c8"/><circle cx="74" cy="68" r="4" fill="#f5e6c8"/><rect x="46" y="26" width="8" height="14" rx="2" fill="#c0392b"/></svg></div>
           <div style="font-size:13px;font-weight:700;margin-bottom:2px">Extinción Polvo</div>
           <div style="font-size:11px;color:${(rev&&rev.actaUNE12)?'var(--green)':'var(--text3)'};">${(rev&&rev.actaUNE12)?'✅ Acta registrada':'Pulsa para crear acta'}</div>
           <div style="margin-top:8px"><span class="bsm ${(rev&&rev.actaUNE12)?'bsm-o':'bsm-r'}" style="font-size:11px;padding:5px 12px">${(rev&&rev.actaUNE12)?'✏️ Editar acta':'📋 Nueva acta'}</span></div>
@@ -2896,7 +3036,7 @@ function renderInv(){
 
         <!-- AEROSOLES CONDENSADOS -->
         <div style="background:var(--surface);border:1.5px solid ${(rev&&rev.actaUNE13)?'var(--green)':'var(--border)'};border-radius:var(--r);padding:14px;text-align:center;cursor:pointer" onclick="ensureRevision();abrirActaUNE13()">
-          <div style="font-size:28px;margin-bottom:4px">☁️</div>
+          <div style="margin-bottom:4px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="36" height="36" style="display:inline-block;vertical-align:middle;flex-shrink:0"><rect width="100" height="100" rx="10" fill="#c0392b"/><rect x="38" y="38" width="24" height="46" rx="8" fill="#f5e6c8"/><rect x="44" y="28" width="12" height="12" rx="3" fill="#f5e6c8"/><rect x="47" y="20" width="6" height="10" rx="2" fill="#f5e6c8"/><ellipse cx="50" cy="18" rx="8" ry="5" fill="#f5e6c8" opacity="0.8"/><ellipse cx="36" cy="12" rx="7" ry="5" fill="#f5e6c8" opacity="0.6"/><ellipse cx="64" cy="12" rx="7" ry="5" fill="#f5e6c8" opacity="0.6"/></svg></div>
           <div style="font-size:13px;font-weight:700;margin-bottom:2px">Aerosoles Cond.</div>
           <div style="font-size:11px;color:${(rev&&rev.actaUNE13)?'var(--green)':'var(--text3)'};">${(rev&&rev.actaUNE13)?'✅ Acta registrada':'Pulsa para crear acta'}</div>
           <div style="margin-top:8px"><span class="bsm ${(rev&&rev.actaUNE13)?'bsm-o':'bsm-r'}" style="font-size:11px;padding:5px 12px">${(rev&&rev.actaUNE13)?'✏️ Editar acta':'📋 Nueva acta'}</span></div>
@@ -2904,7 +3044,7 @@ function renderInv(){
 
         <!-- SEÑALIZACIÓN -->
         <div style="background:var(--surface);border:1.5px solid ${nSENYAL>0?'var(--green)':'var(--border)'};border-radius:var(--r);padding:14px;text-align:center;cursor:pointer;grid-column:1/-1" onclick="ensureRevision();abrirActaSenyal()">
-          <div style="font-size:28px;margin-bottom:4px">🚪</div>
+          <div style="margin-bottom:4px"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="36" height="36" style="display:inline-block;vertical-align:middle;flex-shrink:0"><rect width="100" height="100" rx="10" fill="#c0392b"/><rect x="14" y="28" width="72" height="44" rx="5" fill="none" stroke="#f5e6c8" stroke-width="4"/><path d="M28 52 L28 42 L36 42 L36 48 L42 48 L42 42 L50 42 L50 58 L42 58 L42 52 Z" fill="#f5e6c8"/><path d="M56 42 L70 50 L56 58 Z" fill="#f5e6c8"/><rect x="68" y="47" width="12" height="6" rx="2" fill="#f5e6c8"/></svg></div>
           <div style="font-size:13px;font-weight:700;margin-bottom:2px">Señalización</div>
           <div style="font-size:11px;color:${nSENYAL>0?'var(--green)':'var(--text3);'};">${nSENYAL>0?'<strong>'+nSENYAL+'</strong> señal'+(nSENYAL>1?'es':'') : 'Pulsa para crear acta'}</div>
           <div style="margin-top:8px"><span class="bsm ${nSENYAL>0?'bsm-o':'bsm-r'}" style="font-size:11px;padding:5px 12px">${nSENYAL>0?'✏️ Editar acta':'📋 Nueva acta'}</span></div>
@@ -2943,7 +3083,7 @@ function renderInv(){
         <button class="bsm bsm-r" style="padding:11px 8px;font-size:12px" onclick="abrirActaDeteccion()">🔥 Acta Detección</button>
         <button class="bsm bsm-r" style="padding:11px 8px;font-size:12px" onclick="abrirActaAbastecimiento()">💧 Acta Abastecimiento</button>
         <button class="bsm bsm-r" style="padding:11px 8px;font-size:12px" onclick="abrirActaRociadores()">🚿 Acta Rociadores (UNE 23580-6)</button>
-        <button class="bsm bsm-r" style="padding:11px 8px;font-size:12px" onclick="abrirActaAguaNebulizada()">💦 Acta Agua Nebulizada (UNE 23580-11)</button>
+        <button class="bsm bsm-r" style="padding:11px 8px;font-size:12px" onclick="abrirActaNeb()">💦 Acta Agua Nebulizada (UNE 23580-11)</button>
         <button class="bsm bsm-r" style="padding:11px 8px;font-size:12px" onclick="abrirActaAguaPulverizada()">🌊 Acta Agua Pulverizada (UNE 23580-16)</button>
         <button class="bsm bsm-r" style="padding:11px 8px;font-size:12px" onclick="abrirActaColSeca()">🏛️ Acta Columna Seca</button>
         <button class="bsm bsm-r" style="padding:11px 8px;font-size:12px" onclick="abrirActaSenyal()">🚪 Acta Señalización</button>
@@ -7493,7 +7633,6 @@ function generarCertificadoPCI(year){
   const rev = c.revisiones[year];
   if(!rev){ alert('Revisión no encontrada.'); return; }
   const tasks = rev.tasks||[];
-  const inc = tasks.filter(t=>t.estado==='inc').length;
   const emp = DB.__empresa||{};
   const hoy = new Date().toLocaleDateString('es-ES',{day:'2-digit',month:'long',year:'numeric'});
   const tecnico = rev.tecnico || emp.tecnico || 'MANUEL MORENO DOÑATE';
@@ -7502,40 +7641,205 @@ function generarCertificadoPCI(year){
   const regEsp = emp.regEsp || 'B-56734569';
   const comunitat = emp.comunitat || 'GENERALITAT VALENCIANA, CONSELLERIA D\'INDUSTRIA, TURISME I OCUPACIÓ – SERVICI TERRITORIAL D\'INDUSTRIA';
   const nombreEmp = emp.nombre || 'PROCISEIN, S. L.';
+  const cifEmp = emp.cif || regEsp;
+  const dirEmpFull = (emp.dir||'Párroco Mora 35, 1º pta5') + ' – C.P. ' + (emp.cp||'46250') + ' ' + (emp.ciudad||'Valencia');
   const razonCliente = c.razon||c.name;
   const cifCliente = c.cif||'';
   const dirCliente = c.dir||'';
-  // Construir memoria de equipos
+  const cpCliente = c.cp||'';
+  const telCliente = c.tel||'';
+  const numCert = rev.numcert || '—';
+  const codCliente = c.codigo || cid.replace('imp_','').replace(/_\d+$/,'').substring(0,8).toUpperCase();
+  // ── Equipos e inventario ──────────────────────────────────────────────────
+  const equipos = c.equipos||[];
+  // Agrupamos por tipo para la tabla de revisión
   const equiposPorTipo = {};
-  (c.equipos||[]).forEach(e=>{
-    if(!equiposPorTipo[e.tipo]) equiposPorTipo[e.tipo] = [];
-    equiposPorTipo[e.tipo].push(e);
+  equipos.forEach(e=>{
+    const tipo = e.tipo||'Otros';
+    if(!equiposPorTipo[tipo]) equiposPorTipo[tipo] = [];
+    equiposPorTipo[tipo].push(e);
   });
-  const memoriaLineas = Object.entries(equiposPorTipo).map(([tipo, eqs])=>`<li>Instalación sistema de <strong>${esc(tipo)}</strong> compuesto por:<br>${eqs.map(e=>`&nbsp;&nbsp;&nbsp;&nbsp;${e.codigo?esc(e.codigo)+' - ':''} ${esc(e.subtipo||e.tipo)}${e.ubicacion?' ('+esc(e.ubicacion)+')':''}`).join('<br>')}</li>`).join('');
+  // Calcular resultados por equipo a partir de tasks
+  // Cada task tiene ref (código equipo) y estado 'ok'/'inc'/'pend'
+  const tasksByRef = {};
+  tasks.forEach(t=>{ if(t.ref){ if(!tasksByRef[t.ref]) tasksByRef[t.ref]=[]; tasksByRef[t.ref].push(t); } });
+  // Para cada equipo determinar si tiene anomalías
+  function getEquipoResult(e){
+    const key = e.codigo||e.id||'';
+    const myTasks = tasksByRef[key]||[];
+    const anomalias = myTasks.filter(t=>t.estado==='inc');
+    if(anomalias.length) return {ok:false, anomalias};
+    return {ok:true, anomalias:[]};
+  }
+  // Totales
+  const totalEquipos = equipos.length || tasks.length || 0;
+  let sinAnomalia = 0, conAnomalia = 0;
+  if(equipos.length){
+    equipos.forEach(e=>{ const r=getEquipoResult(e); r.ok?sinAnomalia++:conAnomalia++; });
+  } else {
+    // Fallback si no hay inventario: contar por tasks agrupadas
+    const okSet=new Set(), incSet=new Set();
+    tasks.forEach(t=>{
+      if(t.estado==='ok') okSet.add(t.ref||t.id);
+      else if(t.estado==='inc') incSet.add(t.ref||t.id);
+    });
+    sinAnomalia = okSet.size; conAnomalia = incSet.size;
+  }
+  const estadoInstalacion = conAnomalia>0 ? 'REQUIERE ATENCIÓN' : 'CORRECTO';
+  const estadoColor = conAnomalia>0 ? '#c0392b' : '#27ae60';
+  // ── Tabla de equipos ─────────────────────────────────────────────────────
+  let tablaEquipos = '';
+  let numGlobal = 0;
+  if(equipos.length){
+    Object.entries(equiposPorTipo).forEach(([tipo, eqs])=>{
+      // Cabecera de grupo (fila gris)
+      tablaEquipos += `<tr><td colspan="9" style="background:#e8e8e8;font-weight:700;font-size:10px;padding:4px 6px;text-transform:uppercase;letter-spacing:.3px">${esc(tipo)}</td></tr>`;
+      eqs.forEach(e=>{
+        numGlobal++;
+        const res = getEquipoResult(e);
+        const anomTxts = res.anomalias.map(t=>esc(t.texto||t.desc||'')).filter(Boolean);
+        const resultCell = res.ok
+          ? `<span style="color:#27ae60;font-weight:700">✓ OK</span>`
+          : `<span style="color:#c0392b;font-weight:600">■ ${res.anomalias.length} anomalía${res.anomalias.length>1?'s':''}</span>`;
+        const detalle = anomTxts.length ? `<div style="font-size:9px;color:#c0392b;line-height:1.4;margin-top:2px">${anomTxts.map(t=>`· ${t}`).join('<br>')}</div>` : '';
+        tablaEquipos += `<tr style="border-bottom:1px solid #f0f0f0">
+          <td style="padding:4px 5px;font-size:10px;color:#666">${numGlobal}</td>
+          <td style="padding:4px 5px;font-size:10px"><strong>${esc(e.subtipo||e.tipo||'')}</strong>${detalle}</td>
+          <td style="padding:4px 5px;font-size:10px;color:#555">${esc(e.nfab||e.serie||'')}</td>
+          <td style="padding:4px 5px;font-size:10px;color:#555">${esc(e.fabricante||e.marca||'')}</td>
+          <td style="padding:4px 5px;font-size:10px;text-align:center;color:#555">${esc(e.peso||'')}</td>
+          <td style="padding:4px 5px;font-size:10px;text-align:center;color:#555">${esc(e.presion||'')}</td>
+          <td style="padding:4px 5px;font-size:10px;text-align:center;color:#555">${esc(e.ffab||e.fechaFab||'')}</td>
+          <td style="padding:4px 5px;font-size:10px;text-align:center;color:#555">${esc(rev.fecha?rev.fecha.slice(0,7).replace('-','/'):'')}</td>
+          <td style="padding:4px 5px;font-size:10px;text-align:center;color:#555">${esc(e.ubicacion||'')}</td>
+        </tr>`;
+      });
+    });
+  } else if(tasks.length){
+    // Sin inventario: mostrar tasks agrupadas por sección
+    const secMap = {};
+    tasks.forEach(t=>{ const s=t.seccion||t.tipo||'General'; if(!secMap[s]) secMap[s]=[]; secMap[s].push(t); });
+    Object.entries(secMap).forEach(([sec,ts])=>{
+      tablaEquipos += `<tr><td colspan="9" style="background:#e8e8e8;font-weight:700;font-size:10px;padding:4px 6px;text-transform:uppercase;letter-spacing:.3px">${esc(sec)}</td></tr>`;
+      ts.forEach(t=>{
+        numGlobal++;
+        const ok = t.estado!=='inc';
+        const resultCell = ok ? `<span style="color:#27ae60;font-weight:700">✓ OK</span>` : `<span style="color:#c0392b;font-weight:600">■ Anomalía</span>`;
+        tablaEquipos += `<tr style="border-bottom:1px solid #f0f0f0">
+          <td style="padding:4px 5px;font-size:10px;color:#666">${numGlobal}</td>
+          <td style="padding:4px 5px;font-size:10px" colspan="7">${esc(t.texto||t.desc||t.id||'')}</td>
+          <td style="padding:4px 5px;font-size:10px;text-align:center">${resultCell}</td>
+        </tr>`;
+      });
+    });
+  }
+  // ── Texto resultado final ─────────────────────────────────────────────────
+  const resultadoFinal = `Resultado: ${estadoInstalacion} — ${sinAnomalia} equipo${sinAnomalia!==1?'s':''} sin anomalías${conAnomalia>0?', '+conAnomalia+' con anomalías':''}.`;
+  // ── Observaciones ─────────────────────────────────────────────────────────
+  const obsHtml = rev.obs ? `<div style="background:#fff8e1;border-left:3px solid #f39c12;padding:8px 10px;font-size:10.5px;margin-bottom:14px;line-height:1.6"><strong>Observaciones:</strong> ${esc(rev.obs)}</div>` : '';
   const html = `<div class="doc-procisein">
     ${headerProcisein()}
-    <div class="doc-body" style="min-height:600px">
-      <div class="doc-title">CERTIFICADO DE SEGURIDAD CONTRA INCENDIOS</div>
-      <p style="font-size:12px;line-height:1.9;margin-bottom:14px">
-        <strong>Dº ${esc(tecnico)}</strong>, como ${esc(titTecnico)} y en representación de la firma <strong>${esc(nombreEmp)}</strong> empresa instaladora y mantenedora de todas clases y marcas de material contra incendios, con el Nº de Inscripción en el ${esc(numReg)} y Nº de Inscripción en el Registro Especial ${esc(regEsp)} de ámbito Nacional y con autorización otorgada por la <strong>${esc(comunitat)}</strong>.
-      </p>
-      <div class="doc-title" style="font-size:13px;margin:10px 0 12px">CERTIFICA</div>
-      <p style="font-size:12px;line-height:1.9;margin-bottom:14px">
-        Haber realizado ${inc===0?'la revisión':'la instalación/revisión'} para la firma <strong>${esc(razonCliente)}</strong>${cifCliente?' con C.I.F '+esc(cifCliente):''} y ubicada en ${esc(dirCliente)}, una instalación del sistema de PCI${c.dir2?', en el recinto ubicado en '+esc(c.dir2):''}.<br>
-        Estando acorde con los reglamentos y disposiciones vigentes que las afectan, y en especial con el Reglamento de Instalaciones de Protección Contra Incendios, aprobado por el Real Decreto 513/2017 de 12 de Diciembre y disposiciones que lo complementan.
-      </p>
-      <div style="font-size:12px;font-weight:700;margin-bottom:8px">MEMORIA:</div>
-      <p style="font-size:12px;margin-bottom:8px">Se han instalado/revisado los siguientes elementos:</p>
-      <ul style="font-size:12px;line-height:2;padding-left:20px;margin-bottom:20px">
-        ${memoriaLineas || '<li>Instalación/revisión del sistema de protección contra incendios.</li>'}
-      </ul>
-      ${rev.obs?`<div style="background:#f8f8f8;border:1px solid #ddd;border-radius:4px;padding:12px;font-size:11px;margin-bottom:20px"><strong>Observaciones:</strong> ${esc(rev.obs)}</div>`:''}
-      <!-- Fecha y firma -->
-      <div style="text-align:right;margin-top:40px;margin-bottom:30px">
-        <div style="font-size:12px">Fdo: <strong>Dº ${esc(tecnico)}</strong></div>
-        <div style="font-size:12px;margin-top:6px">${emp.ciudad||'Valencia'}, ${hoy}</div>
+    <div class="doc-body">
+      <!-- Título y número certificado -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;border-bottom:2px solid #c0392b;padding-bottom:8px">
+        <div class="doc-title" style="margin-bottom:0;font-size:14px">CERTIFICADO DE REVISIÓN PCI</div>
+        <div style="font-size:11px;color:#666;text-align:right">Certificado <strong style="color:#c0392b">${esc(numCert)}</strong></div>
       </div>
-      ${rev.firmaTecnico?`<div style="text-align:right"><img src="${rev.firmaTecnico}" style="max-width:200px;border-bottom:1px solid #333;display:inline-block"></div>`:'<div style="display:flex;justify-content:flex-end"><div style="width:200px;border-bottom:1.5px solid #333;height:60px"></div></div>'}
+      <!-- Datos instalación + empresa en dos columnas -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid #ddd;margin-bottom:12px;font-size:10.5px">
+        <!-- Columna izq: instalación -->
+        <div style="padding:0;border-right:1px solid #ddd">
+          <div style="background:#c0392b;color:#fff;font-weight:700;padding:5px 8px;font-size:10px;text-transform:uppercase;letter-spacing:.3px">DATOS DE LA INSTALACIÓN</div>
+          <div style="padding:8px">
+            <div style="display:grid;grid-template-columns:90px 1fr;row-gap:3px">
+              <span style="color:#888">Código cliente</span><span>${esc(codCliente)}</span>
+              <span style="color:#888">Cliente</span><span><strong>${esc(razonCliente)}</strong></span>
+              ${cifCliente?`<span style="color:#888">CIF/NIF</span><span>${esc(cifCliente)}</span>`:''}
+              ${dirCliente?`<span style="color:#888">Dirección</span><span>${esc(dirCliente)}${cpCliente?' – C.P. '+esc(cpCliente):''}</span>`:''}
+              ${telCliente?`<span style="color:#888">Teléfono</span><span>${esc(telCliente)}</span>`:''}
+              ${c.localidad?`<span style="color:#888">Localidad</span><span>${esc(c.localidad)}</span>`:''}
+              ${c.dir2?`<span style="color:#888">Localización</span><span>${esc(c.dir2)}</span>`:''}
+            </div>
+          </div>
+        </div>
+        <!-- Columna dcha: empresa -->
+        <div style="padding:0">
+          <div style="background:#555;color:#fff;font-weight:700;padding:5px 8px;font-size:10px;text-transform:uppercase;letter-spacing:.3px">EMPRESA MANTENEDORA</div>
+          <div style="padding:8px">
+            <div style="display:grid;grid-template-columns:90px 1fr;row-gap:3px">
+              <span style="color:#888">Empresa</span><span><strong>${esc(nombreEmp)}</strong></span>
+              <span style="color:#888">CIF/NIF</span><span>${esc(cifEmp)}</span>
+              <span style="color:#888">Dirección</span><span>${esc(dirEmpFull)}</span>
+              <span style="color:#888">N. Registro</span><span>${esc(numReg)}</span>
+              ${rev.tipo?`<span style="color:#888">Tipo revisión</span><span>${esc(rev.tipo)}</span>`:''}
+              ${rev.fecha?`<span style="color:#888">Fecha revisión</span><span>${esc(rev.fecha)}</span>`:''}
+              <span style="color:#888">Técnico</span><span>${esc(tecnico)}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Resumen visual -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-bottom:12px">
+        <div style="background:#f5f5f5;border:1px solid #ddd;border-radius:5px;padding:10px;text-align:center">
+          <div style="font-size:22px;font-weight:800;color:#333">${totalEquipos||numGlobal||sinAnomalia+conAnomalia}</div>
+          <div style="font-size:10px;color:#888;margin-top:2px">Total equipos</div>
+        </div>
+        <div style="background:#f0faf4;border:1px solid #b2dfc7;border-radius:5px;padding:10px;text-align:center">
+          <div style="font-size:22px;font-weight:800;color:#27ae60">${sinAnomalia}</div>
+          <div style="font-size:10px;color:#27ae60;margin-top:2px">Sin anomalías</div>
+        </div>
+        <div style="background:${conAnomalia>0?'#fef5f5':'#f0faf4'};border:1px solid ${conAnomalia>0?'#f5c6cb':'#b2dfc7'};border-radius:5px;padding:10px;text-align:center">
+          <div style="font-size:22px;font-weight:800;color:${conAnomalia>0?'#c0392b':'#27ae60'}">${conAnomalia}</div>
+          <div style="font-size:10px;color:${conAnomalia>0?'#c0392b':'#27ae60'};margin-top:2px">Con anomalías</div>
+        </div>
+        <div style="background:${conAnomalia>0?'#fef5f5':'#f0faf4'};border:2px solid ${estadoColor};border-radius:5px;padding:10px;text-align:center">
+          <div style="font-size:11px;font-weight:800;color:${estadoColor};line-height:1.3">${estadoInstalacion}</div>
+          <div style="font-size:9px;color:#888;margin-top:2px">Estado instalación</div>
+        </div>
+      </div>
+      ${obsHtml}
+      <!-- Tabla de equipos -->
+      ${(equipos.length||tasks.length)?`
+      <div style="font-size:10.5px;font-weight:700;color:#333;margin-bottom:6px;text-transform:uppercase;letter-spacing:.3px">REVISIÓN DE EQUIPOS</div>
+      <table style="width:100%;border-collapse:collapse;font-size:10px;margin-bottom:16px">
+        <thead>
+          <tr style="background:#c0392b;color:#fff">
+            <th style="padding:5px 5px;text-align:center;width:22px">N.</th>
+            <th style="padding:5px;text-align:left">Tipo / Detalle</th>
+            <th style="padding:5px;text-align:left">N.Fab.</th>
+            <th style="padding:5px;text-align:left">Fabricante</th>
+            <th style="padding:5px;text-align:center">Peso</th>
+            <th style="padding:5px;text-align:center">Presión</th>
+            <th style="padding:5px;text-align:center">F.Fab.</th>
+            <th style="padding:5px;text-align:center">Ult.Rev.</th>
+            <th style="padding:5px;text-align:left">Ubicación</th>
+          </tr>
+        </thead>
+        <tbody>${tablaEquipos}</tbody>
+      </table>`:''}
+      <!-- Texto legal certificación -->
+      <div style="border:1px solid #ddd;background:#fafafa;padding:10px 12px;font-size:10px;line-height:1.7;margin-bottom:14px;border-radius:3px">
+        <strong>Dº ${esc(tecnico)}</strong>, como ${esc(titTecnico)} y en representación de <strong>${esc(nombreEmp)}</strong>, empresa instaladora y mantenedora inscrita con el Nº ${esc(numReg)},
+        <strong>CERTIFICA</strong> haber realizado la revisión de la instalación de PCI de <strong>${esc(razonCliente)}</strong>${dirCliente?', ubicada en '+esc(dirCliente):''}, conforme a lo establecido en el Real Decreto 513/2017, de 12 de mayo, por el que se aprueba el Reglamento de instalaciones de protección contra incendios.
+        <br>${resultadoFinal}
+      </div>
+      <!-- Rogamos presten atención -->
+      <div style="font-size:10px;color:#666;font-style:italic;margin-bottom:16px">Rogamos presten atención a los equipos, trabajos y anomalías detalladas en cada apartado del presente parte de trabajo.</div>
+      <!-- Firmas -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-top:10px">
+        <div style="text-align:center">
+          <div style="font-size:11px;font-weight:700;margin-bottom:8px">Firma del operario cualificado</div>
+          ${rev.firmaTecnico?`<img src="${rev.firmaTecnico}" style="max-width:160px;max-height:60px;display:block;margin:0 auto 4px">`:
+          `<div style="height:60px;border-bottom:1.5px solid #333;margin:0 20px 4px"></div>`}
+          <div style="font-size:10px;color:#555">${esc(nombreEmp)}</div>
+        </div>
+        <div style="text-align:center">
+          <div style="font-size:11px;font-weight:700;margin-bottom:8px">Firma del cliente</div>
+          <div style="height:60px;border-bottom:1.5px solid #333;margin:0 20px 4px"></div>
+          <div style="font-size:10px;color:#555">${esc(razonCliente)}</div>
+        </div>
+      </div>
+      <div style="text-align:right;font-size:10.5px;margin-top:16px;color:#555">${emp.ciudad||'Valencia'}, ${hoy}</div>
     </div>
     ${footerProcisein()}
   </div>`;
@@ -12161,6 +12465,10 @@ function generarDocActaUNE(){
   const une3 = rev.actaUNE3||{};
   const une4 = rev.actaUNE4||{};
   const une5 = rev.actaUNE5||{};
+  const une7 = rev.actaUNE7||{};
+  const une8 = rev.actaUNE8||{};
+  const une12 = rev.actaUNE12||{};
+  const une13 = rev.actaUNE13||{};
   const hoy = new Date().toLocaleDateString('es-ES');
   const tipoRevNombre = {T:'Trimestral',S:'Semestral',A:'Anual',Q:'Quinquenal'};
   const peBg = {T:'#ddf0f5',S:'#d4edda',A:'#fff3cd',Q:'#f8d7da',D:'#e2e3e5'};
@@ -12298,9 +12606,11 @@ function generarDocActaUNE(){
           ${une3.tipoRev?'<div>☑ Sistemas de abastecimiento de agua CI (UNE 23580-3)</div>':'<div>☐ Sistemas de abastecimiento de agua CI (UNE 23580-3)</div>'}
           ${une4&&une4.tipoRev?'<div>☑ Red de hidrantes y válvulas (UNE 23580-4)</div>':'<div>☐ Red de hidrantes y válvulas (UNE 23580-4)</div>'}
           ${une5&&une5.tipoRev?'<div>☑ Red de bocas de incendio equipadas (UNE 23580-5)</div>':'<div>☐ Red de bocas de incendio equipadas (UNE 23580-5)</div>'}
-          <div>☐ Sistemas de hidrantes contra incendios</div>
+          ${une7&&une7.tipoRev?'<div>☑ Sistemas de espuma (UNE 23580-7)</div>':'<div>☐ Sistemas de espuma (UNE 23580-7)</div>'}
+          ${une8&&une8.tipoRev?'<div>☑ Sistemas de agentes gaseosos (UNE 23580-8)</div>':'<div>☐ Sistemas de agentes gaseosos (UNE 23580-8)</div>'}
+          ${une12&&une12.tipoRev?'<div>☑ Sistemas de extinción por polvo (UNE 23580-12)</div>':'<div>☐ Sistemas de extinción por polvo (UNE 23580-12)</div>'}
+          ${une13&&une13.tipoRev?'<div>☑ Aerosoles condensados (UNE 23580-13)</div>':'<div>☐ Aerosoles condensados (UNE 23580-13)</div>'}
           <div>☐ Extintores de incendio</div>
-          <div>☐ Sistemas de bocas de incendio equipadas</div>
           <div>☐ Sistemas de columna seca</div>
           <div>☐ Sistemas fijos de extinción por rociadores</div>
           <div>☐ Otros</div>
@@ -12471,6 +12781,72 @@ function generarDocActaUNE(){
       ${tablaUNE(UNE5_ITEMS, une5.items||{}, une5.tipoRev, null)}
       ${une5.obs?`<div style="background:#fce4ec;border:1px solid #c62828;border-radius:4px;padding:8px 12px;margin-top:10px;font-size:11px"><strong>Observaciones / Deficiencias:</strong> ${esc(une5.obs)}</div>`:''}
       <div style="margin-top:10px;font-size:11px">Estado del sistema: <strong>${esc(une5.estadoFinal||'—')}</strong></div>
+      ${firmasBlock()}
+    </div>` : ''}
+
+    <!-- ══════ ACTA UNE 23580-7: ESPUMA ══════ -->
+    ${une7&&une7.tipoRev ? `
+    <div style="page-break-before:always;padding:14px 28px">
+      <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #1b6ca8;padding-bottom:8px;margin-bottom:14px">
+        <div>
+          <div style="font-size:9px;color:#888">Norma UNE 23580-7:2022</div>
+          <div style="font-size:14px;font-weight:700">Acta de Mantenimiento — Sistemas de Espuma</div>
+          <div style="font-size:11px;color:#555">Tipo revisión: <strong>${tipoRevNombre[une7.tipoRev]||une7.tipoRev}</strong> · Cliente: <strong>${esc(c.name)}</strong> · Fecha: ${hoy}</div>
+        </div>
+      </div>
+      ${tablaUNE(UNE7_ITEMS, une7.items||{}, une7.tipoRev, null)}
+      ${une7.obs?`<div style="background:#e3f2fd;border:1px solid #1b6ca8;border-radius:4px;padding:8px 12px;margin-top:10px;font-size:11px"><strong>Observaciones / Deficiencias:</strong> ${esc(une7.obs)}</div>`:''}
+      <div style="margin-top:10px;font-size:11px">Estado del sistema: <strong>${esc(une7.estadoFinal||'—')}</strong></div>
+      ${firmasBlock()}
+    </div>` : ''}
+
+    <!-- ══════ ACTA UNE 23580-8: AGENTE GASEOSO ══════ -->
+    ${une8&&une8.tipoRev ? `
+    <div style="page-break-before:always;padding:14px 28px">
+      <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #6c3483;padding-bottom:8px;margin-bottom:14px">
+        <div>
+          <div style="font-size:9px;color:#888">Norma UNE 23580-8:2022</div>
+          <div style="font-size:14px;font-weight:700">Acta de Mantenimiento — Sistemas Fijos por Agentes Gaseosos</div>
+          <div style="font-size:11px;color:#555">Tipo revisión: <strong>${tipoRevNombre[une8.tipoRev]||une8.tipoRev}</strong> · Cliente: <strong>${esc(c.name)}</strong> · Fecha: ${hoy}</div>
+        </div>
+      </div>
+      ${une8.fabCentral?`<div style="margin-bottom:8px;font-size:11px">Fabricante / Modelo central: <strong>${esc(une8.fabCentral)}</strong></div>`:''}
+      ${tablaUNE(UNE8_ITEMS, une8.items||{}, une8.tipoRev, null)}
+      ${une8.obs?`<div style="background:#f3e5f5;border:1px solid #6c3483;border-radius:4px;padding:8px 12px;margin-top:10px;font-size:11px"><strong>Observaciones / Deficiencias:</strong> ${esc(une8.obs)}</div>`:''}
+      <div style="margin-top:10px;font-size:11px">Estado del sistema: <strong>${esc(une8.estadoFinal||'—')}</strong></div>
+      ${firmasBlock()}
+    </div>` : ''}
+
+    <!-- ══════ ACTA UNE 23580-12: EXTINCIÓN POR POLVO ══════ -->
+    ${une12&&une12.tipoRev ? `
+    <div style="page-break-before:always;padding:14px 28px">
+      <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #7d6608;padding-bottom:8px;margin-bottom:14px">
+        <div>
+          <div style="font-size:9px;color:#888">Norma UNE 23580-12:2022</div>
+          <div style="font-size:14px;font-weight:700">Acta de Mantenimiento — Sistemas de Extinción por Polvo</div>
+          <div style="font-size:11px;color:#555">Tipo revisión: <strong>${tipoRevNombre[une12.tipoRev]||une12.tipoRev}</strong> · Cliente: <strong>${esc(c.name)}</strong> · Fecha: ${hoy}</div>
+        </div>
+      </div>
+      ${(une12.riesgo||une12.polvo)?`<div style="margin-bottom:8px;font-size:11px">${une12.riesgo?`Tipo de riesgo: <strong>${esc(une12.riesgo)}</strong> &nbsp;`:''}${une12.polvo?`Tipo de polvo: <strong>${esc(une12.polvo)}</strong>`:''}</div>`:''}
+      ${tablaUNE(UNE12_ITEMS, une12.items||{}, une12.tipoRev, null)}
+      ${une12.obs?`<div style="background:#fffde7;border:1px solid #7d6608;border-radius:4px;padding:8px 12px;margin-top:10px;font-size:11px"><strong>Observaciones / Deficiencias:</strong> ${esc(une12.obs)}</div>`:''}
+      <div style="margin-top:10px;font-size:11px">Estado del sistema: <strong>${esc(une12.estadoFinal||'—')}</strong></div>
+      ${firmasBlock()}
+    </div>` : ''}
+
+    <!-- ══════ ACTA UNE 23580-13: AEROSOLES CONDENSADOS ══════ -->
+    ${une13&&une13.tipoRev ? `
+    <div style="page-break-before:always;padding:14px 28px">
+      <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #1e8449;padding-bottom:8px;margin-bottom:14px">
+        <div>
+          <div style="font-size:9px;color:#888">Norma UNE 23580-13:2022</div>
+          <div style="font-size:14px;font-weight:700">Acta de Mantenimiento — Aerosoles Condensados</div>
+          <div style="font-size:11px;color:#555">Tipo revisión: <strong>${tipoRevNombre[une13.tipoRev]||une13.tipoRev}</strong> · Cliente: <strong>${esc(c.name)}</strong> · Fecha: ${hoy}</div>
+        </div>
+      </div>
+      ${tablaUNE(UNE13_ITEMS, une13.items||{}, une13.tipoRev, null)}
+      ${une13.obs?`<div style="background:#e8f5e9;border:1px solid #1e8449;border-radius:4px;padding:8px 12px;margin-top:10px;font-size:11px"><strong>Observaciones / Deficiencias:</strong> ${esc(une13.obs)}</div>`:''}
+      <div style="margin-top:10px;font-size:11px">Estado del sistema: <strong>${esc(une13.estadoFinal||'—')}</strong></div>
       ${firmasBlock()}
     </div>` : ''}
 
@@ -15668,7 +16044,7 @@ function guardarActaUNE7(){
   const tipoRev=_getUNEXTipoRev('une7');
   rev.actaUNE7={tipoRev, items:readUneItems(UNE7_ITEMS),
     obs:document.getElementById('une7-obs').value.trim(),
-    estado:document.getElementById('une7-estado-final').value};
+    estadoFinal:document.getElementById('une7-estado-final').value};
   sched(); closeM('modal-une7'); renderCert();
   showToast('✅ Acta UNE 23580-7 guardada','ok');
 }
@@ -15697,7 +16073,7 @@ function guardarActaUNE8(){
   rev.actaUNE8={tipoRev, items:readUneItems(UNE8_ITEMS),
     fabCentral:document.getElementById('une8-fab-central').value.trim(),
     obs:document.getElementById('une8-obs').value.trim(),
-    estado:document.getElementById('une8-estado-final').value};
+    estadoFinal:document.getElementById('une8-estado-final').value};
   sched(); closeM('modal-une8'); renderCert();
   showToast('✅ Acta UNE 23580-8 guardada','ok');
 }
@@ -15728,7 +16104,7 @@ function guardarActaUNE12(){
     riesgo:document.getElementById('une12-riesgo').value.trim(),
     polvo:document.getElementById('une12-polvo').value.trim(),
     obs:document.getElementById('une12-obs').value.trim(),
-    estado:document.getElementById('une12-estado-final').value};
+    estadoFinal:document.getElementById('une12-estado-final').value};
   sched(); closeM('modal-une12'); renderCert();
   showToast('✅ Acta UNE 23580-12 guardada','ok');
 }
@@ -15755,7 +16131,7 @@ function guardarActaUNE13(){
   const tipoRev=_getUNEXTipoRev('une13');
   rev.actaUNE13={tipoRev, items:readUneItems(UNE13_ITEMS),
     obs:document.getElementById('une13-obs').value.trim(),
-    estado:document.getElementById('une13-estado-final').value};
+    estadoFinal:document.getElementById('une13-estado-final').value};
   sched(); closeM('modal-une13'); renderCert();
   showToast('✅ Acta UNE 23580-13 guardada','ok');
 }
@@ -19368,4 +19744,679 @@ function _albSelClienteNuevoAlbaran(cid2) {
 })();
 
 console.log('✅ RIPCI v9 — Módulo 15: Albaranes de trabajo cargado');
+</script>
+
+<!-- ===== PANTALLA CÁLCULO DE CAUDAL PCI ===== -->
+<div id="screen-caudal" class="screen" style="display:none;padding:14px;padding-bottom:100px">
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════════
+//  MÓDULO 16 — CÁLCULO DE CAUDAL PCI
+//  Normas de referencia: RIPCI (RD 513/2017 + RD 164/2025),
+//  CTE DB SI, NFPA 13/14, EN 12845
+// ══════════════════════════════════════════════════════════════
+
+// ── Estado del calculador ──────────────────────────────────
+var _caudal = {
+  modo: 'bie',        // 'bie' | 'sprinkler' | 'columna' | 'deposito'
+  historial: []       // últimos cálculos guardados localmente
+};
+
+// ── Datos técnicos de referencia RIPCI ────────────────────
+var CAUDAL_DATA = {
+  bie25: {
+    label: 'BIE 25 mm',
+    caudal_min: 1.6,   // l/s
+    caudal_max: 3.3,
+    presion_min: 2,    // bar
+    presion_rec: 3.5,
+    autonomia: 60,     // min
+    simultaneas_riesgo: { bajo: 1, medio: 2, alto: 2 }
+  },
+  bie45: {
+    label: 'BIE 45 mm',
+    caudal_min: 3.3,
+    caudal_max: 6.0,
+    presion_min: 2,
+    presion_rec: 3.5,
+    autonomia: 60,
+    simultaneas_riesgo: { bajo: 1, medio: 2, alto: 2 }
+  },
+  sprinkler_riesgo_bajo: {
+    label: 'Sprinkler — Riesgo Bajo',
+    densidad: 2.25,    // mm/min (EN 12845)
+    area: 84,          // m² área operación
+    presion_min: 0.5,
+    autonomia: 30
+  },
+  sprinkler_riesgo_ordinario: {
+    label: 'Sprinkler — Riesgo Ordinario',
+    densidad: 5.0,
+    area: 72,
+    presion_min: 0.5,
+    autonomia: 60
+  },
+  sprinkler_riesgo_alto: {
+    label: 'Sprinkler — Riesgo Alto',
+    densidad: 10.0,
+    area: 260,
+    presion_min: 0.5,
+    autonomia: 60
+  },
+  columna_seca: {
+    label: 'Columna Seca',
+    caudal_bocas_100: 8.33,  // l/s (500 l/min)
+    caudal_bocas_70: 5.83,   // l/s (350 l/min)
+    presion_min: 3.5,
+    presion_max: 15
+  },
+  columna_humeda: {
+    label: 'Columna Húmeda',
+    caudal_bocas_100: 8.33,
+    caudal_bocas_70: 5.83,
+    presion_min: 3.5,
+    presion_max: 15
+  }
+};
+
+// ── Tablas de depósitos comerciales (litros) ──────────────
+var DEPOSITOS_ESTANDAR = [
+  500, 1000, 1500, 2000, 3000, 4000, 5000, 6000, 8000,
+  10000, 12000, 15000, 20000, 25000, 30000, 40000, 50000
+];
+
+// ── Grupos de presión comerciales (referencia) ────────────
+var GRUPOS_PRESION = [
+  { modelo: 'GP-25', caudal: 0.4, presion: 4.5, pot: 0.37, uso: 'BIE 25 / Sprinkler RB' },
+  { modelo: 'GP-50', caudal: 0.8, presion: 4.0, pot: 0.75, uso: 'BIE 25 (2 bocas)' },
+  { modelo: 'GP-100', caudal: 1.7, presion: 4.0, pot: 1.5, uso: 'BIE 25 múltiple / Sprinkler RO' },
+  { modelo: 'GP-150', caudal: 2.5, presion: 4.5, pot: 2.2, uso: 'BIE 45 / Sprinkler RO' },
+  { modelo: 'GP-200', caudal: 3.3, presion: 5.0, pot: 4.0, uso: 'BIE 45 (2 bocas)' },
+  { modelo: 'GP-300', caudal: 5.0, presion: 5.5, pot: 5.5, uso: 'BIE 45 múltiple / Sprinkler RA' },
+  { modelo: 'GP-500', caudal: 8.3, presion: 6.0, pot: 11.0, uso: 'Columna húmeda / Sprinkler RA' },
+  { modelo: 'GP-1000', caudal: 16.7, presion: 7.0, pot: 22.0, uso: 'Gran instalación / Combinado' }
+];
+
+// ── Render principal ───────────────────────────────────────
+function renderCaudal() {
+  var sc = document.getElementById('screen-caudal');
+  if (!sc) return;
+
+  var modoLabel = {
+    bie: '🚿 BIE / Bocas de Incendio',
+    sprinkler: '🌧️ Sprinkler / Rociadores',
+    columna: '🏗️ Columna Seca/Húmeda',
+    deposito: '🗄️ Sólo Depósito'
+  };
+
+  sc.innerHTML = `
+  <div style="margin-bottom:14px">
+    <div style="font-size:20px;font-weight:800;letter-spacing:-.4px;margin-bottom:4px">💧 Cálculo de Caudal PCI</div>
+    <div style="font-size:12px;color:var(--text2)">Según RIPCI RD 513/2017 · RD 164/2025 · CTE DB SI · EN 12845</div>
+  </div>
+
+  <!-- Selector de modo -->
+  <div class="stitle">Tipo de sistema</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px">
+    ${Object.entries(modoLabel).map(([k,v]) => `
+    <button onclick="_caudalSetModo('${k}')" style="
+      padding:13px 10px;border-radius:14px;border:2px solid ${_caudal.modo===k?'var(--red)':'var(--border)'};
+      background:${_caudal.modo===k?'var(--red-light)':'var(--surface)'};
+      color:${_caudal.modo===k?'var(--red)':'var(--text)'};
+      font-size:12px;font-weight:700;cursor:pointer;text-align:center;line-height:1.4;
+      box-shadow:var(--shadow-sm);transition:all .15s">
+      ${v}
+    </button>`).join('')}
+  </div>
+
+  <!-- Formulario dinámico -->
+  <div id="caudal-form"></div>
+
+  <!-- Resultado -->
+  <div id="caudal-resultado" style="display:none"></div>
+
+  <!-- Historial -->
+  ${_caudal.historial.length ? `
+  <div style="margin-top:20px">
+    <div class="stitle">Últimos cálculos</div>
+    <div id="caudal-historial">
+      ${_caudal.historial.slice().reverse().slice(0,5).map((h,i) => `
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:8px;box-shadow:var(--shadow-sm)">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div>
+            <div style="font-size:13px;font-weight:700">${h.titulo}</div>
+            <div style="font-size:11px;color:var(--text2);margin-top:2px">${h.fecha}</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:16px;font-weight:800;color:var(--red)">${h.caudal} l/s</div>
+            <div style="font-size:11px;color:var(--text2)">${h.deposito} L · ${h.grupo}</div>
+          </div>
+        </div>
+      </div>`).join('')}
+    </div>
+  </div>` : ''}
+  `;
+
+  _caudalRenderForm();
+}
+
+function _caudalSetModo(m) {
+  _caudal.modo = m;
+  renderCaudal();
+}
+
+function _caudalRenderForm() {
+  var el = document.getElementById('caudal-form');
+  if (!el) return;
+
+  if (_caudal.modo === 'bie') {
+    el.innerHTML = `
+    <div class="stitle">Parámetros de la instalación</div>
+    <div class="field"><label>Tipo de BIE</label>
+      <select id="c-tipo-bie">
+        <option value="25">BIE 25 mm (manguera plana)</option>
+        <option value="45">BIE 45 mm (manguera semirígida)</option>
+      </select></div>
+    <div class="frow">
+      <div class="field"><label>Nº de BIEs en la instalación</label>
+        <input type="number" id="c-n-bies" min="1" max="50" value="4" placeholder="4"></div>
+      <div class="field"><label>BIEs más desfavorables (simultáneas)</label>
+        <input type="number" id="c-bies-sim" min="1" max="4" value="2" placeholder="2"></div>
+    </div>
+    <div class="frow">
+      <div class="field"><label>Altura máx. instalación (m)</label>
+        <input type="number" id="c-altura" min="0" max="200" value="10" placeholder="10"></div>
+      <div class="field"><label>Pérdidas en la red (bar)</label>
+        <input type="number" id="c-perdidas" min="0" max="5" step="0.1" value="1.0" placeholder="1.0"></div>
+    </div>
+    <div class="field"><label>Nivel de riesgo (RIPCI Tabla 1)</label>
+      <select id="c-riesgo-bie">
+        <option value="bajo">Riesgo Bajo (1 BIE simultánea)</option>
+        <option value="medio" selected>Riesgo Medio (2 BIEs simultáneas)</option>
+        <option value="alto">Riesgo Alto (2 BIEs simultáneas)</option>
+      </select></div>
+    <button class="btn" style="margin-top:8px" onclick="_caudalCalcularBIE()">💧 Calcular</button>`;
+
+  } else if (_caudal.modo === 'sprinkler') {
+    el.innerHTML = `
+    <div class="stitle">Parámetros de rociadores</div>
+    <div class="field"><label>Nivel de riesgo (EN 12845 / NFPA)</label>
+      <select id="c-riesgo-spr">
+        <option value="bajo">Riesgo Bajo — LH (Densidad 2,25 mm/min · Área 84 m²)</option>
+        <option value="ordinario" selected>Riesgo Ordinario — OH (5 mm/min · 72–144 m²)</option>
+        <option value="alto">Riesgo Alto — HH (10 mm/min · 260 m²)</option>
+      </select></div>
+    <div class="frow">
+      <div class="field"><label>Área protegida total (m²)</label>
+        <input type="number" id="c-area-total" min="10" value="500" placeholder="500"></div>
+      <div class="field"><label>Área de operación (m²)</label>
+        <input type="number" id="c-area-op" min="10" value="72" placeholder="72"></div>
+    </div>
+    <div class="frow">
+      <div class="field"><label>K-factor del rociador</label>
+        <select id="c-kfactor">
+          <option value="57">K-57 (estándar)</option>
+          <option value="80" selected>K-80 (estándar ampliado)</option>
+          <option value="115">K-115 (caudal alto)</option>
+          <option value="161">K-161 (caudal extra alto)</option>
+        </select></div>
+      <div class="field"><label>Altura máx. instalación (m)</label>
+        <input type="number" id="c-altura-spr" min="0" max="50" value="8" placeholder="8"></div>
+    </div>
+    <button class="btn" style="margin-top:8px" onclick="_caudalCalcularSprinkler()">🌧️ Calcular</button>`;
+
+  } else if (_caudal.modo === 'columna') {
+    el.innerHTML = `
+    <div class="stitle">Parámetros de columna</div>
+    <div class="field"><label>Tipo de columna</label>
+      <select id="c-tipo-col">
+        <option value="seca">Columna Seca (abastecida por bomberos)</option>
+        <option value="humeda" selected>Columna Húmeda (red permanente de agua)</option>
+      </select></div>
+    <div class="frow">
+      <div class="field"><label>Bocas DN 100 (uds.)</label>
+        <input type="number" id="c-bocas100" min="0" value="2" placeholder="2"></div>
+      <div class="field"><label>Bocas DN 70 (uds.)</label>
+        <input type="number" id="c-bocas70" min="0" value="2" placeholder="2"></div>
+    </div>
+    <div class="frow">
+      <div class="field"><label>Bocas simultáneas en uso</label>
+        <input type="number" id="c-bocas-sim" min="1" max="8" value="2" placeholder="2"></div>
+      <div class="field"><label>Altura columna (m)</label>
+        <input type="number" id="c-altura-col" min="0" max="200" value="20" placeholder="20"></div>
+    </div>
+    <button class="btn" style="margin-top:8px" onclick="_caudalCalcularColumna()">🏗️ Calcular</button>`;
+
+  } else if (_caudal.modo === 'deposito') {
+    el.innerHTML = `
+    <div class="stitle">Cálculo de depósito por caudal conocido</div>
+    <div class="frow">
+      <div class="field"><label>Caudal necesario (l/s)</label>
+        <input type="number" id="c-caudal-dep" min="0.1" step="0.1" value="3.3" placeholder="3.3"></div>
+      <div class="field"><label>Autonomía requerida (min)</label>
+        <input type="number" id="c-auto-dep" min="10" max="180" value="60" placeholder="60"></div>
+    </div>
+    <div class="field"><label>Factor de seguridad</label>
+      <select id="c-factor-dep">
+        <option value="1.0">1,0 — Sin margen adicional</option>
+        <option value="1.1" selected>1,1 — +10% recomendado RIPCI</option>
+        <option value="1.2">1,2 — +20% (instalaciones mixtas)</option>
+        <option value="1.5">1,5 — +50% (alta criticidad)</option>
+      </select></div>
+    <button class="btn" style="margin-top:8px" onclick="_caudalCalcularDeposito()">🗄️ Calcular depósito</button>`;
+  }
+}
+
+// ── Cálculo BIE ────────────────────────────────────────────
+function _caudalCalcularBIE() {
+  var tipoBIE  = document.getElementById('c-tipo-bie').value;
+  var nBIEs    = parseInt(document.getElementById('c-n-bies').value) || 4;
+  var biesSim  = parseInt(document.getElementById('c-bies-sim').value) || 2;
+  var altura   = parseFloat(document.getElementById('c-altura').value) || 10;
+  var perdidas = parseFloat(document.getElementById('c-perdidas').value) || 1.0;
+  var riesgo   = document.getElementById('c-riesgo-bie').value;
+
+  var datos = CAUDAL_DATA['bie' + tipoBIE];
+
+  // Caudal total = caudal mínimo × bocas simultáneas
+  var caudalTotal = datos.caudal_min * biesSim;  // l/s
+
+  // Presión mínima en la boca más desfavorable
+  var presAltura = altura / 10;  // bar (1 bar ≈ 10 m columna de agua)
+  var presTotal  = datos.presion_rec + presAltura + perdidas;  // bar
+
+  // Volumen depósito = caudal × autonomía (60 min) × 60 s
+  var volumen = caudalTotal * datos.autonomia * 60;  // litros
+
+  _caudalMostrarResultado({
+    titulo: 'BIE ' + tipoBIE + ' mm — ' + biesSim + ' bocas simultáneas',
+    modo: 'bie',
+    caudalTotal: caudalTotal,
+    caudalBoca: datos.caudal_min,
+    bocasSim: biesSim,
+    presion: presTotal,
+    autonomia: datos.autonomia,
+    volumen: volumen,
+    normativa: 'RIPCI RD 513/2017 Anexo I · Tabla 3.1 · Sección 9',
+    notas: [
+      'Caudal mínimo por BIE ' + tipoBIE + ': ' + datos.caudal_min + ' l/s (' + (datos.caudal_min * 60).toFixed(0) + ' l/min)',
+      'Presión mínima en boca: ' + datos.presion_min + ' bar (recomendada ' + datos.presion_rec + ' bar)',
+      'Bocas simultáneas según riesgo ' + riesgo + ': ' + biesSim,
+      'Pérdida de carga por altura (' + altura + ' m): ' + presAltura.toFixed(2) + ' bar',
+      nBIEs > 2 ? 'La instalación tiene ' + nBIEs + ' BIEs · Solo se calculan las ' + biesSim + ' más desfavorables' : ''
+    ].filter(Boolean)
+  });
+}
+
+// ── Cálculo Sprinkler ──────────────────────────────────────
+function _caudalCalcularSprinkler() {
+  var riesgo   = document.getElementById('c-riesgo-spr').value;
+  var areaOp   = parseFloat(document.getElementById('c-area-op').value) || 72;
+  var kFactor  = parseInt(document.getElementById('c-kfactor').value) || 80;
+  var altura   = parseFloat(document.getElementById('c-altura-spr').value) || 8;
+
+  var map = { bajo: 'sprinkler_riesgo_bajo', ordinario: 'sprinkler_riesgo_ordinario', alto: 'sprinkler_riesgo_alto' };
+  var datos = CAUDAL_DATA[map[riesgo]];
+
+  // Densidad × área de operación → caudal en l/min → l/s
+  var caudalLmin   = datos.densidad * areaOp;   // l/min
+  var caudalTotal  = caudalLmin / 60;           // l/s
+
+  // Presión mínima en el rociador más desfavorable
+  // Q = K × √P  →  P = (Q/K)²   (Q en l/min, P en bar)
+  var caudalRoc    = caudalLmin / (areaOp / 9); // aprox: 1 rociador cada 9 m²
+  var presRoc      = Math.pow(caudalRoc / kFactor, 2);
+  var presAltura   = altura / 10;
+  var presTotal    = presRoc + presAltura + 0.5; // +0.5 bar pérdidas red
+
+  // Volumen depósito
+  var volumen = caudalTotal * datos.autonomia * 60; // litros
+
+  _caudalMostrarResultado({
+    titulo: 'Sprinkler — ' + datos.label,
+    modo: 'sprinkler',
+    caudalTotal: caudalTotal,
+    caudalBoca: caudalRoc / 60,
+    bocasSim: Math.ceil(areaOp / 9),
+    presion: presTotal,
+    autonomia: datos.autonomia,
+    volumen: volumen,
+    normativa: 'EN 12845:2015 · NFPA 13 · CTE DB SI',
+    notas: [
+      'Densidad de diseño: ' + datos.densidad + ' mm/min',
+      'Área de operación: ' + areaOp + ' m²',
+      'Rociadores activos estimados: ' + Math.ceil(areaOp / 9) + ' uds.',
+      'K-factor seleccionado: ' + kFactor,
+      'Presión mínima rociador más desfavorable: ' + presRoc.toFixed(2) + ' bar'
+    ]
+  });
+}
+
+// ── Cálculo Columna ────────────────────────────────────────
+function _caudalCalcularColumna() {
+  var tipoCol  = document.getElementById('c-tipo-col').value;
+  var bocas100 = parseInt(document.getElementById('c-bocas100').value) || 0;
+  var bocas70  = parseInt(document.getElementById('c-bocas70').value) || 0;
+  var bocasSim = parseInt(document.getElementById('c-bocas-sim').value) || 2;
+  var altura   = parseFloat(document.getElementById('c-altura-col').value) || 20;
+
+  var datos = CAUDAL_DATA['columna_' + tipoCol];
+
+  // Caudal por boca + simultáneas (se usan las DN100 primero)
+  var sim100   = Math.min(bocasSim, bocas100);
+  var sim70    = Math.max(0, bocasSim - sim100);
+  var caudalTotal = (sim100 * datos.caudal_bocas_100) + (sim70 * datos.caudal_bocas_70);
+
+  var presAltura = altura / 10;
+  var presTotal  = datos.presion_min + presAltura + 0.5;
+
+  // Columna seca → no necesita depósito propio (bomba FF.CC.)
+  var autonomia  = tipoCol === 'seca' ? 0 : 60;
+  var volumen    = tipoCol === 'seca' ? 0 : caudalTotal * autonomia * 60;
+
+  _caudalMostrarResultado({
+    titulo: datos.label + ' — ' + bocasSim + ' bocas simultáneas',
+    modo: 'columna',
+    caudalTotal: caudalTotal,
+    caudalBoca: datos.caudal_bocas_100,
+    bocasSim: bocasSim,
+    presion: presTotal,
+    autonomia: autonomia,
+    volumen: volumen,
+    normativa: 'RIPCI RD 513/2017 Sección 15 · RD 164/2025',
+    notas: [
+      tipoCol === 'seca'
+        ? '⚠️ Columna seca: alimentada por los bomberos. No requiere depósito ni grupo propio.'
+        : 'Columna húmeda: requiere abastecimiento permanente.',
+      'Bocas DN 100 simultáneas: ' + sim100 + ' × ' + datos.caudal_bocas_100 + ' l/s',
+      sim70 > 0 ? 'Bocas DN 70 simultáneas: ' + sim70 + ' × ' + datos.caudal_bocas_70 + ' l/s' : '',
+      'Presión mín. en punta de lanza: ' + datos.presion_min + ' bar',
+      'Presión máx. permitida: ' + datos.presion_max + ' bar'
+    ].filter(Boolean)
+  });
+}
+
+// ── Cálculo por caudal conocido (depósito) ─────────────────
+function _caudalCalcularDeposito() {
+  var caudal = parseFloat(document.getElementById('c-caudal-dep').value) || 3.3;
+  var auto   = parseInt(document.getElementById('c-auto-dep').value) || 60;
+  var factor = parseFloat(document.getElementById('c-factor-dep').value) || 1.1;
+
+  var volumen = caudal * auto * 60 * factor; // litros
+
+  _caudalMostrarResultado({
+    titulo: 'Depósito para ' + caudal.toFixed(2) + ' l/s · ' + auto + ' min',
+    modo: 'deposito',
+    caudalTotal: caudal,
+    caudalBoca: caudal,
+    bocasSim: 1,
+    presion: null,
+    autonomia: auto,
+    volumen: volumen,
+    normativa: 'RIPCI RD 513/2017',
+    notas: [
+      'Factor de seguridad aplicado: ×' + factor,
+      'Volumen base (sin factor): ' + (caudal * auto * 60).toFixed(0) + ' litros'
+    ]
+  });
+}
+
+// ── Muestra resultados + selección de equipo ──────────────
+function _caudalMostrarResultado(res) {
+  var el = document.getElementById('caudal-resultado');
+  if (!el) return;
+  el.style.display = 'block';
+
+  // Seleccionar depósito recomendado
+  var depRec = DEPOSITOS_ESTANDAR.find(d => d >= res.volumen) || DEPOSITOS_ESTANDAR[DEPOSITOS_ESTANDAR.length - 1];
+  var depAlt = DEPOSITOS_ESTANDAR.find(d => d > depRec) || depRec;
+
+  // Seleccionar grupo de presión
+  var grupos = res.presion
+    ? GRUPOS_PRESION.filter(g => g.caudal >= res.caudalTotal && (res.presion === null || g.presion >= res.presion))
+    : GRUPOS_PRESION.filter(g => g.caudal >= res.caudalTotal);
+  var grupoRec = grupos.length ? grupos[0] : GRUPOS_PRESION[GRUPOS_PRESION.length - 1];
+  var grupoAlt = grupos.length > 1 ? grupos[1] : grupoRec;
+
+  // Guardar en historial
+  _caudal.historial.push({
+    titulo: res.titulo,
+    fecha: new Date().toLocaleDateString('es-ES'),
+    caudal: res.caudalTotal.toFixed(2),
+    deposito: depRec.toLocaleString('es-ES'),
+    grupo: grupoRec.modelo
+  });
+  if (_caudal.historial.length > 20) _caudal.historial.shift();
+
+  var colorCaudal = res.caudalTotal > 8 ? '#c0392b' : res.caudalTotal > 3 ? '#e67e22' : '#27ae60';
+
+  el.innerHTML = `
+  <!-- Cabecera resultado -->
+  <div style="background:linear-gradient(135deg,#c0392b,#9b2c1f);border-radius:16px;padding:18px;margin-bottom:14px;color:#fff">
+    <div style="font-size:11px;font-weight:700;opacity:.75;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px">
+      💧 Resultado del cálculo
+    </div>
+    <div style="font-size:16px;font-weight:800;margin-bottom:14px">${res.titulo}</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+      <div style="background:rgba(255,255,255,.15);border-radius:10px;padding:10px;text-align:center">
+        <div style="font-size:22px;font-weight:900">${res.caudalTotal.toFixed(2)}</div>
+        <div style="font-size:10px;opacity:.8;margin-top:2px">l/s caudal</div>
+      </div>
+      <div style="background:rgba(255,255,255,.15);border-radius:10px;padding:10px;text-align:center">
+        <div style="font-size:22px;font-weight:900">${(res.caudalTotal * 60).toFixed(0)}</div>
+        <div style="font-size:10px;opacity:.8;margin-top:2px">l/min</div>
+      </div>
+      <div style="background:rgba(255,255,255,.15);border-radius:10px;padding:10px;text-align:center">
+        <div style="font-size:22px;font-weight:900">${res.presion !== null ? res.presion.toFixed(1) : '—'}</div>
+        <div style="font-size:10px;opacity:.8;margin-top:2px">bar mín.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Volumen requerido -->
+  <div style="background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:12px;box-shadow:var(--shadow-sm)">
+    <div class="stitle" style="margin-bottom:10px">🗄️ Volumen de reserva de incendio</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)">
+      <span style="font-size:13px;color:var(--text2)">Volumen mínimo calculado</span>
+      <span style="font-size:16px;font-weight:800;color:var(--red)">${res.volumen > 0 ? (res.volumen / 1000).toFixed(2) + ' m³' : 'No aplica'}</span>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)">
+      <span style="font-size:13px;color:var(--text2)">Volumen en litros</span>
+      <span style="font-size:14px;font-weight:700">${res.volumen > 0 ? res.volumen.toFixed(0) + ' L' : '—'}</span>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)">
+      <span style="font-size:13px;color:var(--text2)">Autonomía requerida</span>
+      <span style="font-size:14px;font-weight:700">${res.autonomia > 0 ? res.autonomia + ' min' : '—'}</span>
+    </div>
+    ${res.volumen > 0 ? `
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0">
+      <span style="font-size:13px;color:var(--text2)">Normativa aplicada</span>
+      <span style="font-size:11px;font-weight:600;color:var(--text2);text-align:right;max-width:55%">${res.normativa}</span>
+    </div>` : ''}
+  </div>
+
+  <!-- Depósito recomendado -->
+  ${res.volumen > 0 ? `
+  <div style="background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:12px;box-shadow:var(--shadow-sm)">
+    <div class="stitle" style="margin-bottom:10px">🏆 Depósito recomendado</div>
+
+    <div style="background:linear-gradient(135deg,#eafaf1,#d5f5e3);border:1.5px solid #27ae60;border-radius:12px;padding:13px 14px;margin-bottom:8px">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div>
+          <div style="font-size:15px;font-weight:800;color:#1a6b3a">✅ ${depRec.toLocaleString('es-ES')} litros</div>
+          <div style="font-size:11px;color:#2e7d5e;margin-top:2px">Depósito estándar recomendado</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:12px;font-weight:700;color:#1a6b3a">${(depRec / 1000).toFixed(1)} m³</div>
+          <div style="font-size:10px;color:#2e7d5e">+${(((depRec - res.volumen) / res.volumen) * 100).toFixed(0)}% margen</div>
+        </div>
+      </div>
+    </div>
+
+    ${depAlt !== depRec ? `
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:12px 14px">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div>
+          <div style="font-size:14px;font-weight:700;color:var(--text)">🔵 ${depAlt.toLocaleString('es-ES')} litros</div>
+          <div style="font-size:11px;color:var(--text2);margin-top:2px">Alternativa con mayor margen</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:12px;font-weight:700">${(depAlt / 1000).toFixed(1)} m³</div>
+          <div style="font-size:10px;color:var(--text2)">+${(((depAlt - res.volumen) / res.volumen) * 100).toFixed(0)}% margen</div>
+        </div>
+      </div>
+    </div>` : ''}
+  </div>` : ''}
+
+  <!-- Grupo de presión recomendado -->
+  ${res.presion !== null && res.modo !== 'columna_seca' ? `
+  <div style="background:var(--surface);border:1.5px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:12px;box-shadow:var(--shadow-sm)">
+    <div class="stitle" style="margin-bottom:10px">⚡ Grupo de presión recomendado</div>
+
+    <div style="background:linear-gradient(135deg,#ebf5fb,#d6eaf8);border:1.5px solid #2980b9;border-radius:12px;padding:13px 14px;margin-bottom:8px">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between">
+        <div>
+          <div style="font-size:15px;font-weight:800;color:#1a5276">✅ Grupo ${grupoRec.modelo}</div>
+          <div style="font-size:11px;color:#1f6993;margin-top:3px">${grupoRec.uso}</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0;margin-left:8px">
+          <div style="font-size:12px;font-weight:700;color:#1a5276">${grupoRec.caudal} l/s · ${grupoRec.presion} bar</div>
+          <div style="font-size:10px;color:#1f6993">${grupoRec.pot} kW</div>
+        </div>
+      </div>
+    </div>
+
+    ${grupoAlt !== grupoRec ? `
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:12px 14px">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between">
+        <div>
+          <div style="font-size:14px;font-weight:700">🔵 Grupo ${grupoAlt.modelo}</div>
+          <div style="font-size:11px;color:var(--text2);margin-top:2px">${grupoAlt.uso}</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0;margin-left:8px">
+          <div style="font-size:12px;font-weight:700">${grupoAlt.caudal} l/s · ${grupoAlt.presion} bar</div>
+          <div style="font-size:10px;color:var(--text2)">${grupoAlt.pot} kW</div>
+        </div>
+      </div>
+    </div>` : ''}
+  </div>` : ''}
+
+  <!-- Notas técnicas -->
+  <div style="background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:12px">
+    <div class="stitle" style="margin-bottom:8px">📋 Notas técnicas</div>
+    ${res.notas.map(n => `
+    <div style="display:flex;gap:8px;align-items:flex-start;padding:5px 0;border-bottom:1px solid var(--border)">
+      <span style="color:var(--text3);flex-shrink:0">•</span>
+      <span style="font-size:12px;color:var(--text2);line-height:1.5">${n}</span>
+    </div>`).join('')}
+    <div style="font-size:11px;color:var(--text3);margin-top:8px;font-style:italic">
+      ⚠️ Este cálculo es orientativo. Verifique siempre con el proyecto de instalación y la normativa vigente aplicable.
+    </div>
+  </div>
+
+  <!-- Nuevo cálculo -->
+  <button class="btn btn-out" onclick="_caudalNuevoCalculo()">🔄 Nuevo cálculo</button>
+  `;
+
+  // Scroll al resultado
+  setTimeout(function() {
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
+}
+
+function _caudalNuevoCalculo() {
+  var el = document.getElementById('caudal-resultado');
+  if (el) { el.style.display = 'none'; el.innerHTML = ''; }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── Patch irSeccion para el módulo caudal ─────────────────
+(function _patchIrSeccionCaudal() {
+  var _orig = window.irSeccion;
+  if (!_orig || window.__irSeccionCaudalPatch) return;
+  window.__irSeccionCaudalPatch = true;
+  window.irSeccion = function(sec) {
+    if (sec === 'caudal') {
+      // Ocultar todas las pantallas
+      document.querySelectorAll('.screen').forEach(function(s) { s.style.display = 'none'; s.classList.remove('active'); });
+      var sc = document.getElementById('screen-caudal');
+      if (sc) { sc.style.display = 'block'; sc.classList.add('active'); }
+      // Topbar
+      var nav = document.getElementById('nav-global');
+      if (nav) nav.style.display = 'block';
+      var tbBack = document.getElementById('tb-back');
+      if (tbBack) tbBack.style.display = 'none';
+      var tbTitle = document.getElementById('tb-title');
+      if (tbTitle) tbTitle.textContent = '💧 Cálculo de Caudal';
+      var tbAction = document.getElementById('tb-action');
+      if (tbAction) tbAction.style.display = 'none';
+      var tbCat = document.getElementById('tb-cat');
+      if (tbCat) tbCat.style.display = 'none';
+      var topbar = document.getElementById('topbar');
+      if (topbar) topbar.style.display = 'flex';
+      var tabBar = document.getElementById('tab-bar');
+      if (tabBar) tabBar.style.display = 'none';
+      // Nav active
+      if (typeof setNavGlobalActive === 'function') setNavGlobalActive('caudal');
+      // Render
+      renderCaudal();
+      return;
+    }
+    return _orig.apply(this, arguments);
+  };
+})();
+
+// ── Patch setNavGlobalActive para caudal ──────────────────
+(function _patchNavGlobalCaudal() {
+  var _orig = window.setNavGlobalActive;
+  if (window.__navGlobalCaudalPatch) return;
+  window.__navGlobalCaudalPatch = true;
+  var apply = function() {
+    var _cur = window.setNavGlobalActive;
+    if (!_cur) { setTimeout(apply, 100); return; }
+    window.setNavGlobalActive = function(sec) {
+      _cur.apply(this, arguments);
+      var btn = document.getElementById('ng-caudal');
+      if (!btn) return;
+      if (sec === 'caudal') {
+        btn.style.color = 'var(--red)';
+        btn.style.borderBottom = '2.5px solid var(--red)';
+      } else {
+        btn.style.color = 'var(--text2)';
+        btn.style.borderBottom = '2px solid transparent';
+      }
+    };
+  };
+  apply();
+})();
+
+// ── Tile en el dashboard ──────────────────────────────────
+(function _patchDashboardCaudal() {
+  var _origRender = window.renderDashboard;
+  if (window.__dashCaudalPatch) return;
+  window.__dashCaudalPatch = true;
+  var apply = function() {
+    if (!window.renderDashboard) { setTimeout(apply, 200); return; }
+    var _orig2 = window.renderDashboard;
+    window.renderDashboard = function() {
+      _orig2.apply(this, arguments);
+      try {
+        var statsEl = document.getElementById('dash-stats');
+        if (statsEl && !document.getElementById('dstat-caudal')) {
+          var dstat = document.createElement('div');
+          dstat.id = 'dstat-caudal';
+          dstat.className = 'dstat';
+          dstat.style.cursor = 'pointer';
+          dstat.onclick = function() { irSeccion('caudal'); };
+          dstat.innerHTML = '<div class="dstat-n">💧</div><div class="dstat-l">Caudal</div>';
+          statsEl.appendChild(dstat);
+        }
+      } catch(e) {}
+    };
+  };
+  apply();
+})();
+
+console.log('✅ RIPCI v9 — Módulo 16: Cálculo de Caudal PCI cargado');
 </script>
