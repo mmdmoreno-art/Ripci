@@ -16467,10 +16467,14 @@ function fotosTotalRevision() {
   cursor: pointer;
   font-size: 22px;
   line-height: 1;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,.6));
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,.7));
   transition: transform .15s;
   -webkit-user-select: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
+.plano-marker svg { border-radius: 6px; }
 .plano-marker:active { transform: translate(-50%, -100%) scale(1.3); }
 .plano-marker-label {
   position: absolute;
@@ -16511,7 +16515,7 @@ function fotosTotalRevision() {
     <div style="padding:12px 16px 10px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;gap:8px;flex-wrap:wrap;align-items:center">
       <label style="display:flex;align-items:center;gap:6px;background:var(--red);color:#fff;padding:8px 14px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:700;flex-shrink:0">
         📤 Subir plano
-        <input type="file" id="plano-file-input" accept="image/*" style="display:none" onchange="planoCargarImagen(event)">
+        <input type="file" id="plano-file-input" accept="image/*,application/pdf" style="display:none" onchange="planoCargarImagen(event)">
       </label>
       <button id="plano-btn-marker" onclick="planoToggleAddMode()" style="padding:8px 14px;background:var(--surface2);border:1.5px solid var(--border);border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;color:var(--text2)">📍 Añadir equipo</button>
       <button onclick="planoLimpiarMarcadores()" style="padding:8px 14px;background:var(--surface2);border:1.5px solid var(--border);border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;color:var(--text2)">🗑 Limpiar marcadores</button>
@@ -16527,7 +16531,7 @@ function fotosTotalRevision() {
           <div style="font-size:56px;margin-bottom:12px">🗺️</div>
           <div style="font-size:15px;font-weight:700;margin-bottom:6px">Sin plano de instalación</div>
           <p style="font-size:13px;line-height:1.6">Sube una imagen del plano del edificio<br>para poder marcar la ubicación de los equipos PCI.</p>
-          <p style="font-size:11px;color:var(--text3);margin-top:8px">Formatos: JPG, PNG, BMP. Máx. 5MB.</p>
+          <p style="font-size:11px;color:var(--text3);margin-top:8px">Formatos: JPG, PNG, PDF. Máx. 5MB.</p>
         </div>
         <!-- Wrapper plano -->
         <div id="plano-wrap-outer" style="display:none;position:relative">
@@ -16552,26 +16556,14 @@ function fotosTotalRevision() {
 
 <!-- Modal añadir marcador de equipo en plano -->
 <div id="modal-plano-marker" class="modal-wrap">
-  <div class="mbox" style="max-width:380px">
+  <div class="mbox" style="max-width:420px">
     <h2>📍 Marcar equipo en plano</h2>
     <input type="hidden" id="pm-x">
     <input type="hidden" id="pm-y">
+    <input type="hidden" id="pm-tipo" value="">
     <div class="field">
       <label>Tipo de equipo</label>
-      <select id="pm-tipo" onchange="planoActualizarIcono()">
-        <option value="🧯">🧯 Extintor</option>
-        <option value="🚒">🚒 BIE</option>
-        <option value="🔥">🔥 Detector</option>
-        <option value="🔔">🔔 Pulsador alarma</option>
-        <option value="🚿">🚿 Rociador</option>
-        <option value="💧">💧 Hidrante</option>
-        <option value="🏛️">🏛️ Columna seca</option>
-        <option value="🚪">🚪 Señal evacuación</option>
-        <option value="💨">💨 Control humos</option>
-        <option value="🔧">🔧 Cuadro control</option>
-        <option value="⚡">⚡ Central incendios</option>
-        <option value="📦">📦 Otro equipo</option>
-      </select>
+      <div id="pm-icon-picker" style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;padding:4px 0"></div>
     </div>
     <div class="field">
       <label>Código / Referencia (opcional)</label>
@@ -16606,14 +16598,333 @@ function _getPlano() {
   return DB[cid].planoInstalacion || null;
 }
 
+// ── Símbolos normalizados ISO 7010 / UNE 23033-1:2019 ────────────────────────
+// Fondo rojo #CC0000 con icono blanco — conforme a norma para equipos PCI (serie F)
+// Los símbolos de evacuación/salvamento usan fondo verde #007A4D (serie E)
+const _ISO = (inner, bg) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="34" height="34" style="display:block;flex-shrink:0"><rect width="100" height="100" rx="8" fill="${bg||'#CC0000'}"/>${inner}</svg>`;
+
+const PLANO_ICONOS_SVG = {
+  // F001 — Extintor de incendios (ISO 7010 F001 / UNE 23033-1)
+  'Extintor': _ISO(`<g fill="white">
+    <rect x="43" y="8" width="6" height="8" rx="2"/>
+    <rect x="38" y="14" width="16" height="4" rx="2"/>
+    <path d="M54 18 Q68 20 68 34"/>
+    <path d="M68 34 L72 34 L72 38" stroke="white" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <rect x="35" y="22" width="22" height="32" rx="11"/>
+    <rect x="40" y="54" width="12" height="28" rx="4"/>
+    <rect x="38" y="80" width="16" height="5" rx="2"/>
+  </g>`),
+
+  // F002 — BIE / Manguera enrollada (ISO 7010 F002 / UNE 23033-1)
+  'BIE (Boca de Incendio Equipada)': _ISO(`<g fill="none" stroke="white" stroke-width="5" stroke-linecap="round">
+    <circle cx="50" cy="52" r="22" fill="none"/>
+    <circle cx="50" cy="52" r="10" fill="none"/>
+    <path d="M50 30 L50 20 Q50 10 62 10 L78 10" stroke-width="6"/>
+    <path d="M78 10 L78 22" stroke-width="6"/>
+    <ellipse cx="78" cy="26" rx="6" ry="4" fill="white" stroke="none"/>
+    <path d="M72 74 L72 88 L60 88" stroke-width="5"/>
+    <path d="M60 88 L60 78" stroke-width="5"/>
+  </g>`),
+
+  // F005 — Pulsador de alarma manual (ISO 7010 F005 / UNE 23033-1)
+  'Pulsador de Alarma': _ISO(`<g fill="white">
+    <rect x="18" y="18" width="64" height="64" rx="6" fill="none" stroke="white" stroke-width="5"/>
+    <rect x="28" y="28" width="44" height="44" rx="4" fill="none" stroke="white" stroke-width="4"/>
+    <circle cx="50" cy="50" r="12"/>
+    <path d="M46 42 L46 50 L54 50" stroke="#CC0000" stroke-width="3" fill="none" stroke-linecap="round"/>
+  </g>`),
+
+  // F006 — Detector / Sistema detección y alarma (UNE 23033-1, análogo F006)
+  'Sistema de Detección y Alarma': _ISO(`<g fill="white">
+    <circle cx="50" cy="55" r="18"/>
+    <path d="M30 30 Q10 55 30 80" fill="none" stroke="white" stroke-width="6" stroke-linecap="round"/>
+    <path d="M70 30 Q90 55 70 80" fill="none" stroke="white" stroke-width="6" stroke-linecap="round"/>
+    <path d="M36 38 Q22 55 36 72" fill="none" stroke="white" stroke-width="5" stroke-linecap="round"/>
+    <path d="M64 38 Q78 55 64 72" fill="none" stroke="white" stroke-width="5" stroke-linecap="round"/>
+    <circle cx="50" cy="55" r="8" fill="#CC0000"/>
+  </g>`),
+
+  // Rociador automático (UNE 23033-1 — dispositivo de disparo de agua)
+  'Rociador Automático': _ISO(`<g fill="white" stroke="white">
+    <circle cx="50" cy="36" r="10" fill="none" stroke-width="5"/>
+    <line x1="50" y1="46" x2="50" y2="56" stroke-width="5" stroke-linecap="round"/>
+    <line x1="30" y1="56" x2="70" y2="56" stroke-width="5" stroke-linecap="round"/>
+    <line x1="30" y1="56" x2="18" y2="72" stroke-width="4" stroke-linecap="round"/>
+    <line x1="40" y1="56" x2="32" y2="74" stroke-width="4" stroke-linecap="round"/>
+    <line x1="50" y1="56" x2="50" y2="76" stroke-width="4" stroke-linecap="round"/>
+    <line x1="60" y1="56" x2="68" y2="74" stroke-width="4" stroke-linecap="round"/>
+    <line x1="70" y1="56" x2="82" y2="72" stroke-width="4" stroke-linecap="round"/>
+    <rect x="38" y="22" width="24" height="6" rx="2"/>
+  </g>`),
+
+  // Hidrante exterior (ISO 7010 / UNE 23033-1 — hidrante)
+  'Hidrante Exterior': _ISO(`<g fill="white">
+    <rect x="38" y="8" width="24" height="8" rx="3"/>
+    <rect x="34" y="16" width="32" height="42" rx="6"/>
+    <rect x="20" y="30" width="14" height="10" rx="3"/>
+    <rect x="66" y="30" width="14" height="10" rx="3"/>
+    <rect x="38" y="58" width="24" height="10" rx="3"/>
+    <rect x="30" y="68" width="40" height="10" rx="3"/>
+    <rect x="34" y="78" width="32" height="14" rx="4"/>
+  </g>`),
+
+  // Columna seca (UNE 23033-1)
+  'Columna Seca': _ISO(`<g fill="white">
+    <rect x="44" y="8" width="12" height="74" rx="4"/>
+    <rect x="24" y="26" width="20" height="10" rx="3"/>
+    <rect x="56" y="26" width="20" height="10" rx="3"/>
+    <rect x="24" y="50" width="20" height="10" rx="3"/>
+    <rect x="56" y="50" width="20" height="10" rx="3"/>
+    <circle cx="50" cy="88" r="7"/>
+    <rect x="30" y="80" width="40" height="8" rx="3"/>
+  </g>`),
+
+  // Señalización / Alumbrado emergencia — fondo VERDE (serie E, ISO 7010 E001/E002)
+  'Señalización / Alumbrado Emergencia': _ISO(`<g fill="white">
+    <rect x="12" y="20" width="76" height="60" rx="4" fill="none" stroke="white" stroke-width="4"/>
+    <path d="M28 70 L28 40 L48 55 L48 40 L72 70 Z"/>
+    <rect x="28" y="30" width="6" height="12" rx="2"/>
+    <rect x="36" y="28" width="4" height="16" rx="2" transform="rotate(30 38 36)"/>
+  </g>`, '#007A4D'),
+
+  // Control de humos y calor (UNE 23033-1)
+  'Sistema Control Humos y Calor': _ISO(`<g fill="white">
+    <path d="M50 15 Q58 28 52 38 Q62 28 56 15 Q68 30 62 45 Q74 32 70 15 Q88 35 82 58 Q86 72 74 80 Q76 90 50 90 Q24 90 26 80 Q14 72 18 58 Q12 35 30 15 Q26 32 38 45 Q32 28 44 15 Q38 28 48 38 Q42 28 50 15Z" fill-rule="evenodd"/>
+  </g>`),
+
+  // Abastecimiento de agua / Grupo de presión (UNE 23033-1)
+  'Abastecimiento de Agua CI': _ISO(`<g fill="white">
+    <rect x="18" y="48" width="64" height="36" rx="5"/>
+    <circle cx="50" cy="48" r="18" fill="none" stroke="white" stroke-width="6"/>
+    <path d="M50 30 L50 16" stroke="white" stroke-width="6" stroke-linecap="round"/>
+    <path d="M38 36 L28 26" stroke="white" stroke-width="5" stroke-linecap="round"/>
+    <path d="M62 36 L72 26" stroke="white" stroke-width="5" stroke-linecap="round"/>
+    <rect x="34" y="60" width="32" height="12" rx="4" fill="#CC0000"/>
+    <circle cx="34" cy="75" r="6"/>
+    <circle cx="50" cy="75" r="6"/>
+    <circle cx="66" cy="75" r="6"/>
+  </g>`),
+
+  // Grupo de presión CI
+  'Grupo de Presión CI': _ISO(`<g fill="white">
+    <rect x="14" y="40" width="72" height="44" rx="5"/>
+    <ellipse cx="50" cy="40" rx="28" ry="20" fill="none" stroke="white" stroke-width="6"/>
+    <line x1="50" y1="20" x2="50" y2="10" stroke="white" stroke-width="6" stroke-linecap="round"/>
+    <line x1="26" y1="28" x2="18" y2="18" stroke="white" stroke-width="5" stroke-linecap="round"/>
+    <line x1="74" y1="28" x2="82" y2="18" stroke="white" stroke-width="5" stroke-linecap="round"/>
+    <circle cx="30" cy="72" r="10" fill="#CC0000"/>
+    <circle cx="50" cy="72" r="10" fill="#CC0000"/>
+    <circle cx="70" cy="72" r="10" fill="#CC0000"/>
+    <line x1="30" y1="62" x2="30" y2="40" stroke="white" stroke-width="4"/>
+    <line x1="50" y1="62" x2="50" y2="40" stroke="white" stroke-width="4"/>
+    <line x1="70" y1="62" x2="70" y2="40" stroke="white" stroke-width="4"/>
+  </g>`),
+
+  // Extinción por espuma (UNE 23033-1)
+  'Espuma': _ISO(`<g fill="white">
+    <rect x="30" y="38" width="40" height="48" rx="5"/>
+    <rect x="44" y="20" width="12" height="20" rx="4"/>
+    <rect x="38" y="16" width="24" height="8" rx="3"/>
+    <path d="M20 30 Q20 20 30 20 L30 28 Q24 28 24 36 Z"/>
+    <path d="M80 30 Q80 20 70 20 L70 28 Q76 28 76 36 Z"/>
+    <circle cx="38" cy="56" r="6" fill="#CC0000"/>
+    <circle cx="50" cy="56" r="6" fill="#CC0000"/>
+    <circle cx="62" cy="56" r="6" fill="#CC0000"/>
+    <circle cx="44" cy="66" r="5" fill="#CC0000"/>
+    <circle cx="56" cy="66" r="5" fill="#CC0000"/>
+  </g>`),
+
+  // Extinción por agente gaseoso (UNE 23033-1)
+  'Agente Gaseoso': _ISO(`<g fill="white">
+    <ellipse cx="50" cy="60" rx="24" ry="30" fill="none" stroke="white" stroke-width="6"/>
+    <rect x="42" y="12" width="16" height="20" rx="5"/>
+    <rect x="38" y="8" width="24" height="8" rx="3"/>
+    <path d="M42 32 Q30 42 26 60" stroke="white" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <path d="M58 32 Q70 42 74 60" stroke="white" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <line x1="50" y1="46" x2="50" y2="74" stroke="white" stroke-width="5" stroke-linecap="round"/>
+    <line x1="38" y1="54" x2="62" y2="54" stroke="white" stroke-width="5" stroke-linecap="round"/>
+  </g>`),
+
+  // Extinción por polvo (UNE 23033-1)
+  'Extinción Polvo': _ISO(`<g fill="white">
+    <rect x="28" y="36" width="44" height="50" rx="6"/>
+    <rect x="40" y="18" width="20" height="20" rx="5"/>
+    <rect x="36" y="14" width="28" height="8" rx="3"/>
+    <path d="M18 28 Q18 18 28 18 L28 26 Q22 26 22 34 Z"/>
+    <path d="M82 28 Q82 18 72 18 L72 26 Q78 26 78 34 Z"/>
+    <line x1="50" y1="54" x2="50" y2="72" stroke="#CC0000" stroke-width="5" stroke-linecap="round"/>
+    <line x1="38" y1="63" x2="62" y2="63" stroke="#CC0000" stroke-width="5" stroke-linecap="round"/>
+    <circle cx="50" cy="63" r="4" fill="#CC0000"/>
+  </g>`),
+
+  // Aerosoles condensados (UNE 23033-1 — sin símbolo específico, se usa analogía)
+  'Aerosoles Condensados': _ISO(`<g fill="white">
+    <rect x="34" y="22" width="32" height="56" rx="10"/>
+    <rect x="42" y="12" width="16" height="12" rx="4"/>
+    <rect x="40" y="8" width="20" height="6" rx="2"/>
+    <path d="M20 38 Q14 50 20 62" stroke="white" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <path d="M80 38 Q86 50 80 62" stroke="white" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <line x1="50" y1="38" x2="50" y2="62" stroke="#CC0000" stroke-width="4" stroke-linecap="round"/>
+    <line x1="40" y1="50" x2="60" y2="50" stroke="#CC0000" stroke-width="4" stroke-linecap="round"/>
+  </g>`),
+
+  // Genérico — punto de interrogación con fondo rojo
+  'Otro': _ISO(`<g fill="white">
+    <path d="M50 20 Q72 20 72 38 Q72 52 58 56 L58 64 L42 64 L42 52 Q56 50 56 38 Q56 32 50 32 Q44 32 42 38 L28 34 Q32 20 50 20Z"/>
+    <rect x="42" y="70" width="16" height="16" rx="4"/>
+  </g>`)
+};
+
+const PLANO_TIPO_ICONOS = {
+  'Extintor':           PLANO_ICONOS_SVG['Extintor'],
+  'BIE (Boca de Incendio Equipada)': PLANO_ICONOS_SVG['BIE (Boca de Incendio Equipada)'],
+  'Sistema de Detección y Alarma': PLANO_ICONOS_SVG['Sistema de Detección y Alarma'],
+  'Pulsador de Alarma': PLANO_ICONOS_SVG['Pulsador de Alarma'],
+  'Rociador Automático': PLANO_ICONOS_SVG['Rociador Automático'],
+  'Hidrante Exterior':  PLANO_ICONOS_SVG['Hidrante Exterior'],
+  'Columna Seca':       PLANO_ICONOS_SVG['Columna Seca'],
+  'Señalización / Alumbrado Emergencia': PLANO_ICONOS_SVG['Señalización / Alumbrado Emergencia'],
+  'Sistema Control Humos y Calor': PLANO_ICONOS_SVG['Sistema Control Humos y Calor'],
+  'Abastecimiento de Agua CI': PLANO_ICONOS_SVG['Abastecimiento de Agua CI'],
+  'Grupo de Presión CI': PLANO_ICONOS_SVG['Grupo de Presión CI'],
+  'Espuma':             PLANO_ICONOS_SVG['Espuma'],
+  'Agente Gaseoso':     PLANO_ICONOS_SVG['Agente Gaseoso'],
+  'Extinción Polvo':    PLANO_ICONOS_SVG['Extinción Polvo'],
+  'Aerosoles Condensados': PLANO_ICONOS_SVG['Aerosoles Condensados'],
+  'Otro':               PLANO_ICONOS_SVG['Otro']
+};
+
+// Opciones fijas de fallback cuando no hay inventario
+const PLANO_OPCIONES_DEFAULT = [
+  { icono: PLANO_ICONOS_SVG['Extintor'],           label: 'Extintor' },
+  { icono: PLANO_ICONOS_SVG['BIE (Boca de Incendio Equipada)'], label: 'BIE' },
+  { icono: PLANO_ICONOS_SVG['Sistema de Detección y Alarma'],   label: 'Detección' },
+  { icono: PLANO_ICONOS_SVG['Pulsador de Alarma'], label: 'Pulsador alarma' },
+  { icono: PLANO_ICONOS_SVG['Rociador Automático'], label: 'Rociador' },
+  { icono: PLANO_ICONOS_SVG['Hidrante Exterior'],  label: 'Hidrante' },
+  { icono: PLANO_ICONOS_SVG['Columna Seca'],       label: 'Columna seca' },
+  { icono: PLANO_ICONOS_SVG['Señalización / Alumbrado Emergencia'], label: 'Señal evacuación' },
+  { icono: PLANO_ICONOS_SVG['Sistema Control Humos y Calor'], label: 'Control humos' },
+  { icono: PLANO_ICONOS_SVG['Abastecimiento de Agua CI'], label: 'Cuadro control' },
+  { icono: PLANO_ICONOS_SVG['Grupo de Presión CI'], label: 'Grupo presión' },
+  { icono: PLANO_ICONOS_SVG['Espuma'],             label: 'Espuma' },
+  { icono: PLANO_ICONOS_SVG['Agente Gaseoso'],     label: 'Agente gaseoso' },
+  { icono: PLANO_ICONOS_SVG['Extinción Polvo'],    label: 'Extinción polvo' },
+  { icono: PLANO_ICONOS_SVG['Aerosoles Condensados'], label: 'Aerosoles' },
+  { icono: PLANO_ICONOS_SVG['Otro'],               label: 'Otro equipo' }
+];
+
+// Rellenar el selector de tipo/icono con los equipos reales del cliente
+function planoPopularSelectTipo() {
+  const picker = document.getElementById('pm-icon-picker');
+  const hiddenInput = document.getElementById('pm-tipo');
+  if (!picker) return;
+  picker.innerHTML = '';
+
+  let opciones = [];
+  const equipos = (cid && DB[cid]?.equipos) ? DB[cid].equipos : [];
+  if (equipos.length > 0) {
+    const vistos = new Set();
+    equipos.forEach(eq => {
+      if (!eq.tipo || vistos.has(eq.tipo)) return;
+      vistos.add(eq.tipo);
+      const icono = PLANO_TIPO_ICONOS[eq.tipo] || PLANO_ICONOS_SVG['Otro'];
+      opciones.push({ icono, label: eq.tipo });
+    });
+    opciones.push({ icono: PLANO_ICONOS_SVG['Otro'], label: 'Otro' });
+  } else {
+    opciones = PLANO_OPCIONES_DEFAULT;
+  }
+
+  // Render visual buttons
+  opciones.forEach((op, i) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.title = op.label;
+    btn.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 4px;border-radius:8px;border:2px solid transparent;background:var(--surface2);cursor:pointer;font-size:9px;font-weight:700;color:var(--text2);line-height:1.2;transition:border-color .15s';
+    btn.innerHTML = op.icono + `<span style="max-width:52px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(op.label)}</span>`;
+    btn.onclick = () => {
+      picker.querySelectorAll('button').forEach(b => { b.style.borderColor = 'transparent'; b.style.background = 'var(--surface2)'; });
+      btn.style.borderColor = 'var(--red)';
+      btn.style.background = 'rgba(229,57,53,.12)';
+      hiddenInput.value = JSON.stringify({ icono: op.icono, tipo: op.label });
+    };
+    if (i === 0) {
+      btn.style.borderColor = 'var(--red)';
+      btn.style.background = 'rgba(229,57,53,.12)';
+      hiddenInput.value = JSON.stringify({ icono: op.icono, tipo: op.label });
+    }
+    picker.appendChild(btn);
+  });
+}
+
 function planoCargarImagen(event) {
   const file = event.target.files[0];
   if (!file) return;
   const MAX = 5 * 1024 * 1024;
-  if (file.size > MAX) { showToast('⚠️ La imagen supera 5MB', 'warn', 3000); return; }
+  if (file.size > MAX) { showToast('⚠️ El archivo supera 5MB', 'warn', 3000); return; }
+
+  // ── PDF: renderizar primera página con PDF.js ─────────────────────────────
+  if (file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')) {
+    showToast('⏳ Procesando PDF...', 'ok', 2000);
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const loadPdfJs = () => {
+        if (window.pdfjsLib) return Promise.resolve();
+        return new Promise((resolve, reject) => {
+          const s = document.createElement('script');
+          s.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+          s.onload = () => {
+            window.pdfjsLib.GlobalWorkerOptions.workerSrc =
+              'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+            resolve();
+          };
+          s.onerror = reject;
+          document.head.appendChild(s);
+        });
+      };
+      loadPdfJs().then(() => {
+        const typedArr = new Uint8Array(e.target.result);
+        return pdfjsLib.getDocument({ data: typedArr }).promise;
+      }).then(pdf => pdf.getPage(1)).then(page => {
+        const viewport = page.getViewport({ scale: 2.0 });
+        const canvas = document.createElement('canvas');
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+        return page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise.then(() => canvas);
+      }).then(canvas => {
+        const MAX_DIM = 2000;
+        let w = canvas.width, h = canvas.height;
+        if (w > MAX_DIM || h > MAX_DIM) {
+          const outCanvas = document.createElement('canvas');
+          if (w > h) { h = Math.round(h * MAX_DIM / w); w = MAX_DIM; }
+          else { w = Math.round(w * MAX_DIM / h); h = MAX_DIM; }
+          outCanvas.width = w; outCanvas.height = h;
+          outCanvas.getContext('2d').drawImage(canvas, 0, 0, w, h);
+          return outCanvas;
+        }
+        return canvas;
+      }).then(canvas => {
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.88);
+        if (!DB[cid].planoInstalacion) DB[cid].planoInstalacion = { marcadores: [] };
+        DB[cid].planoInstalacion.imgData = dataUrl;
+        DB[cid].planoInstalacion.imgW = canvas.width;
+        DB[cid].planoInstalacion.imgH = canvas.height;
+        sched(); planoRender();
+        showToast('🗺️ Plano PDF cargado (pág. 1)', 'ok');
+      }).catch(err => {
+        console.error('PDF.js error:', err);
+        showToast('❌ Error al procesar el PDF', 'err', 3000);
+      });
+    };
+    reader.readAsArrayBuffer(file);
+    event.target.value = '';
+    return;
+  }
+
+  // ── Imagen normal (JPG, PNG…) ─────────────────────────────────────────────
   const reader = new FileReader();
   reader.onload = (e) => {
-    // Redimensionar a máx 2000px
     const img = new Image();
     img.onload = () => {
       const canvas = document.createElement('canvas');
@@ -16678,6 +16989,7 @@ function planoRender() {
     document.getElementById('pm-y').value = _planoPendingY;
     document.getElementById('pm-codigo').value = '';
     document.getElementById('pm-nota').value = '';
+    planoPopularSelectTipo();
     openM('modal-plano-marker');
   };
 
@@ -16695,6 +17007,7 @@ function planoRender() {
     document.getElementById('pm-y').value = _planoPendingY;
     document.getElementById('pm-codigo').value = '';
     document.getElementById('pm-nota').value = '';
+    planoPopularSelectTipo();
     openM('modal-plano-marker');
   };
 
@@ -16753,9 +17066,16 @@ function planoToggleAddMode() {
 function planoConfirmarMarcador() {
   const x = parseFloat(document.getElementById('pm-x').value);
   const y = parseFloat(document.getElementById('pm-y').value);
-  const tipoSelect = document.getElementById('pm-tipo');
-  const icono = tipoSelect.value;
-  const tipo = tipoSelect.options[tipoSelect.selectedIndex].text.replace(icono + ' ', '');
+  const tipoRaw = document.getElementById('pm-tipo').value;
+  let icono, tipo;
+  try {
+    const parsed = JSON.parse(tipoRaw);
+    icono = parsed.icono;
+    tipo = parsed.tipo;
+  } catch(e) {
+    icono = PLANO_ICONOS_SVG['Otro'];
+    tipo = 'Otro';
+  }
   const codigo = document.getElementById('pm-codigo').value.trim();
   const nota = document.getElementById('pm-nota').value.trim();
 
