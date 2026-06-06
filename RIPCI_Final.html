@@ -2609,7 +2609,7 @@ function renderAlerts(){
 
 // ===== SYNC =====
 function setSS(s,t){document.getElementById('sd').className=s;document.getElementById('st').textContent=t;}
-function sched(){save();clearTimeout(syncTimer);setSS('busy','Guardando...');syncTimer=setTimeout(()=>fsScheduledSave(),2500);}
+function sched(){save();clearTimeout(syncTimer);setSS('busy','Guardando...');syncTimer=setTimeout(()=>{ if(SAAS.tenantId) saasFsSave(); else fsScheduledSave(); },2500);}
 async function fsScheduledSave(){
   if(FIREBASE_CONFIG.apiKey==='TU_API_KEY')return;
   try{
@@ -2663,8 +2663,7 @@ async function syncNow(){setSS('busy','...');await fsLoad();renderDashboard();re
 // ===== LOGIN GOOGLE REAL =====
 function loginGoogle(){
   const provider = new firebase.auth.GoogleAuthProvider();
-  provider.setCustomParameters({ login_hint: OWNER_EMAIL });
-  // Usar redirect en móvil (Safari), popup en escritorio
+  // Usar redirect en móvil (Safari/iOS), popup en escritorio
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
   if(isMobile){
     getAuth().signInWithRedirect(provider).catch(err => {
@@ -2673,17 +2672,31 @@ function loginGoogle(){
     });
   } else {
     getAuth().signInWithPopup(provider)
-      .then(result => {
-        const email = result.user.email;
-        if(email !== OWNER_EMAIL){
-          getAuth().signOut();
-          alert('⛔ Acceso denegado. Esta app es de uso privado.');
-          return;
+      .then(async result => {
+        const user = result.user;
+        try {
+          SAAS.user = user;
+          if(user.email === SAAS_SUPERADMIN){
+            SAAS.tenantId = user.uid;
+            await saasCrearTenant(user, 'SuperAdmin');
+            await saasCargarTenant(user);
+            await saasFsLoad();
+            saasEntrarApp();
+            return;
+          }
+          await saasCargarTenant(user);
+          await saasFsLoad();
+          if(!SAAS.onboardingDone){
+            showRaw('onboarding');
+            document.getElementById('topbar').style.display = 'none';
+            document.getElementById('nav-global').style.display = 'none';
+            return;
+          }
+          saasEntrarApp();
+        } catch(e) {
+          console.error('Error SaaS login', e);
+          alert('Error al cargar datos: ' + e.message);
         }
-        _fbUser = result.user;
-        document.getElementById('sync-bar').style.display='flex';
-        setSS('busy','Conectando...');
-        fsLoad().then(()=>enterApp());
       })
       .catch(err => {
         console.error('Login error', err);
@@ -2693,21 +2706,34 @@ function loginGoogle(){
 }
 function checkOAuth(){return false;}
 
-// Manejar resultado del redirect al volver a la app
+// Manejar resultado del redirect al volver a la app (móvil)
 function handleRedirectResult(){
   if(!getAuth) return;
-  getAuth().getRedirectResult().then(result => {
+  getAuth().getRedirectResult().then(async result => {
     if(!result || !result.user) return;
-    const email = result.user.email;
-    if(email !== OWNER_EMAIL){
-      getAuth().signOut();
-      alert('⛔ Acceso denegado. Esta app es de uso privado.');
-      return;
+    const user = result.user;
+    try {
+      SAAS.user = user;
+      if(user.email === SAAS_SUPERADMIN){
+        SAAS.tenantId = user.uid;
+        await saasCrearTenant(user, 'SuperAdmin');
+        await saasCargarTenant(user);
+        await saasFsLoad();
+        saasEntrarApp();
+        return;
+      }
+      await saasCargarTenant(user);
+      await saasFsLoad();
+      if(!SAAS.onboardingDone){
+        showRaw('onboarding');
+        document.getElementById('topbar').style.display = 'none';
+        document.getElementById('nav-global').style.display = 'none';
+        return;
+      }
+      saasEntrarApp();
+    } catch(e) {
+      console.error('Error SaaS redirect login', e);
     }
-    _fbUser = result.user;
-    document.getElementById('sync-bar').style.display='flex';
-    setSS('busy','Conectando...');
-    fsLoad().then(()=>enterApp());
   }).catch(err => {
     if(err.code !== 'auth/no-auth-event') console.error('Redirect result error', err);
   });
