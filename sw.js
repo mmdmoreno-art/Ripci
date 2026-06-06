@@ -1,5 +1,5 @@
-const CACHE = 'ripci-v1';
-const FILES = ['/', '/index.html', '/manifest.json'];
+const CACHE = 'ripci-v3';
+const FILES = ['/Ripci/', '/Ripci/index.html', '/Ripci/manifest.json'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES)));
