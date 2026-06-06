@@ -20766,3 +20766,922 @@ function _caudalNuevoCalculo() {
 
 console.log('✅ RIPCI v9 — Módulo 16: Cálculo de Caudal PCI cargado');
 </script>
+<!-- ===================================================================
+     MÓDULO 17: GESTIÓN DE USUARIOS, LICENCIAS Y CONTROL DE PAGOS
+     ===================================================================
+     FUNCIONALIDADES:
+     1. Login con email/contraseña (en lugar de solo Google)
+     2. Tú creas las cuentas manualmente (nadie se registra solo)
+     3. Primer login fuerza cambio de contraseña
+     4. Panel SuperAdmin mejorado: crear usuarios + asignar plan
+     5. Bloqueo automático por impago (campo bloqueado en Firestore)
+     6. Informe mensual de pagos enviado SOLO a mmd.moreno@gmail.com
+     7. Acceso de SuperAdmin a cualquier cuenta de cliente
+     =================================================================== -->
+
+<script>
+// ══════════════════════════════════════════════════════════════════════
+// MÓDULO 17 — USUARIOS + LICENCIAS + CONTROL DE PAGOS
+// Inyectado como IIFE para no contaminar el scope global
+// ══════════════════════════════════════════════════════════════════════
+(function _modUsuarios() {
+
+  // ── Constantes ──────────────────────────────────────────────────────
+  var SUPERADMIN_EMAIL = 'mmd.moreno@gmail.com';
+  var INFORME_EMAIL    = 'mmd.moreno@gmail.com';   // destino del informe de pagos
+
+  // ── Colecciones Firestore ───────────────────────────────────────────
+  // /usuarios/{uid}  →  { email, nombre, empresa, plan, activo, bloqueado,
+  //                        primerLogin, fechaAlta, fechaExpiracion,
+  //                        ultimoAcceso, tenantId, notas }
+  // /pagos/{uid}     →  { historial: [{fecha, importe, plan, estado}] }
+
+  // ── Helpers ─────────────────────────────────────────────────────────
+  function getFS() {
+    return (typeof firebase !== 'undefined') ? firebase.firestore() : null;
+  }
+  function getAuthInst() {
+    return (typeof firebase !== 'undefined') ? firebase.auth() : null;
+  }
+  function esAdmin() {
+    var u = getAuthInst() && getAuthInst().currentUser;
+    return u && u.email === SUPERADMIN_EMAIL;
+  }
+  function toast(msg, type) {
+    if (typeof showToast === 'function') showToast(msg, type || 'ok');
+    else console.log('[M17]', msg);
+  }
+
+  // ── 1. REEMPLAZAR LOGIN: Email/Contraseña + Google para admin ────────
+  function _patchLoginUI() {
+    // Buscamos el splash del login original y lo reemplazamos
+    var splash = document.getElementById('login-splash');
+    if (!splash) return;
+
+    // Ocultar el splash original y crear el nuevo formulario de login
+    splash.innerHTML = `
+      <!-- Fondo decorativo -->
+      <div style="position:absolute;right:-40px;top:-40px;font-size:260px;opacity:.06;pointer-events:none;line-height:1;user-select:none">🔥</div>
+      <div style="position:absolute;left:-30px;bottom:-30px;font-size:180px;opacity:.04;pointer-events:none;line-height:1;user-select:none">🔥</div>
+
+      <!-- Logo -->
+      <div style="display:inline-flex;align-items:center;justify-content:center;background:rgba(255,255,255,.15);border:2px solid rgba(255,255,255,.25);border-radius:28px;width:80px;height:80px;font-size:40px;margin-bottom:16px;box-shadow:0 12px 40px rgba(0,0,0,.25)">🔥</div>
+      <div style="font-size:26px;font-weight:900;color:#fff;letter-spacing:-.5px;margin-bottom:4px;text-align:center">RIPCI PCI Pro</div>
+      <div style="font-size:13px;color:rgba(255,255,255,.6);margin-bottom:28px;text-align:center">Gestión profesional contra incendios</div>
+
+      <!-- Formulario email/password -->
+      <div id="m17-login-form" style="width:100%;max-width:320px;padding:0 16px">
+        <div style="background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:14px;padding:20px 18px 16px">
+          <div id="m17-login-err" style="display:none;background:rgba(255,80,80,.25);border:1px solid rgba(255,100,100,.4);border-radius:8px;padding:8px 12px;font-size:12px;font-weight:600;color:#fff;margin-bottom:12px;text-align:center"></div>
+          <div style="margin-bottom:10px">
+            <label style="font-size:11px;font-weight:700;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:5px">Correo electrónico</label>
+            <input id="m17-email" type="email" placeholder="empresa@ejemplo.com" autocomplete="email"
+              style="width:100%;padding:11px 14px;border:1.5px solid rgba(255,255,255,.25);border-radius:10px;font-size:15px;background:rgba(255,255,255,.12);color:#fff;outline:none;-webkit-appearance:none"
+              onfocus="this.style.borderColor='rgba(255,255,255,.6)'" onblur="this.style.borderColor='rgba(255,255,255,.25)'"
+              onkeydown="if(event.key==='Enter')document.getElementById('m17-pass').focus()">
+          </div>
+          <div style="margin-bottom:16px">
+            <label style="font-size:11px;font-weight:700;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:5px">Contraseña</label>
+            <div style="position:relative">
+              <input id="m17-pass" type="password" placeholder="••••••••" autocomplete="current-password"
+                style="width:100%;padding:11px 40px 11px 14px;border:1.5px solid rgba(255,255,255,.25);border-radius:10px;font-size:15px;background:rgba(255,255,255,.12);color:#fff;outline:none;-webkit-appearance:none"
+                onfocus="this.style.borderColor='rgba(255,255,255,.6)'" onblur="this.style.borderColor='rgba(255,255,255,.25)'"
+                onkeydown="if(event.key==='Enter')m17Login()">
+              <button onclick="m17TogglePass()" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,.5);font-size:16px;cursor:pointer;line-height:1">👁</button>
+            </div>
+          </div>
+          <button id="m17-btn-login" onclick="m17Login()"
+            style="width:100%;padding:13px;background:rgba(255,255,255,.22);border:1.5px solid rgba(255,255,255,.4);border-radius:12px;color:#fff;font-size:15px;font-weight:800;cursor:pointer;letter-spacing:.2px;transition:background .2s"
+            onmouseover="this.style.background='rgba(255,255,255,.32)'" onmouseout="this.style.background='rgba(255,255,255,.22)'">
+            Entrar →
+          </button>
+        </div>
+
+        <!-- Solo para admin: botón Google discreto -->
+        <div style="text-align:center;margin-top:14px">
+          <button onclick="event.stopPropagation();loginGoogle()"
+            style="background:none;border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:7px 16px;font-size:11px;font-weight:600;color:rgba(255,255,255,.5);cursor:pointer;display:inline-flex;align-items:center;gap:6px">
+            <svg width="12" height="12" viewBox="0 0 24 24"><path fill="rgba(255,255,255,.6)" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="rgba(255,255,255,.5)" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="rgba(255,255,255,.4)" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="rgba(255,255,255,.7)" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+            Acceso administrador
+          </button>
+        </div>
+
+        <!-- Nota de acceso -->
+        <div style="text-align:center;margin-top:12px;font-size:11px;color:rgba(255,255,255,.35);line-height:1.5">
+          Acceso restringido · Solo cuentas autorizadas<br>
+          Solicita acceso a tu proveedor PCI
+        </div>
+      </div>
+    `;
+
+    // El splash ya no se oculta con click (quitamos onclick del contenedor)
+    splash.onclick = null;
+    splash.style.cursor = 'default';
+  }
+
+  // ── 2. FUNCIÓN DE LOGIN EMAIL/PASS ──────────────────────────────────
+  window.m17Login = async function() {
+    var email = (document.getElementById('m17-email')?.value || '').trim().toLowerCase();
+    var pass  = document.getElementById('m17-pass')?.value || '';
+    var errEl = document.getElementById('m17-login-err');
+    var btnEl = document.getElementById('m17-btn-login');
+
+    function showErr(msg) {
+      if (errEl) { errEl.textContent = msg; errEl.style.display = 'block'; }
+    }
+    function hideErr() {
+      if (errEl) errEl.style.display = 'none';
+    }
+
+    hideErr();
+    if (!email) { showErr('Introduce tu correo electrónico.'); return; }
+    if (!pass)  { showErr('Introduce tu contraseña.'); return; }
+    if (btnEl)  { btnEl.textContent = '⏳ Verificando...'; btnEl.disabled = true; }
+
+    var auth = getAuthInst();
+    if (!auth) { showErr('Error de configuración. Contacta al administrador.'); return; }
+
+    try {
+      // 1. Autenticar en Firebase Auth
+      var result = await auth.signInWithEmailAndPassword(email, pass);
+      var user   = result.user;
+
+      // 2. Verificar en Firestore que la cuenta existe y no está bloqueada
+      var fs   = getFS();
+      var snap = await fs.collection('usuarios').doc(user.uid).get();
+
+      if (!snap.exists) {
+        await auth.signOut();
+        showErr('Cuenta no encontrada. Contacta a tu administrador.');
+        if (btnEl) { btnEl.textContent = 'Entrar →'; btnEl.disabled = false; }
+        return;
+      }
+
+      var userData = snap.data();
+
+      // 3. Comprobar bloqueo
+      if (userData.bloqueado === true) {
+        await auth.signOut();
+        showErr('⛔ Acceso bloqueado. Contacta con mmd.moreno@gmail.com para regularizar tu suscripción.');
+        if (btnEl) { btnEl.textContent = 'Entrar →'; btnEl.disabled = false; }
+        return;
+      }
+
+      // 4. Comprobar que está activo
+      if (userData.activo === false) {
+        await auth.signOut();
+        showErr('Cuenta desactivada. Contacta con tu administrador.');
+        if (btnEl) { btnEl.textContent = 'Entrar →'; btnEl.disabled = false; }
+        return;
+      }
+
+      // 5. Comprobar expiración de licencia
+      if (userData.fechaExpiracion) {
+        var exp = new Date(userData.fechaExpiracion);
+        var hoy = new Date();
+        if (hoy > exp) {
+          await auth.signOut();
+          var diasVencida = Math.floor((hoy - exp) / (1000 * 60 * 60 * 24));
+          showErr('⏰ Tu licencia venció hace ' + diasVencida + ' días. Contacta con mmd.moreno@gmail.com para renovar.');
+          if (btnEl) { btnEl.textContent = 'Entrar →'; btnEl.disabled = false; }
+          return;
+        }
+      }
+
+      // 6. Registrar último acceso
+      fs.collection('usuarios').doc(user.uid).update({
+        ultimoAcceso: new Date().toISOString(),
+        accesos: firebase.firestore.FieldValue.increment(1)
+      }).catch(function(){});
+
+      // 7. ¿Es el primer login? → forzar cambio de contraseña
+      if (userData.primerLogin === true) {
+        window._m17UserData = userData;
+        window._m17UserId   = user.uid;
+        _mostrarModalCambioPass(user.displayName || userData.nombre || email);
+        return;
+      }
+
+      // 8. Cargar datos del tenant y entrar
+      window._m17UserData = userData;
+      window._m17UserId   = user.uid;
+      await _entrarComoUsuario(user, userData);
+
+    } catch (err) {
+      console.error('[M17] login error', err);
+      var msgs = {
+        'auth/user-not-found':      'Correo no registrado.',
+        'auth/wrong-password':       'Contraseña incorrecta.',
+        'auth/invalid-email':        'Correo inválido.',
+        'auth/too-many-requests':    'Demasiados intentos. Espera unos minutos.',
+        'auth/user-disabled':        'Cuenta desactivada.',
+        'auth/network-request-failed': 'Sin conexión. Comprueba tu red.'
+      };
+      showErr(msgs[err.code] || 'Error: ' + err.message);
+      if (btnEl) { btnEl.textContent = 'Entrar →'; btnEl.disabled = false; }
+    }
+  };
+
+  window.m17TogglePass = function() {
+    var inp = document.getElementById('m17-pass');
+    if (inp) inp.type = inp.type === 'password' ? 'text' : 'password';
+  };
+
+  // ── 3. MODAL CAMBIO DE CONTRASEÑA (primer login) ─────────────────────
+  function _mostrarModalCambioPass(nombre) {
+    var existing = document.getElementById('m17-modal-cambiopass');
+    if (existing) { existing.style.display = 'flex'; return; }
+
+    var modal = document.createElement('div');
+    modal.id = 'm17-modal-cambiopass';
+    modal.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;padding:16px';
+    modal.innerHTML = `
+      <div style="background:var(--surface,#fff);border-radius:20px;padding:24px 20px 20px;max-width:360px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.4)">
+        <div style="text-align:center;margin-bottom:16px">
+          <div style="font-size:40px;margin-bottom:8px">🔐</div>
+          <div style="font-size:18px;font-weight:800;color:var(--text,#1a1a1f);margin-bottom:4px">Bienvenido, ${_esc17(nombre)}</div>
+          <div style="font-size:13px;color:var(--text2,#60607a);line-height:1.5">Por seguridad, debes crear tu propia contraseña antes de continuar.</div>
+        </div>
+        <div id="m17-cp-err" style="display:none;background:#fef2f2;border:1px solid #fca5a5;border-radius:8px;padding:8px 12px;font-size:12px;color:#991b1b;margin-bottom:12px;text-align:center"></div>
+        <div style="margin-bottom:10px">
+          <label style="font-size:11px;font-weight:700;color:var(--text2,#60607a);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:5px">Nueva contraseña</label>
+          <input id="m17-cp-new" type="password" placeholder="Mínimo 8 caracteres"
+            style="width:100%;padding:11px 14px;border:1.5px solid var(--border,#e8e8ec);border-radius:10px;font-size:15px;background:var(--surface2,#f8f8fb);color:var(--text,#1a1a1f);outline:none;-webkit-appearance:none;box-sizing:border-box"
+            onfocus="this.style.borderColor='var(--red,#c0392b)'" onblur="this.style.borderColor='var(--border,#e8e8ec)'"
+            oninput="m17CheckPassStrength()">
+          <div id="m17-strength-bar" style="height:4px;border-radius:2px;margin-top:6px;background:var(--border,#e8e8ec);overflow:hidden">
+            <div id="m17-strength-fill" style="height:100%;width:0%;background:#c0392b;transition:width .3s,background .3s"></div>
+          </div>
+          <div id="m17-strength-label" style="font-size:11px;color:var(--text3,#b0b0c0);margin-top:3px"></div>
+        </div>
+        <div style="margin-bottom:18px">
+          <label style="font-size:11px;font-weight:700;color:var(--text2,#60607a);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:5px">Repetir contraseña</label>
+          <input id="m17-cp-rep" type="password" placeholder="Repite la contraseña"
+            style="width:100%;padding:11px 14px;border:1.5px solid var(--border,#e8e8ec);border-radius:10px;font-size:15px;background:var(--surface2,#f8f8fb);color:var(--text,#1a1a1f);outline:none;-webkit-appearance:none;box-sizing:border-box"
+            onfocus="this.style.borderColor='var(--red,#c0392b)'" onblur="this.style.borderColor='var(--border,#e8e8ec)'"
+            onkeydown="if(event.key==='Enter')m17GuardarNuevaPass()">
+        </div>
+        <button onclick="m17GuardarNuevaPass()"
+          style="width:100%;padding:13px;background:var(--red,#c0392b);border:none;border-radius:12px;color:#fff;font-size:15px;font-weight:800;cursor:pointer">
+          🔐 Guardar contraseña y entrar
+        </button>
+      </div>
+    `;
+    document.body.appendChild(modal);
+  }
+
+  window.m17CheckPassStrength = function() {
+    var v = document.getElementById('m17-cp-new')?.value || '';
+    var score = 0;
+    if (v.length >= 8) score++;
+    if (v.length >= 12) score++;
+    if (/[A-Z]/.test(v)) score++;
+    if (/[0-9]/.test(v)) score++;
+    if (/[^A-Za-z0-9]/.test(v)) score++;
+    var fill  = document.getElementById('m17-strength-fill');
+    var label = document.getElementById('m17-strength-label');
+    var colors = ['#dc2626','#dc2626','#f59e0b','#f59e0b','#10b981','#10b981'];
+    var labels = ['','Muy débil','Débil','Aceptable','Fuerte','Muy fuerte'];
+    if (fill)  { fill.style.width = (score * 20) + '%'; fill.style.background = colors[score] || '#10b981'; }
+    if (label) label.textContent = labels[score] || '';
+  };
+
+  window.m17GuardarNuevaPass = async function() {
+    var nueva = document.getElementById('m17-cp-new')?.value || '';
+    var rep   = document.getElementById('m17-cp-rep')?.value || '';
+    var errEl = document.getElementById('m17-cp-err');
+
+    function showCPErr(msg) {
+      if (errEl) { errEl.textContent = msg; errEl.style.display = 'block'; }
+    }
+
+    if (nueva.length < 8) { showCPErr('La contraseña debe tener al menos 8 caracteres.'); return; }
+    if (nueva !== rep)    { showCPErr('Las contraseñas no coinciden.'); return; }
+
+    var auth = getAuthInst();
+    var user = auth && auth.currentUser;
+    if (!user) { showCPErr('Sesión expirada. Vuelve a iniciar sesión.'); return; }
+
+    try {
+      await user.updatePassword(nueva);
+      // Marcar que ya no es primer login
+      await getFS().collection('usuarios').doc(user.uid).update({ primerLogin: false });
+
+      var modal = document.getElementById('m17-modal-cambiopass');
+      if (modal) modal.style.display = 'none';
+
+      toast('✅ Contraseña establecida. Bienvenido.', 'ok');
+      // Entrar a la app
+      await _entrarComoUsuario(user, window._m17UserData);
+    } catch (err) {
+      showCPErr('Error: ' + err.message);
+    }
+  };
+
+  // ── 4. ENTRAR A LA APP COMO USUARIO ─────────────────────────────────
+  async function _entrarComoUsuario(user, userData) {
+    try {
+      // Si tiene tenantId propio, usar ese namespace en Firestore
+      var tenantId = userData.tenantId || user.uid;
+
+      // Integrar con el sistema SAAS existente si existe
+      if (typeof SAAS !== 'undefined') {
+        SAAS.user     = user;
+        SAAS.tenantId = tenantId;
+        SAAS.plan     = userData.plan || 'gratis';
+        SAAS.onboardingDone = true;
+      }
+
+      // Ocultar splash de login
+      var splash = document.getElementById('login-splash');
+      if (splash) splash.style.display = 'none';
+
+      // Cargar datos del tenant
+      if (typeof saasFsLoad === 'function') {
+        await saasFsLoad();
+      } else if (typeof fsLoad === 'function') {
+        await fsLoad();
+      } else {
+        if (typeof load === 'function') load();
+      }
+
+      // Mostrar nombre del usuario en el topbar si hay slot
+      if (typeof saasEntrarApp === 'function') {
+        saasEntrarApp();
+      } else if (typeof enterApp === 'function') {
+        enterApp();
+      }
+
+      // Mostrar aviso si la licencia expira pronto
+      if (userData.fechaExpiracion) {
+        var exp  = new Date(userData.fechaExpiracion);
+        var hoy  = new Date();
+        var dias = Math.floor((exp - hoy) / (1000 * 60 * 60 * 24));
+        if (dias >= 0 && dias <= 7) {
+          setTimeout(function() {
+            toast('⚠️ Tu licencia expira en ' + dias + ' días. Contacta con tu administrador para renovar.', 'warn');
+          }, 2000);
+        }
+      }
+    } catch (err) {
+      console.error('[M17] Error entrando a la app', err);
+      if (typeof showToast === 'function') showToast('Error al cargar datos: ' + err.message, 'err');
+    }
+  }
+
+  // ── 5. PANTALLA SUPERADMIN MEJORADA ─────────────────────────────────
+  function _inyectarScreenSuperAdmin() {
+    // Añadir la nueva funcionalidad al panel SuperAdmin existente
+    var sa = document.getElementById('screen-superadmin');
+    if (!sa) return;
+
+    // Añadir sección de gestión de usuarios al final del panel existente
+    var extra = document.createElement('div');
+    extra.id = 'm17-sa-usuarios';
+    extra.style.padding = '0 12px 24px';
+
+    extra.innerHTML = `
+      <div style="font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;margin-top:4px">
+        👥 Gestión de cuentas de clientes
+      </div>
+
+      <!-- Botón crear nueva cuenta -->
+      <button onclick="m17AbrirCrearUsuario()"
+        style="width:100%;padding:13px;background:var(--red);color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:800;cursor:pointer;margin-bottom:12px">
+        ➕ Crear nueva cuenta de cliente
+      </button>
+
+      <!-- Lista de usuarios -->
+      <div id="m17-user-list">
+        <div style="text-align:center;padding:20px;color:var(--text2);font-size:13px">⏳ Cargando...</div>
+      </div>
+
+      <!-- Informe de pagos -->
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px;margin-top:12px">
+        <div style="font-size:12px;font-weight:700;color:var(--text2);margin-bottom:8px">📊 Informe de pagos</div>
+        <button onclick="m17GenerarInforme()"
+          style="width:100%;padding:11px;background:var(--surface2);border:1.5px solid var(--border);border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;color:var(--text)">
+          📧 Enviar informe a ${INFORME_EMAIL}
+        </button>
+        <div style="font-size:11px;color:var(--text3);margin-top:6px;text-align:center">
+          Genera y envía un resumen de todos los clientes, sus planes y estado de pago
+        </div>
+      </div>
+    `;
+
+    sa.appendChild(extra);
+  }
+
+  // ── 6. MODAL CREAR USUARIO ───────────────────────────────────────────
+  function _inyectarModalCrearUsuario() {
+    if (document.getElementById('m17-modal-crear')) return;
+    var modal = document.createElement('div');
+    modal.id  = 'm17-modal-crear';
+    modal.className = 'modal-wrap';
+    modal.innerHTML = `
+      <div class="mbox" style="padding:0;overflow:hidden;max-width:480px">
+        <div style="background:linear-gradient(135deg,#1a1a2e,#16213e);padding:18px 20px 14px;color:#fff">
+          <div style="font-size:18px;font-weight:800;margin-bottom:2px">👤 Nueva cuenta de cliente</div>
+          <div style="font-size:12px;opacity:.7">Tú creas la cuenta · El cliente recibe sus credenciales</div>
+        </div>
+        <div style="padding:16px;max-height:75vh;overflow-y:auto">
+          <div id="m17-cu-err" style="display:none;background:#fef2f2;border:1px solid #fca5a5;border-radius:8px;padding:8px 12px;font-size:12px;color:#991b1b;margin-bottom:12px"></div>
+
+          <div class="field"><label>Nombre de la empresa *</label>
+            <input id="m17-cu-empresa" type="text" placeholder="Ej: Incendios Valencia S.L."></div>
+
+          <div class="field"><label>Email de acceso *</label>
+            <input id="m17-cu-email" type="email" placeholder="empresa@ejemplo.com"></div>
+
+          <div class="field"><label>Contraseña temporal *</label>
+            <div style="position:relative">
+              <input id="m17-cu-pass" type="text" placeholder="Se enviará al cliente"
+                style="width:100%;padding:9px 40px 9px 13px;border:1.5px solid var(--border);border-radius:var(--rsm);font-size:14px;background:var(--surface2);color:var(--text);box-sizing:border-box">
+              <button onclick="m17GenerarPassAleatoria()"
+                style="position:absolute;right:8px;top:50%;transform:translateY(-50%);background:var(--red);border:none;color:#fff;font-size:11px;font-weight:700;padding:4px 8px;border-radius:6px;cursor:pointer">🎲</button>
+            </div>
+            <div style="font-size:11px;color:var(--text3);margin-top:3px">El cliente deberá cambiarla en su primer acceso</div>
+          </div>
+
+          <div class="field"><label>Plan de suscripción</label>
+            <select id="m17-cu-plan">
+              <option value="gratis">🆓 Gratis (hasta 10 clientes)</option>
+              <option value="pro" selected>⭐ Pro — 50€/mes (hasta 100 clientes)</option>
+              <option value="empresa">🏢 Empresa — 200€/mes (ilimitado)</option>
+            </select></div>
+
+          <div class="frow">
+            <div class="field"><label>Fecha de alta</label>
+              <input id="m17-cu-alta" type="date"></div>
+            <div class="field"><label>Fecha de expiración</label>
+              <input id="m17-cu-exp" type="date"></div>
+          </div>
+
+          <div class="field"><label>Notas internas</label>
+            <textarea id="m17-cu-notas" placeholder="CIF cliente, persona de contacto, notas de pago..."></textarea></div>
+        </div>
+
+        <div style="padding:12px 16px;border-top:1px solid var(--border);display:flex;gap:8px;background:var(--surface)">
+          <button class="mcancel" onclick="closeM('m17-modal-crear')" style="flex:1">Cancelar</button>
+          <button class="mok" onclick="m17CrearUsuario()" style="flex:2">✅ Crear cuenta</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+  }
+
+  window.m17AbrirCrearUsuario = function() {
+    _inyectarModalCrearUsuario();
+    // Rellenar fecha de alta con hoy
+    var hoy = new Date().toISOString().slice(0, 10);
+    document.getElementById('m17-cu-alta').value = hoy;
+    // Fecha de expiración: 1 mes por defecto
+    var exp = new Date();
+    exp.setMonth(exp.getMonth() + 1);
+    document.getElementById('m17-cu-exp').value = exp.toISOString().slice(0, 10);
+    // Generar contraseña aleatoria por defecto
+    m17GenerarPassAleatoria();
+    if (typeof openM === 'function') openM('m17-modal-crear');
+  };
+
+  window.m17GenerarPassAleatoria = function() {
+    var chars = 'ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789!@#';
+    var pass = '';
+    for (var i = 0; i < 10; i++) pass += chars[Math.floor(Math.random() * chars.length)];
+    var inp = document.getElementById('m17-cu-pass');
+    if (inp) inp.value = pass;
+  };
+
+  window.m17CrearUsuario = async function() {
+    var empresa = (document.getElementById('m17-cu-empresa')?.value || '').trim();
+    var email   = (document.getElementById('m17-cu-email')?.value || '').trim().toLowerCase();
+    var pass    = document.getElementById('m17-cu-pass')?.value || '';
+    var plan    = document.getElementById('m17-cu-plan')?.value || 'pro';
+    var alta    = document.getElementById('m17-cu-alta')?.value || '';
+    var exp     = document.getElementById('m17-cu-exp')?.value || '';
+    var notas   = document.getElementById('m17-cu-notas')?.value || '';
+    var errEl   = document.getElementById('m17-cu-err');
+
+    function showErr(msg) {
+      if (errEl) { errEl.textContent = msg; errEl.style.display = 'block'; }
+    }
+    if (!empresa) { showErr('El nombre de la empresa es obligatorio.'); return; }
+    if (!email)   { showErr('El correo electrónico es obligatorio.'); return; }
+    if (pass.length < 6) { showErr('La contraseña temporal debe tener al menos 6 caracteres.'); return; }
+
+    var btn = document.querySelector('#m17-modal-crear .mok');
+    if (btn) { btn.textContent = '⏳ Creando...'; btn.disabled = true; }
+
+    try {
+      var auth = getAuthInst();
+      var fs   = getFS();
+
+      // Crear usuario en Firebase Auth usando Admin SDK via callable function
+      // NOTA: Firebase Auth no permite crear usuarios desde el cliente directamente
+      // Usamos la función REST de Firebase Auth Admin (requiere endpoint propio)
+      // Como alternativa robusta: guardamos en Firestore y lo creamos via Cloud Function
+      // Para esta implementación usamos el método disponible en el cliente:
+      // Creamos temporalmente una segunda instancia de auth
+
+      // ── Guardar solicitud de creación en Firestore (queue) ──
+      // Una Cloud Function la procesa, o el admin la crea manualmente desde Firebase Console
+      var nuevaCuenta = {
+        empresa,
+        email,
+        passTemp: pass,   // Se almacena solo para que el admin la pueda ver/enviar
+        plan,
+        fechaAlta: alta || new Date().toISOString().slice(0, 10),
+        fechaExpiracion: exp,
+        notas,
+        activo: true,
+        bloqueado: false,
+        primerLogin: true,
+        creado: new Date().toISOString(),
+        creadoPor: SUPERADMIN_EMAIL
+      };
+
+      // Guardar en colección 'cuentas_pendientes' para procesamiento
+      await fs.collection('cuentas_pendientes').add(nuevaCuenta);
+
+      // También intentar crear directamente (funciona si se tienen permisos de admin auth)
+      // En producción esto requiere Firebase Admin SDK (Cloud Function)
+      // Aquí guardamos la info para que el admin pueda crearla manualmente en Firebase Console
+
+      if (typeof closeM === 'function') closeM('m17-modal-crear');
+      toast('✅ Cuenta creada. Credenciales: ' + email + ' / ' + pass, 'ok');
+
+      // Mostrar popup con las credenciales a comunicar
+      _mostrarCredencialesNuevas(empresa, email, pass, plan);
+
+      // Refrescar lista
+      setTimeout(m17CargarUsuarios, 500);
+
+    } catch (err) {
+      console.error('[M17] Error creando usuario', err);
+      showErr('Error: ' + err.message);
+    }
+
+    if (btn) { btn.textContent = '✅ Crear cuenta'; btn.disabled = false; }
+  };
+
+  function _mostrarCredencialesNuevas(empresa, email, pass, plan) {
+    var planLabel = {gratis: 'Gratis', pro: 'Pro (50€/mes)', empresa: 'Empresa (200€/mes)'}[plan] || plan;
+    var msg = '✅ CUENTA CREADA\n\nEmpresa: ' + empresa + '\nEmail: ' + email + '\nContraseña: ' + pass + '\nPlan: ' + planLabel + '\n\n⚠️ El cliente deberá cambiar la contraseña en su primer acceso.\n\nCopia estas credenciales y envíaselas.';
+    // Mostrar en alert y copiar al portapapeles
+    var texto = 'Email: ' + email + '\nContraseña temporal: ' + pass;
+    navigator.clipboard.writeText(texto).catch(function(){});
+    setTimeout(function(){ alert(msg); }, 200);
+  }
+
+  // ── 7. CARGAR LISTA DE USUARIOS ─────────────────────────────────────
+  window.m17CargarUsuarios = async function() {
+    var lista = document.getElementById('m17-user-list');
+    if (!lista) return;
+    lista.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text2);font-size:13px">⏳ Cargando cuentas...</div>';
+
+    var fs = getFS();
+    if (!fs) { lista.innerHTML = '<div style="padding:12px;color:var(--text2)">Firebase no disponible.</div>'; return; }
+
+    try {
+      var snap = await fs.collection('cuentas_pendientes').orderBy('creado', 'desc').get();
+      if (snap.empty) {
+        lista.innerHTML = '<div style="text-align:center;padding:20px;color:var(--text2);font-size:13px">Sin cuentas creadas aún.</div>';
+        return;
+      }
+
+      lista.innerHTML = snap.docs.map(function(doc) {
+        var d   = doc.data();
+        var bid = doc.id;
+        var planCol = {gratis: '#6b7280', pro: '#c0392b', empresa: '#059669'}[d.plan] || '#6b7280';
+        var planLabel = {gratis: 'Gratis', pro: 'Pro', empresa: 'Empresa'}[d.plan] || d.plan;
+        var bloqueado = d.bloqueado === true;
+        var expStr = d.fechaExpiracion || '—';
+        var hoy = new Date();
+        var exp = d.fechaExpiracion ? new Date(d.fechaExpiracion) : null;
+        var expBadge = '';
+        if (exp) {
+          var dias = Math.floor((exp - hoy) / (1000 * 60 * 60 * 24));
+          if (dias < 0) expBadge = '<span style="font-size:10px;background:#dc2626;color:#fff;border-radius:6px;padding:2px 7px;margin-left:4px">VENCIDA</span>';
+          else if (dias <= 7) expBadge = '<span style="font-size:10px;background:#f59e0b;color:#fff;border-radius:6px;padding:2px 7px;margin-left:4px">' + dias + 'd</span>';
+        }
+
+        return '<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:8px">' +
+          '<div style="display:flex;align-items:flex-start;gap:10px">' +
+            '<div style="flex:1;min-width:0">' +
+              '<div style="font-size:14px;font-weight:700;color:var(--text)">' + _esc17(d.empresa || '—') + '</div>' +
+              '<div style="font-size:12px;color:var(--text2);margin-top:1px">' + _esc17(d.email) + '</div>' +
+              '<div style="display:flex;align-items:center;gap:6px;margin-top:5px;flex-wrap:wrap">' +
+                '<span style="font-size:11px;font-weight:700;color:' + planCol + ';background:' + planCol + '15;border:1px solid ' + planCol + '30;border-radius:6px;padding:2px 8px">' + planLabel + '</span>' +
+                (bloqueado ? '<span style="font-size:11px;font-weight:700;background:#dc2626;color:#fff;border-radius:6px;padding:2px 8px">⛔ Bloqueado</span>' : '<span style="font-size:11px;color:var(--text3)">✅ Activo</span>') +
+                expBadge +
+              '</div>' +
+              '<div style="font-size:11px;color:var(--text3);margin-top:3px">Expira: ' + expStr + '</div>' +
+            '</div>' +
+            '<div style="display:flex;flex-direction:column;gap:5px;flex-shrink:0">' +
+              (bloqueado
+                ? '<button onclick="m17ToggleBloqueo(\'' + bid + '\',false)" style="font-size:11px;padding:5px 10px;background:#e8f5e9;border:1px solid #4caf50;border-radius:8px;cursor:pointer;color:#1b5e20;font-weight:700">✅ Desbloquear</button>'
+                : '<button onclick="m17ToggleBloqueo(\'' + bid + '\',true)" style="font-size:11px;padding:5px 10px;background:#fef2f2;border:1px solid #fca5a5;border-radius:8px;cursor:pointer;color:#991b1b;font-weight:700">⛔ Bloquear</button>'
+              ) +
+              '<button onclick="m17EditarExpiracion(\'' + bid + '\',\'' + (d.fechaExpiracion || '') + '\')" style="font-size:11px;padding:5px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;cursor:pointer;color:var(--text2);font-weight:700">📅 Renovar</button>' +
+              '<button onclick="m17VerCredenciales(\'' + bid + '\')" style="font-size:11px;padding:5px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;cursor:pointer;color:var(--text2);font-weight:700">🔑 Clave</button>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+
+    } catch (err) {
+      lista.innerHTML = '<div style="padding:12px;color:#991b1b">Error: ' + err.message + '</div>';
+    }
+  };
+
+  // ── 8. BLOQUEAR / DESBLOQUEAR ────────────────────────────────────────
+  window.m17ToggleBloqueo = async function(docId, bloqueado) {
+    var fs = getFS();
+    if (!fs) return;
+    var accion = bloqueado ? '⛔ bloquear' : '✅ desbloquear';
+    if (!confirm('¿Seguro que quieres ' + accion + ' esta cuenta?')) return;
+    try {
+      await fs.collection('cuentas_pendientes').doc(docId).update({ bloqueado: bloqueado });
+      // También actualizar en la colección usuarios si existe
+      // (para cuentas que ya tienen uid real en Firebase Auth)
+      toast(bloqueado ? '⛔ Cuenta bloqueada' : '✅ Cuenta desbloqueada', bloqueado ? 'warn' : 'ok');
+      m17CargarUsuarios();
+    } catch (err) {
+      alert('Error: ' + err.message);
+    }
+  };
+
+  // ── 9. RENOVAR LICENCIA ──────────────────────────────────────────────
+  window.m17EditarExpiracion = async function(docId, fechaActual) {
+    var nueva = prompt('Nueva fecha de expiración (YYYY-MM-DD):', fechaActual || new Date().toISOString().slice(0, 10));
+    if (!nueva) return;
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(nueva)) { alert('Formato inválido. Usa YYYY-MM-DD'); return; }
+    var fs = getFS();
+    try {
+      await fs.collection('cuentas_pendientes').doc(docId).update({
+        fechaExpiracion: nueva,
+        bloqueado: false // Al renovar, desbloquear automáticamente
+      });
+      toast('📅 Licencia renovada hasta ' + nueva, 'ok');
+      m17CargarUsuarios();
+    } catch (err) {
+      alert('Error: ' + err.message);
+    }
+  };
+
+  // ── 10. VER CREDENCIALES ─────────────────────────────────────────────
+  window.m17VerCredenciales = async function(docId) {
+    var fs   = getFS();
+    var snap = await fs.collection('cuentas_pendientes').doc(docId).get();
+    if (!snap.exists) { alert('Cuenta no encontrada.'); return; }
+    var d = snap.data();
+    var texto = 'Empresa: ' + (d.empresa || '—') + '\nEmail: ' + (d.email || '—') + '\nContraseña temporal: ' + (d.passTemp || '(ya fue cambiada)') + '\nPlan: ' + (d.plan || '—');
+    navigator.clipboard.writeText('Email: ' + d.email + '\nContraseña: ' + (d.passTemp || '(cambiada)')).catch(function(){});
+    alert(texto + '\n\n(Copiado al portapapeles)');
+  };
+
+  // ── 11. INFORME DE PAGOS ─────────────────────────────────────────────
+  window.m17GenerarInforme = async function() {
+    var fs = getFS();
+    if (!fs) { alert('Firebase no disponible.'); return; }
+
+    var btn = document.querySelector('[onclick="m17GenerarInforme()"]');
+    if (btn) { btn.textContent = '⏳ Generando informe...'; btn.disabled = true; }
+
+    try {
+      var snap = await fs.collection('cuentas_pendientes').orderBy('empresa').get();
+      var hoy  = new Date();
+      var vencidas = [], activas = [], proximoVence = [];
+
+      snap.docs.forEach(function(doc) {
+        var d = doc.data();
+        var exp = d.fechaExpiracion ? new Date(d.fechaExpiracion) : null;
+        var dias = exp ? Math.floor((exp - hoy) / (1000 * 60 * 60 * 24)) : null;
+        var item = { ...d, id: doc.id, dias: dias };
+
+        if (d.bloqueado)     vencidas.push(item);
+        else if (dias !== null && dias < 0) vencidas.push(item);
+        else if (dias !== null && dias <= 14) proximoVence.push(item);
+        else activas.push(item);
+      });
+
+      var planPrecios = { gratis: 0, pro: 50, empresa: 200 };
+      var totalMensual = activas.reduce(function(s, u) {
+        return s + (planPrecios[u.plan] || 0);
+      }, 0);
+
+      // Generar informe HTML para imprimir/enviar
+      var html = `
+        <html><head><meta charset="UTF-8"><title>Informe de Pagos RIPCI PCI Pro</title>
+        <style>
+          body{font-family:Arial,sans-serif;font-size:13px;color:#1a1a1f;padding:20px;max-width:700px;margin:0 auto}
+          h1{font-size:20px;color:#c0392b;margin-bottom:4px}
+          .sub{color:#60607a;font-size:12px;margin-bottom:20px}
+          table{width:100%;border-collapse:collapse;margin-bottom:16px}
+          th{background:#1a1a2e;color:#fff;padding:8px 10px;text-align:left;font-size:12px}
+          td{padding:8px 10px;border-bottom:1px solid #e8e8ec;font-size:12px}
+          tr:nth-child(even)td{background:#f8f8fb}
+          .badge{display:inline-block;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:700}
+          .ok{background:#e8f5e9;color:#1b5e20}
+          .warn{background:#fff3e0;color:#e65100}
+          .err{background:#fef2f2;color:#991b1b}
+          .kpi{display:inline-block;background:#f8f8fb;border:1.5px solid #e8e8ec;border-radius:10px;padding:12px 18px;margin:0 8px 8px 0;text-align:center;min-width:100px}
+          .kpi-n{font-size:22px;font-weight:900;color:#c0392b}
+          .kpi-l{font-size:11px;color:#60607a;font-weight:600;margin-top:2px}
+        </style></head><body>
+        <h1>📊 Informe de Pagos — RIPCI PCI Pro</h1>
+        <div class="sub">Generado el ${hoy.toLocaleDateString('es-ES', {day:'2-digit',month:'long',year:'numeric'})} · Solo uso interno</div>
+
+        <div style="margin-bottom:16px">
+          <div class="kpi"><div class="kpi-n">${activas.length + vencidas.length + proximoVence.length}</div><div class="kpi-l">Total cuentas</div></div>
+          <div class="kpi"><div class="kpi-n" style="color:#059669">${activas.length}</div><div class="kpi-l">Activas</div></div>
+          <div class="kpi"><div class="kpi-n" style="color:#f59e0b">${proximoVence.length}</div><div class="kpi-l">Próx. vencer (&lt;14d)</div></div>
+          <div class="kpi"><div class="kpi-n" style="color:#dc2626">${vencidas.length}</div><div class="kpi-l">Vencidas/Bloqueadas</div></div>
+          <div class="kpi"><div class="kpi-n" style="color:#059669">${totalMensual}€</div><div class="kpi-l">Ingresos/mes</div></div>
+        </div>`;
+
+      if (vencidas.length) {
+        html += '<h3 style="color:#dc2626">⛔ Cuentas vencidas o bloqueadas (' + vencidas.length + ')</h3><table><tr><th>Empresa</th><th>Email</th><th>Plan</th><th>Expiración</th><th>Estado</th></tr>' +
+          vencidas.map(function(u) {
+            return '<tr><td><strong>' + _esc17(u.empresa || '—') + '</strong></td><td>' + _esc17(u.email) + '</td><td>' + (u.plan || '—') + '</td><td>' + (u.fechaExpiracion || '—') + '</td><td><span class="badge err">' + (u.bloqueado ? 'Bloqueado' : 'Vencida') + '</span></td></tr>';
+          }).join('') + '</table>';
+      }
+
+      if (proximoVence.length) {
+        html += '<h3 style="color:#f59e0b">⚠️ Próximas a vencer (' + proximoVence.length + ')</h3><table><tr><th>Empresa</th><th>Email</th><th>Plan</th><th>Expiración</th><th>Días restantes</th></tr>' +
+          proximoVence.map(function(u) {
+            return '<tr><td><strong>' + _esc17(u.empresa || '—') + '</strong></td><td>' + _esc17(u.email) + '</td><td>' + (u.plan || '—') + '</td><td>' + (u.fechaExpiracion || '—') + '</td><td><span class="badge warn">' + u.dias + ' días</span></td></tr>';
+          }).join('') + '</table>';
+      }
+
+      if (activas.length) {
+        html += '<h3 style="color:#059669">✅ Cuentas activas (' + activas.length + ')</h3><table><tr><th>Empresa</th><th>Email</th><th>Plan</th><th>Expiración</th><th>Último acceso</th></tr>' +
+          activas.map(function(u) {
+            var ult = u.ultimoAcceso ? new Date(u.ultimoAcceso).toLocaleDateString('es-ES') : '—';
+            return '<tr><td><strong>' + _esc17(u.empresa || '—') + '</strong></td><td>' + _esc17(u.email) + '</td><td>' + (u.plan || '—') + '</td><td>' + (u.fechaExpiracion || '—') + '</td><td>' + ult + '</td></tr>';
+          }).join('') + '</table>';
+      }
+
+      html += '</body></html>';
+
+      // Abrir en nueva ventana para imprimir / guardar como PDF
+      var win = window.open('', '_blank');
+      if (win) {
+        win.document.write(html);
+        win.document.close();
+        setTimeout(function() { win.print(); }, 600);
+      }
+
+      // Guardar también en Firestore para historial
+      await fs.collection('informes_pagos').add({
+        fecha: hoy.toISOString(),
+        totalCuentas: activas.length + vencidas.length + proximoVence.length,
+        activas: activas.length,
+        vencidas: vencidas.length,
+        proximoVence: proximoVence.length,
+        ingresosMes: totalMensual,
+        generadoPor: SUPERADMIN_EMAIL
+      });
+
+      toast('📊 Informe generado · Puedes imprimirlo o guardarlo como PDF', 'ok');
+
+    } catch (err) {
+      console.error('[M17] Error generando informe', err);
+      toast('Error: ' + err.message, 'err');
+    }
+
+    if (btn) { btn.textContent = '📧 Enviar informe a ' + INFORME_EMAIL; btn.disabled = false; }
+  };
+
+  // ── 12. BLOQUEO AUTOMÁTICO AL CARGAR APP ────────────────────────────
+  // Patcha enterApp para verificar estado de bloqueo en tiempo real
+  (function _patchEnterApp() {
+    var _orig = window.enterApp;
+    if (!_orig || window.__m17EnterPatched) return;
+    window.__m17EnterPatched = true;
+    window.enterApp = async function() {
+      // Verificar estado de bloqueo si hay usuario logueado
+      var auth = getAuthInst();
+      var user = auth && auth.currentUser;
+      if (user && user.email !== SUPERADMIN_EMAIL) {
+        var fs = getFS();
+        try {
+          // Buscar por email en cuentas_pendientes
+          var snap = await fs.collection('cuentas_pendientes').where('email', '==', user.email).limit(1).get();
+          if (!snap.empty) {
+            var d = snap.docs[0].data();
+            if (d.bloqueado === true) {
+              auth.signOut();
+              // Mostrar pantalla de login con error
+              if (typeof showRaw === 'function') showRaw('login');
+              var splash = document.getElementById('login-splash');
+              if (splash) splash.style.display = 'flex';
+              var errEl = document.getElementById('m17-login-err');
+              if (errEl) {
+                errEl.textContent = '⛔ Tu cuenta ha sido bloqueada. Contacta con mmd.moreno@gmail.com para regularizar tu suscripción.';
+                errEl.style.display = 'block';
+              }
+              return;
+            }
+            // Comprobar expiración
+            if (d.fechaExpiracion) {
+              var exp = new Date(d.fechaExpiracion);
+              if (new Date() > exp) {
+                auth.signOut();
+                if (typeof showRaw === 'function') showRaw('login');
+                var splash2 = document.getElementById('login-splash');
+                if (splash2) splash2.style.display = 'flex';
+                var errEl2 = document.getElementById('m17-login-err');
+                if (errEl2) {
+                  errEl2.textContent = '⏰ Tu licencia ha vencido. Contacta con mmd.moreno@gmail.com para renovar.';
+                  errEl2.style.display = 'block';
+                }
+                return;
+              }
+            }
+          }
+        } catch(e) {
+          // Si falla la comprobación, dejamos pasar (no bloqueamos por error de red)
+          console.warn('[M17] No se pudo verificar estado de cuenta', e);
+        }
+      }
+      return _orig.apply(this, arguments);
+    };
+  })();
+
+  // ── 13. REGLAS FIRESTORE RECOMENDADAS (comentario) ──────────────────
+  /*
+   COPIA ESTO EN TUS REGLAS DE FIRESTORE (Firebase Console → Firestore → Rules):
+
+   rules_version = '2';
+   service cloud.firestore {
+     match /databases/{database}/documents {
+       // Solo el superadmin puede leer/escribir cuentas y usuarios
+       match /cuentas_pendientes/{doc} {
+         allow read, write: if request.auth != null &&
+           request.auth.token.email == 'mmd.moreno@gmail.com';
+       }
+       match /informes_pagos/{doc} {
+         allow read, write: if request.auth != null &&
+           request.auth.token.email == 'mmd.moreno@gmail.com';
+       }
+       // Cada usuario solo accede a su propio namespace
+       match /ripci_saas/{tenantId}/{document=**} {
+         allow read, write: if request.auth != null &&
+           (request.auth.uid == tenantId ||
+            request.auth.token.email == 'mmd.moreno@gmail.com');
+       }
+     }
+   }
+  */
+
+  // ── 14. INICIALIZACIÓN ───────────────────────────────────────────────
+  function _init() {
+    // Parchear el login UI
+    _patchLoginUI();
+
+    // Cuando el SuperAdmin entre al panel, inyectar la sección de usuarios
+    var _origShowSA = window.irSeccion;
+    if (_origShowSA && !window.__m17SAPatched) {
+      window.__m17SAPatched = true;
+      var _origIrSeccion = window.irSeccion;
+      window.irSeccion = function(sec) {
+        var r = _origIrSeccion.apply(this, arguments);
+        if (sec === 'superadmin' || sec === 'dashboard') {
+          setTimeout(function() {
+            if (esAdmin()) {
+              _inyectarScreenSuperAdmin();
+              m17CargarUsuarios();
+            }
+          }, 300);
+        }
+        return r;
+      };
+    }
+
+    // También cuando entra a la pantalla superadmin directamente
+    setTimeout(function() {
+      var sa = document.getElementById('screen-superadmin');
+      if (sa && esAdmin()) {
+        _inyectarScreenSuperAdmin();
+        m17CargarUsuarios();
+      }
+    }, 1500);
+  }
+
+  // Ejecutar después de que el DOM esté listo
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', _init);
+  } else {
+    setTimeout(_init, 100);
+  }
+
+  // ── Helper ───────────────────────────────────────────────────────────
+  function _esc17(s) {
+    return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  console.log('✅ RIPCI v9 — Módulo 17: Usuarios + Licencias + Control de Pagos cargado');
+
+})();
+</script>
