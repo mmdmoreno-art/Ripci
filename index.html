@@ -1769,12 +1769,7 @@ function isoToDisplay(v){
   return`${p[2]}/${p[1]}/${p[0]}`;
 }
 // dd/mm/aaaa → YYYY-MM-DD
-function displayToIso(v){
-  if(!v)return'';
-  const p=v.split('/');
-  if(p.length!==3)return'';
-  return`${p[2]}-${p[1]}-${p[0]}`;
-}
+
 
 let _active=null; // current picker state
 
@@ -3844,32 +3839,7 @@ function fmtDate(d){if(!d)return'—';const p=d.split('-');return p.length===3?`
 function daysUntil(dateStr){if(!dateStr)return null;const diff=new Date(dateStr)-new Date();return Math.floor(diff/(1000*60*60*24));}
 
 // ===== ALERTS =====
-function renderAlerts(){
-  const container=document.getElementById('alert-container');
-  if(!container)return;
-  const alerts=[];
-  const today=new Date();
-  Object.values(DB).forEach(c=>{
-    (c.equipos||[]).forEach(e=>{
-      if(!e.fcad||!e.codigo)return;
-      const d=daysUntil(e.fcad);
-      if(d===null)return;
-      if(d<0) alerts.push({type:'danger',msg:`❌ ${esc(c.name)} — ${esc(e.codigo)}: CADUCADO (${fmtDate(e.fcad)})`,cid:Object.keys(DB).find(k=>DB[k]===c)});
-      else if(d<=30) alerts.push({type:'warn',msg:`⚠️ ${esc(c.name)} — ${esc(e.codigo)}: caduca en ${d} días (${fmtDate(e.fcad)})`,cid:Object.keys(DB).find(k=>DB[k]===c)});
-    });
-    // Check if revision is overdue
-    const years=Object.keys(c.revisiones||{}).sort().reverse();
-    if(years.length>0){
-      const lastYear=parseInt(years[0]);
-      const currentYear=today.getFullYear();
-      if(currentYear-lastYear>=2){
-        const ckey=Object.keys(DB).find(k=>DB[k]===c);
-        alerts.push({type:'warn',msg:`📅 ${esc(c.name)}: última revisión en ${lastYear}`,cid:ckey});
-      }
-    }
-  });
-  container.innerHTML=alerts.slice(0,5).map(a=>`<div class="alert-banner ${a.type==='danger'?'danger':''}" onclick="openClient('${a.cid}')">${a.msg}</div>`).join('');
-}
+
 
 // ===== SYNC =====
 function setSS(s,t){document.getElementById('sd').className=s;document.getElementById('st').textContent=t;}
@@ -3969,7 +3939,7 @@ function loginGoogle(){
       });
   }
 }
-function checkOAuth(){return false;}
+
 
 // Manejar resultado del redirect al volver a la app (móvil)
 function handleRedirectResult(){
@@ -7449,16 +7419,8 @@ function mbcSeleccionar(clienteId) {
 }
 
 // Mantener compatibilidad con código antiguo que abría modal-cliente-pres
-function filtrarClientesPres(){
-  // Redirigir al nuevo modal si se llama directamente
-  mbcFiltrar();
-}
-function crearPresupuestoParaCliente(clienteId){
-  closeM('modal-buscar-cliente');
-  closeM('modal-cliente-pres');
-  openClient(clienteId);
-  setTimeout(()=>{ swTab('presupuestos'); setTimeout(()=>nuevoPresupuesto(),150); },200);
-}
+
+
 function crearPresupuestoDesdeIncidencias(){
   const c=DB[cid];
   const rev=c.revisiones&&c.revisiones[cYear];
@@ -8528,64 +8490,12 @@ function copiarClave(id){
   });
 }
 
-async function adminNuevaClave(){
-  const nombre = prompt('Nombre del cliente (ej: Ayuntamiento Mislata):');
-  if(!nombre) return;
-  // Generar clave aleatoria legible
-  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  const parte = (n) => Array.from({length:n},()=>chars[Math.floor(Math.random()*chars.length)]).join('');
-  const clave = parte(4)+'-'+parte(4);
-  try {
-    await getDB().collection('claves').doc(clave).set({
-      nombre,
-      activa: true,
-      creada: new Date().toISOString(),
-      accesos: 0,
-      ultimoAcceso: null
-    });
-    await renderAdmin();
-    // Copiar URL automáticamente
-    copiarClave(clave);
-  } catch(e){ alert('Error al crear: '+e.message); }
-}
+async 
 
 function escAdmin(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
 // ===== VERIFICAR SESIÓN AL CARGAR =====
-async function checkAcceso(){
-  // Sin Firebase configurado → pasar directo (desarrollo local)
-  if(FIREBASE_CONFIG.apiKey === 'TU_API_KEY') return true;
-
-  // URL con ?key=XXXX (primer acceso desde link)
-  const urlKey = new URLSearchParams(location.search).get('key');
-  if(urlKey){
-    // Guardar en session y limpiar URL
-    sessionStorage.setItem('ripci_clave', urlKey.toUpperCase());
-    history.replaceState(null,'',location.pathname);
-  }
-
-  const saved = sessionStorage.getItem('ripci_clave');
-  if(!saved) return false; // no hay clave
-
-  // Admin directo
-  if(saved === ADMIN_KEY.toUpperCase()){ claveActiva='__admin__'; return 'admin'; }
-
-  // Validar contra Firestore
-  try {
-    const snap = await getDB().collection('claves').doc(saved).get();
-    if(snap.exists && snap.data().activa !== false){
-      claveActiva = saved;
-      // Actualizar acceso silencioso
-      getDB().collection('claves').doc(saved).update({
-        ultimoAcceso: new Date().toISOString(),
-        accesos: firebase.firestore.FieldValue.increment(1)
-      }).catch(()=>{});
-      return true;
-    }
-  } catch(e){ console.warn('Firebase check failed', e); }
-  sessionStorage.removeItem('ripci_clave');
-  return false;
-}
+async 
 
 
 // ===== DASHBOARD GLOBAL =====
@@ -10018,11 +9928,7 @@ function abrirNuevaFacturaGlobal(){
   });
 }
 
-function crearFacturaParaCliente(clienteId){
-  closeM('modal-nueva-fac-global');
-  openClient(clienteId);
-  setTimeout(()=>{ swTab('facturas'); setTimeout(()=>nuevaFactura(), 150); }, 200);
-}
+
 
 function abrirFacturaGlobal(clienteId, facId){
   openClient(clienteId);
@@ -10032,10 +9938,7 @@ function abrirFacturaGlobal(clienteId, facId){
   }, 200);
 }
 
-function generarFacturaRapida(){
-  // legacy — redirigir al nuevo flujo
-  abrirNuevaFacturaGlobal();
-}
+
 
 function nuevaFacturaRapida(){
   abrirBuscadorClientes('factura', (clienteId)=>{
@@ -11388,35 +11291,7 @@ function guardarEmpresa(){sched();showToast('✅ Datos guardados','ok',2000);}
 // ======= RIPCI v5 ENHANCEMENTS =======
 
 // ─── RELLENAR LOGIN CON DATOS DE EMPRESA ───
-function _actualizarLoginEmpresa(){
-  try {
-    const emp = DB.__empresa || {};
-    const nombre = emp.nombre || 'RIPCI PCI Pro';
-    const cif    = emp.cif    || '';
-    const dir    = emp.dir    || '';
-    const loc    = emp.loc    || '';
-    const tel    = emp.tel    || '';
 
-    const elNombre = document.getElementById('login-emp-nombre');
-    const elTagline= document.getElementById('login-emp-tagline');
-    const elCif    = document.getElementById('login-emp-cif');
-    const elDir    = document.getElementById('login-emp-dir');
-
-    if(elNombre) elNombre.textContent = nombre;
-    if(elTagline) elTagline.textContent = emp.nombre ? 'Gestión profesional contra incendios' : 'Gestión profesional de instalaciones PCI';
-
-    // Línea CIF + nombre si hay datos
-    if(elCif){
-      if(cif) elCif.textContent = 'CIF: ' + cif;
-      else    elCif.textContent = 'Software de mantenimiento PCI';
-    }
-    // Línea dirección / teléfono
-    if(elDir){
-      const partes = [dir, loc, tel].filter(Boolean);
-      elDir.textContent = partes.length ? partes.join(' · ') : 'RD 513/2017 · RD 164/2025 · RIPCI';
-    }
-  } catch(e){}
-}
 
 // ─── SWIPE BACK GESTURE ───
 (function(){
@@ -12813,20 +12688,7 @@ async function initSaaS(){
 
 // init() ya apunta directamente a initSaaS (ver definición arriba)
 
-function saasEntrarSinCuenta(){
-  // Modo invitado: DB vacía, datos del propietario NUNCA expuestos.
-  // El banner de demo se mostrará en el dashboard para cargar datos ficticios.
-  DB = {};
-  SAAS.tenantId = null;
-  SAAS.user = null;
-  SAAS.plan = 'gratis';
-  sessionStorage.setItem('ripci_guest', '1');
-  localStorage.removeItem('ripci_local'); // No cargar datos reales
-  document.getElementById('sync-bar').style.display = 'none';
-  document.getElementById('topbar').style.display = 'flex';
-  document.getElementById('nav-global').style.display = 'block';
-  enterApp();
-}
+
 
 async function saasCerrarSesion(){
   if(!confirm('¿Cerrar sesión?')) return;
@@ -15672,54 +15534,8 @@ const UNE5_ITEMS = [
 // ─── BLOQUE DE IDENTIFICACIÓN DE SISTEMA — helper reutilizable ───────────────
 // cfg = { pfx:'une2', hasPH:false, extraFields:[{id,label,type,opts,placeholder}] }
 // saved = objeto con los datos guardados (actaXXX)
-function buildSysIdHtml(cfg, saved){
-  var p = cfg.pfx;
-  var s = saved || {};
-  function fld(id, label, type, opts, ph){
-    var fid = p+'-sid-'+id;
-    if(type==='select'){
-      var optHtml = '<option value="">—</option>';
-      (opts||[]).forEach(function(o){ optHtml += '<option'+(s[id]===o?' selected':'')+'>'+o+'</option>'; });
-      return '<div class="field" style="background:#fff"><label>'+label+'</label><select id="'+fid+'">'+optHtml+'</select></div>';
-    }
-    return '<div class="field" style="background:#fff"><label>'+label+'</label><input type="text" id="'+fid+'" value="'+esc(s[id]||'')+'" placeholder="'+(ph||'')+'"></div>';
-  }
-  var html = '<div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--rsm);padding:12px 14px;margin-bottom:12px">'
-    + '<div style="font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">📋 Identificación del sistema</div>'
-    + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">'
-    + fld('marca','Marca / Fabricante','text',null,'Ej: Notifier, Tyco...')
-    + fld('modelo','Modelo / Referencia','text',null,'')
-    + fld('nserie','N.º Serie / Referencia','text',null,'')
-    + fld('ubic','Ubicación / Emplazamiento','text',null,'Sala máquinas, P.B...')
-    + fld('finstal','Fecha instalación','text',null,'mm/aaaa')
-    + fld('fultrev','Fecha última revisión','text',null,'mm/aaaa')
-    + fld('proxrev','Próxima revisión programada','text',null,'mm/aaaa')
-    + fld('tecnico','Técnico responsable','text',null,'Nombre y nº carnet');
-  if(cfg.hasPH){
-    html += fld('fph','Fecha P. Hidráulica realizada','text',null,'mm/aaaa')
-      + fld('presph','Presión prueba P.H. (bar)','text',null,'Ej: 15')
-    + '<div class="field" style="background:#fff"><label>Resultado P.H.</label><select id="'+p+'-sid-resph"><option value="">—</option>'
-      + ['Correcto','Deficiente','N/A'].map(function(o){ return '<option'+(s.resph===o?' selected':'')+'>'+o+'</option>'; }).join('')
-      + '</select></div>'
-      + fld('proxph','Próxima P. Hidráulica','text',null,'mm/aaaa');
-  }
-  (cfg.extraFields||[]).forEach(function(ef){
-    html += fld(ef.id, ef.label, ef.type||'text', ef.opts, ef.placeholder||'');
-  });
-  html += '</div></div>';
-  return html;
-}
-function loadSysId(cfg, saved){
-  var p = cfg.pfx; var s = saved||{};
-  var keys = ['marca','modelo','nserie','ubic','finstal','fultrev','proxrev','tecnico'];
-  if(cfg.hasPH) keys = keys.concat(['fph','presph','resph','proxph']);
-  (cfg.extraFields||[]).forEach(function(ef){ keys.push(ef.id); });
-  keys.forEach(function(k){
-    var el = document.getElementById(p+'-sid-'+k);
-    if(!el) return;
-    if(el.tagName==='SELECT') el.value = s[k]||''; else el.value = s[k]||'';
-  });
-}
+
+
 function readSysId(cfg){
   var p = cfg.pfx;
   var keys = ['marca','modelo','nserie','ubic','finstal','fultrev','proxrev','tecnico'];
@@ -16176,9 +15992,7 @@ function generarDocActaUNE(){
       :'<p style="color:#666;font-style:italic;font-size:11px">Sin datos registrados para esta acta.</p>';
   }
 
-  function seccionHeader(titulo, color){
-    return`<div style="margin:18px 0 10px;padding:8px 14px;background:${color};border-left:4px solid #c0392b;font-size:13px;font-weight:700;font-family:Arial,sans-serif">${titulo}</div>`;
-  }
+  
 
   function firmasBlock(){
     return`<div style="display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-top:28px;page-break-inside:avoid">
@@ -17018,42 +16832,7 @@ function addActaBIERow(){
   renderActaBIEBody(rev.actaBIE);
 }
 function abrirActaBIE(){ abrirActaUNE5(); }
-function _abrirActaBIE_legacy(){
-  if(!cid)return;
-  ensureRevision();
-  const rev=DB[cid].revisiones[cYear];
-  const eqs=(DB[cid].equipos||[]).filter(e=>e.tipo==='BIE (Boca de Incendio Equipada)');
-  const existing=rev.actaBIE||[];
-  const invExisting=rev.inventarioBIEs||[];
-  const rows=eqs.map((e,i)=>{
-    const saved=existing.find(r=>r.eqId===e.id)||{};
-    const invSaved=(!saved.marca&&!saved.modelo)?
-      (invExisting.find(r=>r.situacion===e.ubicacion)||invExisting[i]||{}):{};
-    return Object.assign({eqId:e.id,codigo:e.codigo,ubicacion:e.ubicacion,
-      marca:e.marcaBIE||invSaved.marca||'',modelo:invSaved.modelo||'',
-      anofab:e.anofabBIE||invSaved.anofab||'',
-      ph:e.phBIE||invSaved.ph||'',phprx:e.phprxBIE||invSaved.phprx||'',
-      presion:e.presionBIE||invSaved.presion||'',obs:invSaved.obs||''},saved);
-  });
-  if(!eqs.length && !invExisting.length){
-    rev.actaBIE = [{eqId:'manual_0',codigo:'BIE-1',ubicacion:'',marca:'',modelo:'',anofab:'',ph:'',phprx:'',presion:'',obs:''}];
-    renderActaBIEBody(rev.actaBIE);
-  } else if(!eqs.length && invExisting.length){
-    const invRows=invExisting.map((inv,i)=>{
-      const saved=existing[i]||{};
-      return Object.assign({eqId:'inv_'+i,codigo:inv.codigo||('BIE-'+(i+1)),ubicacion:inv.situacion||'',
-        marca:inv.marca||'',modelo:inv.modelo||'',anofab:inv.anofab||'',
-        ph:inv.ph||'',phprx:inv.phprx||'',presion:inv.presion||'',obs:inv.obs||''},saved);
-    });
-    rev.actaBIE=invRows;
-    renderActaBIEBody(invRows);
-  } else {
-    rev.actaBIE=rows;
-    renderActaBIEBody(rows);
-  }
-  document.getElementById('acta-bie-estado').value=rev.actaBIEEstado||'En automático sin anomalías';
-  openM('modal-acta-bie');
-}
+
 function renderActaBIEBody(rows){
   const c=document.getElementById('acta-bie-body');
   if(!rows.length){c.innerHTML='<p style="color:var(--text2);font-size:13px;text-align:center;padding:16px">Sin BIEs registradas.</p>';return;}
@@ -17113,34 +16892,7 @@ function guardarActaBIE(){
 let _actaDetZonas=[];
 let _actaDetAnomalias=[];
 
-function abrirActaDeteccion(){
-  if(!cid)return;
-  ensureRevision();
-  const rev=DB[cid].revisiones[cYear];
-  const ad=rev.actaDeteccion||{};
-  // Rellenar datos central
-  document.getElementById('acta-det-id').value=ad.centralId||'';
-  document.getElementById('acta-det-marca').value=ad.centralMarca||'';
-  document.getElementById('acta-det-modelo').value=ad.centralModelo||'';
-  document.getElementById('acta-det-ubic').value=ad.centralUbic||'';
-  document.getElementById('acta-det-lazos').value=ad.lazos||'';
-  document.getElementById('acta-det-zonas').value=ad.zonasConv||'';
-  document.getElementById('acta-det-averias').value=ad.averias||'';
-  document.getElementById('acta-det-alarmas').value=ad.alarmas||'';
-  document.getElementById('acta-det-baterias').value=ad.baterias||'';
-  document.getElementById('acta-det-tension-bat').value=ad.tensionBat||'';
-  document.getElementById('acta-det-fmant-bat').value=ad.fmantBat||'';
-  document.getElementById('acta-det-finstal').value=ad.finstal||'';
-  document.getElementById('acta-det-consumo').value=ad.consumo||'';
-  document.getElementById('acta-det-remoto').value=ad.remoto||'';
-  document.getElementById('acta-det-empresa-remota').value=ad.empresaRemota||'';
-  document.getElementById('acta-det-estado-final').value=ad.estadoFinal||'';
-  _actaDetZonas=(ad.zonasPrueba||[]).slice();
-  _actaDetAnomalias=(ad.anomalias||[]).slice();
-  renderActaDetZonas();
-  renderActaDetAnomalias();
-  openM('modal-acta-det');
-}
+
 function renderActaDetZonas(){
   const c=document.getElementById('acta-det-zonas-list');
   if(!_actaDetZonas.length){c.innerHTML='<p style="font-size:12px;color:var(--text2);padding:6px 0">Sin zonas añadidas.</p>';return;}
@@ -17899,54 +17651,9 @@ function buildRocChecksTable(tipo, saved, tipoRev){
     +'</div></div>';
 }
 
-function buildRocDpTable(saved){
-  var rows='';
-  ROC_DP_CHECKS.forEach(function(c,ci){
-    var rkey='roc-dp-'+ci;
-    var val=(saved&&saved.dpChecks&&saved.dpChecks[ci])||'';
-    var rowBg=ci%2===0?'#fff':'#fafafa';
-    var opts='';
-    ['\u0053\u00ed','No','N/A'].forEach(function(opt){
-      opts+='<td style="padding:3px 4px;border:1px solid #ddd;text-align:center"><label style="cursor:pointer;font-size:11px"><input type="radio" name="'+rkey+'" value="'+opt+'"'+(val===opt?' checked':'')+'>'+opt+'</label></td>';
-    });
-    rows+='<tr style="background:'+rowBg+'">'
-      +'<td style="padding:3px 5px;border:1px solid #ddd;text-align:center"><span style="font-size:9px;font-weight:700;padding:2px 4px;border-radius:8px;background:#e2e3e5;color:#333">'+c.pe+'</span></td>'
-      +'<td style="padding:3px 6px;border:1px solid #ddd;font-size:11px">'+c.txt+'</td>'
-      +opts+'</tr>';
-  });
-  return '<div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--rsm);padding:10px 12px;margin-bottom:10px">'
-    +'<div style="font-size:10px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Pruebas decenales (10 a\u00f1os) y a los 25 a\u00f1os</div>'
-    +'<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:11px;min-width:500px">'
-    +'<thead><tr style="background:#555;color:#fff">'
-    +'<th style="padding:4px 6px;border:1px solid #999;width:36px">PE</th>'
-    +'<th style="padding:4px 6px;border:1px solid #999;text-align:left">Concepto</th>'
-    +'<th style="padding:4px 5px;border:1px solid #999;width:44px">S\u00ed</th>'
-    +'<th style="padding:4px 5px;border:1px solid #999;width:44px">No</th>'
-    +'<th style="padding:4px 5px;border:1px solid #999;width:44px">N/A</th>'
-    +'</tr></thead><tbody>'+rows+'</tbody></table></div></div>';
-}
 
-function abrirActaRociadores(){
-  if(!cid)return;
-  ensureRevision();
-  var rev=DB[cid].revisiones[cYear];
-  var saved=rev.actaRociadores||{};
-  document.getElementById('roc-tipo').value=saved.tipo||'';
-  document.getElementById('roc-npuestos').value=saved.npuestos||'';
-  document.getElementById('roc-ubic').value=saved.ubic||'';
-  document.getElementById('roc-diam').value=saved.diam||'';
-  document.getElementById('roc-modelo').value=saved.modelo||'';
-  document.getElementById('roc-riesgo').value=saved.riesgo||'';
-  document.getElementById('roc-obs').value=saved.obs||'';
-  document.getElementById('roc-estado-final').value=saved.estadoFinal||'';
-  var tipoRev=saved.tipoRev||'T';
-  var rb=document.getElementById('roc-rev-'+tipoRev);
-  if(rb)rb.checked=true;
-  document.getElementById('roc-tabla-body').innerHTML=buildRocChecksTable(saved.tipo||'Tub\u00eda h\u00fameda',saved,tipoRev);
-  document.getElementById('roc-dp-body').innerHTML=buildRocDpTable(saved);
-  renderRocPuestos(saved.puestos||[]);
-  openM('modal-acta-roc');
-}
+
+
 
 function rocTipoChanged(){
   var tipo=document.getElementById('roc-tipo').value;
@@ -18158,97 +17865,11 @@ var NEB_TABS = [
 
 var _nebTabActivo = 0;
 
-function abrirActaNeb(){
-  ensureRevision();
-  var rev = DB[cid].revisiones[cYear];
-  if(!rev.actaNeb) rev.actaNeb = {};
-  _nebTabActivo = 0;
-  _renderNebBody();
-  openM('modal-acta-neb');
-}
 
-function _renderNebBody(){
-  var rev = DB[cid].revisiones[cYear];
-  var saved = rev.actaNeb || {};
 
-  // Datos instalación
-  var dotHtml = '<div style="margin-bottom:14px">'
-    +'<div class="stitle">Datos de la instalación</div>'
-    +'<div class="frow"><div class="field"><label>Cant. cilindros N₂</label><input id="neb-ncil" type="text" placeholder="—" value="'+((saved.nCil)||'')+'"></div>'
-    +'<div class="field"><label>Cant. cilindros agua</label><input id="neb-nacil" type="text" placeholder="—" value="'+((saved.nACil)||'')+'"></div></div>'
-    +'<div class="frow"><div class="field"><label>Tipo boquilla</label><input id="neb-tipobq" type="text" placeholder="—" value="'+((saved.tipoBq)||'')+'"></div>'
-    +'<div class="field"><label>Tipo boquilla</label><select id="neb-tipobq-open" style="display:block;width:100%;padding:5px 13px 9px;border:none;font-size:14px;background:transparent"><option value="">—</option><option value="Abierta"'+(saved.tipoBqOpen==='Abierta'?' selected':'')+'> Abierta</option><option value="Cerrada"'+(saved.tipoBqOpen==='Cerrada'?' selected':'')+'> Cerrada</option></select></div></div>'
-    +'<div class="field"><label>Unidad de bombeo (modelo)</label><input id="neb-ubombeo" type="text" placeholder="—" value="'+((saved.uBombeo)||'')+'"></div>'
-    +'</div>';
 
-  // Tabs
-  var tabBtns = '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">';
-  NEB_TABS.forEach(function(tab, i){
-    tabBtns += '<button id="nebtab-'+i+'" class="bsm '+(i===_nebTabActivo?'bsm-r':'bsm-g')+'" onclick="switchNebTab('+i+')" style="font-size:11px;padding:5px 10px">'+tab.label+'</button>';
-  });
-  tabBtns += '</div>';
 
-  // Tab panels
-  var panels = '';
-  NEB_TABS.forEach(function(tab, i){
-    var tabSaved = (saved['s'+i]) || {};
-    var checksHtml = '';
-    tab.checks.forEach(function(c, ci){
-      var peColors = {'T':'#ddf0f5','S':'#d4edda','A':'#fff3cd','Q':'#f8d7da','D':'#f0e0ff'};
-      var peBg = peColors[c.pe] || '#eee';
-      checksHtml += '<div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--rsm);padding:9px 12px;margin-bottom:6px;display:flex;align-items:center;gap:8px">'
-        +'<span style="background:'+peBg+';padding:2px 7px;border-radius:10px;font-size:10px;font-weight:700;white-space:nowrap">'+c.pe+'</span>'
-        +'<span style="flex:1;font-size:13px;line-height:1.4">'+c.t+'</span>'
-        +'<select id="nebc'+i+'_'+ci+'" style="border:1px solid var(--border);border-radius:var(--rsm);padding:4px 8px;font-size:12px;background:var(--surface);color:var(--text);min-width:70px">'
-        +'<option value="">—</option><option value="SI">✅ SÍ</option><option value="NO">❌ NO</option><option value="NA">N/A</option>'
-        +'</select></div>';
-    });
-    panels += '<div id="nebpanel-'+i+'" style="display:'+(i===_nebTabActivo?'block':'none')+'">'
-      +'<div id="neb-checks-'+i+'">'+checksHtml+'</div>'
-      +'<div class="field" style="margin-top:8px"><label>Observaciones</label><textarea id="nebobs-'+i+'" rows="2" style="display:block;width:100%;padding:5px 13px 9px;border:none;font-size:13px;background:transparent">'+((tabSaved.obs)||'')+'</textarea></div>'
-      +'</div>';
-  });
 
-  // Estado final
-  var estadoHtml = '<div style="margin-top:12px"><div class="stitle">Estado final del sistema</div>'
-    +'<select id="acta-neb-estado" style="display:block;width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:var(--rsm);font-size:14px;background:var(--surface);color:var(--text)">'
-    +'<option value="">— Seleccionar estado —</option>'
-    +'<option value="ok"'+(saved.estado==='ok'?' selected':'')+'>✅ En automático sin anomalías</option>'
-    +'<option value="def"'+(saved.estado==='def'?' selected':'')+'>⚠️ Con anomalías pendientes de reparación</option>'
-    +'</select></div>';
-
-  document.getElementById('acta-neb-body').innerHTML = dotHtml + tabBtns + panels + estadoHtml;
-
-  // Restore check values
-  NEB_TABS.forEach(function(tab, i){
-    var tabSaved = (saved['s'+i]) || {};
-    tab.checks.forEach(function(_, ci){
-      var el = document.getElementById('nebc'+i+'_'+ci);
-      if(el && tabSaved['c'+ci]) el.value = tabSaved['c'+ci];
-    });
-  });
-}
-
-function switchNebTab(idx){
-  _guardarNebTabActual();
-  _nebTabActivo = idx;
-  NEB_TABS.forEach(function(_, i){
-    var b = document.getElementById('nebtab-'+i);
-    if(b) b.className = 'bsm '+(i===idx?'bsm-r':'bsm-g');
-    var p = document.getElementById('nebpanel-'+i);
-    if(p) p.style.display = (i===idx)?'block':'none';
-  });
-  // Restore check values for active tab
-  var rev = DB[cid].revisiones[cYear];
-  var saved = rev.actaNeb || {};
-  var tabSaved = saved['s'+idx] || {};
-  NEB_TABS[idx].checks.forEach(function(_, ci){
-    var el = document.getElementById('nebc'+idx+'_'+ci);
-    if(el && tabSaved['c'+ci]) el.value = tabSaved['c'+ci];
-    var obs = document.getElementById('nebobs-'+idx);
-    if(obs) obs.value = tabSaved.obs||'';
-  });
-}
 
 function _guardarNebTabActual(){
   var idx = _nebTabActivo;
@@ -18324,74 +17945,9 @@ var PULV_CHECKS = [
   {pe:'A', t:'Comprobación de presiones. Abrir completamente la válvula del drenaje principal del puesto de diluvio. Cerrar la válvula y comprobar que la medición no es un 5% inferior a la medida el año anterior'}
 ];
 
-function abrirActaAguaPulverizada(){
-  ensureRevision();
-  var rev = DB[cid].revisiones[cYear];
-  if(!rev.actaPulv) rev.actaPulv = {};
-  _renderPulvBody();
-  openM('modal-acta-pulv');
-}
 
-function _renderPulvBody(){
-  var rev = DB[cid].revisiones[cYear];
-  var saved = rev.actaPulv || {};
-  var peColors = {T:'#ddf0f5',S:'#d4edda',A:'#fff3cd',Q:'#f8d7da',D:'#f0e0ff'};
 
-  var html = '<div style="margin-bottom:14px">'
-    + '<div class="stitle">Características de la instalación</div>'
-    + '<div class="field"><label>Zona de extinción</label><input id="pulv-zona" type="text" placeholder="Descripción de la zona" value="'+(saved.zona||'')+'"></div>'
-    + '<div class="frow">'
-    +   '<div class="field"><label>N° puestos de diluvio</label><input id="pulv-npuestos" type="text" placeholder="—" value="'+(saved.nPuestos||'')+'"></div>'
-    +   '<div class="field"><label>N° total boquillas</label><input id="pulv-nboquillas" type="text" placeholder="—" value="'+(saved.nBoquillas||'')+'"></div>'
-    + '</div>'
-    + '<div class="frow">'
-    +   '<div class="field"><label>Tipo</label><input id="pulv-tipo" type="text" placeholder="—" value="'+(saved.tipo||'')+'"></div>'
-    +   '<div class="field"><label>Modelos</label><input id="pulv-modelos" type="text" placeholder="—" value="'+(saved.modelos||'')+'"></div>'
-    + '</div>'
-    + '<div class="frow">'
-    +   '<div class="field"><label>Descripción/ubicación puesto</label><input id="pulv-ubic" type="text" placeholder="—" value="'+(saved.ubic||'')+'"></div>'
-    +   '<div class="field"><label>Diámetro (mm)</label><input id="pulv-diam" type="text" placeholder="—" value="'+(saved.diam||'')+'"></div>'
-    + '</div>'
-    + '<div class="field"><label>Presión dinámica medida (bar)</label><input id="pulv-presion" type="text" placeholder="—" value="'+(saved.presion||'')+'"></div>'
-    + '</div>';
 
-  html += '<div class="stitle">Lista de verificación</div>';
-  PULV_CHECKS.forEach(function(c, ci){
-    var bg = peColors[c.pe] || '#eee';
-    var val = saved['c'+ci] || '';
-    html += '<div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--rsm);padding:9px 12px;margin-bottom:6px;display:flex;align-items:center;gap:8px">'
-      + '<span style="background:'+bg+';padding:2px 7px;border-radius:10px;font-size:10px;font-weight:700;white-space:nowrap">'+c.pe+'</span>'
-      + '<span style="flex:1;font-size:13px;line-height:1.4">'+c.t+'</span>'
-      + '<select id="pulvc_'+ci+'" style="border:1px solid var(--border);border-radius:var(--rsm);padding:4px 8px;font-size:12px;background:var(--surface);color:var(--text);min-width:70px">'
-      + '<option value="">—</option>'
-      + '<option value="SI"'+(val==='SI'?' selected':'')+'>✅ SÍ</option>'
-      + '<option value="NO"'+(val==='NO'?' selected':'')+'>❌ NO</option>'
-      + '<option value="NA"'+(val==='NA'?' selected':'')+'>N/A</option>'
-      + '</select></div>';
-  });
-
-  html += '<div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;margin-top:10px;margin-bottom:10px">'
-    + '<div style="font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;margin-bottom:8px">Comprobaciones finales</div>'
-    + '<div style="font-size:12px;color:var(--text);line-height:1.9">'
-    + '☑ Todas las válvulas quedan precintadas y en posición normal de operación<br>'
-    + '☑ El suministro de agua queda abierto y en condiciones de servicio<br>'
-    + '☑ Si dispone, la válvula de la alarma hidráulica queda en posición abierta y operativa<br>'
-    + '☑ La central de detección queda operativa y sin ninguna señal indicada<br>'
-    + '☑ Lectura de manómetros dentro de los márgenes permitidos'
-    + '</div></div>';
-
-  html += '<div class="field"><label>Observaciones</label>'
-    + '<textarea id="pulv-obs" rows="3" style="display:block;width:100%;padding:5px 13px 9px;border:none;font-size:13px;background:transparent">'+(saved.obs||'')+'</textarea></div>';
-
-  html += '<div style="margin-top:10px"><div class="stitle">Estado final del sistema</div>'
-    + '<select id="acta-pulv-estado" style="display:block;width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:var(--rsm);font-size:14px;background:var(--surface);color:var(--text)">'
-    + '<option value="">— Seleccionar estado —</option>'
-    + '<option value="ok"'+(saved.estado==='ok'?' selected':'')+'>✅ En automático sin anomalías</option>'
-    + '<option value="def"'+(saved.estado==='def'?' selected':'')+'>⚠️ Con anomalías pendientes de reparación</option>'
-    + '</select></div>';
-
-  document.getElementById('acta-pulv-body').innerHTML = html;
-}
 
 function guardarActaPulv(){
   var rev = DB[cid].revisiones[cYear];
@@ -19572,35 +19128,9 @@ const UNE7_ITEMS = [
   {id:'u7c08',pe:'Q',seccion:'11. Cámara de espuma',texto:'¿Se ha procedido al drenaje de toda la instalación y es correcto?'},
 ];
 
-function _buildUNEChecks(items, prefix, tipoRev) {
-  const peColors = {T:'#ddf0f5',S:'#d4edda',A:'#fff3cd',Q:'#f8d7da'};
-  const peNames = {T:'Trimestral',S:'Semestral',A:'Anual',Q:'Quinquenal'};
-  // Filtrar por periodicidad según norma UNE 23580:
-  // T=solo T, S=T+S, A=T+S+A, Q/vacío=todos
-  let filtered = items;
-  if(tipoRev==='T') filtered = items.filter(c=>c.pe==='T');
-  else if(tipoRev==='S') filtered = items.filter(c=>['T','S'].includes(c.pe));
-  else if(tipoRev==='A') filtered = items.filter(c=>['T','S','A'].includes(c.pe));
-  // Q o sin tipo: mostrar todos
-  if(!filtered.length) return '<div style="color:var(--text2);text-align:center;padding:16px;font-size:13px">No hay verificaciones para la periodicidad seleccionada.</div>';
-  return filtered.map((c,i) => {
-    const realIdx = items.indexOf(c);
-    const bg = peColors[c.pe]||'#eee';
-    return `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:var(--rsm);padding:9px 12px;margin-bottom:6px;display:flex;align-items:center;gap:8px">
-      <span style="background:${bg};padding:2px 7px;border-radius:10px;font-size:10px;font-weight:700;white-space:nowrap" title="${peNames[c.pe]||c.pe}">${c.pe}</span>
-      <span style="flex:1;font-size:13px;line-height:1.4">${c.t}</span>
-      <select id="${prefix}_${realIdx}" style="border:1px solid var(--border);border-radius:var(--rsm);padding:4px 8px;font-size:12px;background:var(--surface);color:var(--text);min-width:70px">
-        <option value="">—</option><option value="SI" selected>✅ SÍ</option><option value="NO">❌ NO</option><option value="NA">N/A</option>
-      </select></div>`;
-  }).join('');
-}
 
-function _restoreUNEChecks(items, prefix, saved) {
-  items.forEach((_,i) => {
-    const el = document.getElementById(prefix+'_'+i);
-    if(el) el.value = saved[prefix+'_'+i] || 'SI';
-  });
-}
+
+
 
 function _getUNEXTipoRev(prefix){
   return ['T','S','A','Q'].find(v=>{ const r=document.getElementById(prefix+'-rev-'+v); return r&&r.checked; })||'T';
@@ -22615,19 +22145,7 @@ function ripciDescargarICS() {
   if (typeof toast === 'function') toast('Archivo .ics descargado — ábrelo para añadir al calendario ✅', 'ok');
 }
 
-function ripciAbrirGoogleCal() {
-  // Extraer datos del ICS para construir URL de Google Calendar
-  const ics = window._ripciICS || '';
-  const getVal = key => { const m = ics.match(new RegExp(key + ':(.+)')); return m ? m[1].trim() : ''; };
-  const summary = encodeURIComponent(getVal('SUMMARY'));
-  const dtstart = getVal('DTSTART');
-  const dtend = getVal('DTEND');
-  const location = encodeURIComponent(getVal('LOCATION'));
-  const details = encodeURIComponent(getVal('DESCRIPTION').replace(/\\n/g, '\n'));
-  const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${summary}&dates=${dtstart}/${dtend}&location=${location}&details=${details}`;
-  window.open(url, '_blank');
-  const t = document.getElementById('ripci-cal-toast'); if (t) t.remove();
-}
+
 
 function abrirModalTecnico() {
   const m = document.getElementById('modal-tecnico-nuevo'); if (!m) return;
@@ -27557,8 +27075,8 @@ function miInitFirma(){
 function miGetTouch(e,canvas){const r=canvas.getBoundingClientRect();const t=e.touches[0];return{x:t.clientX-r.left,y:t.clientY-r.top};}
 function miFirmaStart(x,y){miFirmaCtx.beginPath();miFirmaCtx.moveTo(x,y);const s=document.getElementById('mi-firma-status');if(s)s.style.display='none';}
 function miFirmaDraw(x,y){miFirmaCtx.lineTo(x,y);miFirmaCtx.strokeStyle=miFirmaColor;miFirmaCtx.lineWidth=miFirmaGrosor;miFirmaCtx.lineCap='round';miFirmaCtx.lineJoin='round';miFirmaCtx.stroke();}
-function miFirmaSetGrosor(v){miFirmaGrosor=parseFloat(v);}
-function miFirmaSetColor(v){miFirmaColor=v;}
+
+
 function miClearFirma(){
   const canvas=document.getElementById('firmaCanvasV10');
   if(!canvas||!miFirmaCtx)return;
@@ -27609,7 +27127,7 @@ function miFirmaEstaVacia(){
   for(let i=0;i<d.length;i+=4)if(d[i]<250||d[i+1]<250||d[i+2]<250)return false;
   return true;
 }
-function miGenerarPDFConFirma(){miToast('Generando PDF con firma integrada…','info');}
+
 function miEnviarCopiaEmail(){
   const email=document.getElementById('mi-firmante-email').value;
   if(!email){miToast('Introduce un email válido','error');return;}
