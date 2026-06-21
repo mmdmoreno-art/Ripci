@@ -24190,8 +24190,12 @@ function ajustarStock(id, delta) {
       div.innerHTML = `<button class="btn btn-out no-print" style="font-size:13px;padding:10px" onclick="imprimirActaUNE('generico')">🖨️ Imprimir acta de revisión (PDF)</button>`;
       // Insert before the first child content after the filter pills
       const firstSection = sc.querySelector('.section');
-      if (firstSection) sc.insertBefore(div, firstSection);
-      else sc.appendChild(div);
+      try {
+        if (firstSection && firstSection.parentNode) firstSection.parentNode.insertBefore(div, firstSection);
+        else sc.appendChild(div);
+      } catch (e) {
+        sc.appendChild(div);
+      }
     }, 300);
   };
 })();
@@ -24410,18 +24414,25 @@ function ajustarStock(id, delta) {
 
 // ── Botón en nav-global ───────────────────────────────────────
 (function _addNavCalc() {
-  const navInner = document.querySelector('#nav-global > div');
-  if (!navInner || document.getElementById('ng-calculadora')) return;
-  const btn = document.createElement('button');
-  btn.className = 'nav-global-btn';
-  btn.id = 'ng-calculadora';
-  btn.onclick = function () { irSeccion('calculadora'); };
-  btn.style.cssText = 'flex:none;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;color:var(--text2);padding:8px 8px 6px;font-size:9px;font-weight:600';
-  btn.innerHTML = '<span style="font-size:18px;display:block">🧮</span>Calc.Ext.';
-  // Insertar antes del botón Ajustes
-  const ajustes = document.getElementById('ng-ajustes');
-  if (ajustes) navInner.insertBefore(btn, ajustes);
-  else navInner.appendChild(btn);
+  try {
+    if (document.getElementById('ng-calculadora')) return;
+    const btn = document.createElement('button');
+    btn.className = 'nav-global-btn';
+    btn.id = 'ng-calculadora';
+    btn.onclick = function () { irSeccion('calculadora'); };
+    btn.style.cssText = 'flex:none;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;color:var(--text2);padding:8px 8px 6px;font-size:9px;font-weight:600';
+    btn.innerHTML = '<span style="font-size:18px;display:block">🧮</span>Calc.Ext.';
+    // Insertar antes del botón Ajustes (relativo a su padre REAL)
+    const ajustes = document.getElementById('ng-ajustes');
+    if (ajustes && ajustes.parentNode) {
+      ajustes.parentNode.insertBefore(btn, ajustes);
+    } else {
+      const navInner = document.querySelector('#nav-global > div') || document.getElementById('nav-global');
+      if (navInner) navInner.appendChild(btn);
+    }
+  } catch (e) {
+    console.warn('[RIPCI] No se pudo añadir botón Calculadora al nav:', e);
+  }
 })();
 
 // ── Patch irSeccion ───────────────────────────────────────────
@@ -24798,16 +24809,24 @@ function calcImprimir() {
 })();
 
 (function _addNavInforme() {
-  const navInner = document.querySelector('#nav-global > div');
-  if (!navInner || document.getElementById('ng-informe-anual')) return;
-  const btn = document.createElement('button');
-  btn.className = 'nav-global-btn';
-  btn.id = 'ng-informe-anual';
-  btn.onclick = function () { irSeccion('informe-anual'); };
-  btn.style.cssText = 'flex:none;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;color:var(--text2);padding:8px 8px 6px;font-size:9px;font-weight:600';
-  btn.innerHTML = '<span style="font-size:18px;display:block">📈</span>Inf.Anual';
-  const ref = document.getElementById('ng-calculadora') || document.getElementById('ng-ajustes');
-  if (ref) navInner.insertBefore(btn, ref); else navInner.appendChild(btn);
+  try {
+    if (document.getElementById('ng-informe-anual')) return;
+    const btn = document.createElement('button');
+    btn.className = 'nav-global-btn';
+    btn.id = 'ng-informe-anual';
+    btn.onclick = function () { irSeccion('informe-anual'); };
+    btn.style.cssText = 'flex:none;border:none;background:none;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;color:var(--text2);padding:8px 8px 6px;font-size:9px;font-weight:600';
+    btn.innerHTML = '<span style="font-size:18px;display:block">📈</span>Inf.Anual';
+    const ref = document.getElementById('ng-calculadora') || document.getElementById('ng-ajustes');
+    if (ref && ref.parentNode) {
+      ref.parentNode.insertBefore(btn, ref);
+    } else {
+      const navInner = document.querySelector('#nav-global > div') || document.getElementById('nav-global');
+      if (navInner) navInner.appendChild(btn);
+    }
+  } catch (e) {
+    console.warn('[RIPCI] No se pudo añadir botón Informe Anual al nav:', e);
+  }
 })();
 
 (function _patchIrSeccionInforme() {
