@@ -2568,7 +2568,7 @@ window.rdpRefresh=scanAndWrap;
           <label for="login-remember" style="font-size:13px;color:#555;cursor:pointer;user-select:none">Recordar sesión en este dispositivo</label>
         </div>
         <button class="saas-btn" onclick="saasLoginEmail()">Entrar →</button>
-        <div class="saas-err" id="login-err"></div>
+        <div class="saas-err" id="saas-login-err"></div>
         <div style="text-align:center;margin-top:12px">
           <button onclick="saasForgotPass()" style="background:none;border:none;color:#999;font-size:12px;cursor:pointer;text-decoration:underline">¿Olvidaste tu contraseña?</button>
         </div>
@@ -15960,7 +15960,7 @@ setTimeout(()=>{
   }, 60000);
 }, 600);
 
-</script><div id="v8-save-indicator"><div class="v8-si-dot"></div><span id="v8-si-text">Guardado</span></div>
+</script>
 
 <!-- ===== MODAL INVENTARIO EXTINTORES ===== -->
 <div id="modal-inv-ext" class="modal-wrap v5-init">
@@ -19044,7 +19044,7 @@ function renderActasEnCert(rev){
         <div class="field"><label>Diámetro (mm)</label><input type="text" id="roc-diam" placeholder="Ej: 100"></div>
         <div class="field"><label>Modelo</label><input type="text" id="roc-modelo" placeholder="Ej: Tyco TY-B"></div>
         <div class="field"><label>Clasificación del riesgo</label>
-          <select id="roc-riesgo">
+          <select id="acta-roc-riesgo">
             <option value="">—</option>
             <option>Riesgo Ligero (LH)</option>
             <option>Riesgo Ordinario grupo 1 (OH1)</option>
@@ -19353,7 +19353,7 @@ function guardarActaRociadores(){
   saved.ubic=(document.getElementById('roc-ubic')||{}).value||'';
   saved.diam=(document.getElementById('roc-diam')||{}).value||'';
   saved.modelo=(document.getElementById('roc-modelo')||{}).value||'';
-  saved.riesgo=(document.getElementById('roc-riesgo')||{}).value||'';
+  saved.riesgo=(document.getElementById('acta-roc-riesgo')||{}).value||'';
   saved.obs=(document.getElementById('roc-obs')||{}).value||'';
   saved.estadoFinal=(document.getElementById('roc-estado-final')||{}).value||'';
   saved.presionDinamica=(document.getElementById('roc-pdin')||{}).value||'';
@@ -29431,59 +29431,6 @@ window.cambiarEstadoFac=function(fid,nuevoEstado){
   if(typeof sched==='function')sched();
   if(typeof renderDetalleFactura==='function')renderDetalleFactura();
   if(typeof showToast==='function')showToast('Estado → '+nuevoEstado,'ok');
-};
-
-/* Modal marcar cobrada */
-window.abrirModalCobrar=function(fid){
-  // Inyectar modal si no existe
-  let m=document.getElementById('modal-cobrar-fac');
-  if(!m){
-    m=document.createElement('div');
-    m.id='modal-cobrar-fac';
-    m.style.cssText='display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:8000;align-items:flex-end;justify-content:center';
-    m.innerHTML=`
-      <div style="background:var(--surface);border-radius:18px 18px 0 0;padding:20px;width:100%;max-width:480px;box-shadow:0 -4px 24px rgba(0,0,0,.15)">
-        <div style="font-size:17px;font-weight:800;margin-bottom:16px">✅ Marcar como cobrada</div>
-        <div class="field"><label>Fecha de cobro</label><input type="date" id="cobrar-fecha" value="${today()}"></div>
-        <div class="field"><label>Método de cobro</label>
-          <select id="cobrar-metodo">
-            <option value="transferencia">Transferencia bancaria</option>
-            <option value="cheque">Cheque</option>
-            <option value="efectivo">Efectivo</option>
-            <option value="domiciliacion">Domiciliación SEPA</option>
-            <option value="tarjeta">Tarjeta</option>
-          </select>
-        </div>
-        <div style="display:flex;gap:10px;margin-top:16px">
-          <button onclick="cerrarModalCobrar()" style="flex:1;padding:12px;background:var(--gray);border:1px solid var(--border);border-radius:10px;font-size:14px;cursor:pointer">Cancelar</button>
-          <button id="cobrar-confirmar-btn" style="flex:2;padding:12px;background:#155724;color:#fff;border:none;border-radius:10px;font-weight:700;font-size:14px;cursor:pointer">✅ Confirmar cobro</button>
-        </div>
-      </div>`;
-    document.body.appendChild(m);
-  }
-  m._fid=fid;
-  m.style.display='flex';
-  document.getElementById('cobrar-confirmar-btn').onclick=function(){confirmarCobro(m._fid);};
-};
-
-window.cerrarModalCobrar=function(){
-  const m=document.getElementById('modal-cobrar-fac');
-  if(m)m.style.display='none';
-};
-
-window.confirmarCobro=function(fid){
-  if(typeof DB==='undefined'||typeof cid==='undefined')return;
-  const fac=(DB[cid].facturas||[]).find(f=>f.id===fid);
-  if(!fac)return;
-  const fecha=document.getElementById('cobrar-fecha')?.value||today();
-  const metodo=document.getElementById('cobrar-metodo')?.value||'transferencia';
-  fac.estado='cobrada';
-  fac.fechaCobro=fecha;
-  fac.metodoCobro=metodo;
-  if(typeof sched==='function')sched();
-  cerrarModalCobrar();
-  if(typeof renderDetalleFactura==='function')renderDetalleFactura();
-  if(typeof showToast==='function')showToast('✅ Factura cobrada ('+metodo+')','ok');
 };
 
 /* Crear rectificativa */
