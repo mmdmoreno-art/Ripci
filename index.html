@@ -4271,11 +4271,47 @@ async function syncNow(){setSS('busy','...');await fsLoad();renderDashboard();re
 function loginGoogle(){
   if(typeof firebase==="undefined"){ alert("Firebase no disponible. Comprueba tu conexión."); return; }
   const provider = new firebase.auth.GoogleAuthProvider();
-  // Siempre usar redirect (popup falla con cookies de terceros bloqueadas en Chrome/GitHub Pages)
-  getAuth().signInWithRedirect(provider).catch(err => {
-    console.error('Login redirect error', err);
-    alert('Error al iniciar sesión: ' + err.message);
-  });
+  // Usar redirect en móvil (Safari/iOS), popup en escritorio
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  if(isMobile){
+    getAuth().signInWithRedirect(provider).catch(err => {
+      console.error('Login redirect error', err);
+      alert('Error al iniciar sesión: ' + err.message);
+    });
+  } else {
+    getAuth().signInWithPopup(provider)
+      .then(async result => {
+        const user = result.user;
+        try {
+          SAAS.user = user;
+          const _esSA = await verificarRolSuperAdmin(user.uid);
+          if(_esSA){
+            SAAS.tenantId = user.uid;
+            await saasCrearTenant(user, 'SuperAdmin');
+            await saasCargarTenant(user);
+            await saasFsLoad();
+            saasEntrarApp();
+            return;
+          }
+          await saasCargarTenant(user);
+          await saasFsLoad();
+          if(!SAAS.onboardingDone){
+            showRaw('onboarding');
+            document.getElementById('topbar').style.display = 'none';
+            document.getElementById('nav-global').style.display = 'none';
+            return;
+          }
+          saasEntrarApp();
+        } catch(e) {
+          console.error('Error SaaS login', e);
+          alert('Error al cargar datos: ' + e.message);
+        }
+      })
+      .catch(err => {
+        console.error('Login error', err);
+        alert('Error al iniciar sesión: ' + err.message);
+      });
+  }
 }
 
 
@@ -9282,7 +9318,7 @@ function imprimirFactura(fid){
 // ⚠️ REEMPLAZA estos valores con los de TU proyecto Firebase
 const FIREBASE_CONFIG = {
   apiKey:            "AIzaSyBiOayeuyqhaEPxfXXKKokwlHYnoakq9rk",
-  authDomain:        "ripci-pro.firebaseapp.com",
+  authDomain:        "mmdmoreno-art.github.io",
   projectId:         "ripci-pro",
   storageBucket:     "ripci-pro.firebasestorage.app",
   messagingSenderId: "1087127950570",
@@ -13244,9 +13280,16 @@ async function _saasGoogleAuth(errElId){
   errEl.textContent = 'Conectando...';
   if(typeof firebase==="undefined"){ errEl.textContent="Firebase no disponible."; return; }
   const provider = new firebase.auth.GoogleAuthProvider();
-  // Siempre redirect — popup falla con cookies de terceros bloqueadas (Chrome + GitHub Pages)
-  // El resultado lo recoge handleRedirectResult() via getRedirectResult() al volver
-  await getAuth().signInWithRedirect(provider);
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  if(isMobile){
+    // En móvil/iOS el popup no funciona bien — usar redirect
+    // El resultado lo recoge initSaaS via onAuthStateChanged al volver
+    await getAuth().signInWithRedirect(provider);
+    return; // la página se recarga sola
+  }
+  const result = await getAuth().signInWithPopup(provider);
+  errEl.textContent = '';
+  await saasProcessUser(result.user);
 }
 
 async function saasLoginGoogle(){
